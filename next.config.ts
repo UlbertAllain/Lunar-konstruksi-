@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   experimental: {
     cpus: 2,
   },
+
+  serverExternalPackages: ["firebase-admin"],
+
   images: {
     remotePatterns: [
       {

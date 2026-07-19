@@ -1,4 +1,4 @@
-import { getAdminAuth } from "@/lib/firebase/admin";
+import { getAdminAuth } from "@/lib/firebase/admin-auth";
 import { getAdminByUid } from "@/repositories/admin.repository";
 import type { Admin } from "@/types/admin";
 

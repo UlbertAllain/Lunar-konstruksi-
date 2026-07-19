@@ -4,7 +4,7 @@ import { getPublishedProjects } from "@/repositories/project.repository";
 import { getPublishedServices } from "@/repositories/service.repository";
 import { getActiveTeamMembers } from "@/repositories/team.repository";
 import { getPublishedTestimonials } from "@/repositories/testimonial.repository";
-
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
