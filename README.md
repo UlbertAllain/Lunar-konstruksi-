@@ -54,7 +54,6 @@ npm run dev
 ```
 
 - Website publik: `http://localhost:3000`
-- Admin CMS: `http://localhost:3000/admin/login`
 
 ## Firebase
 
@@ -69,17 +68,6 @@ Struktur koleksi:
 - `testimonials/{id}`
 - `faqs/{id}`
 
-Dokumen admin minimal:
-
-```json
-{
-  "uid": "FIREBASE_AUTH_UID",
-  "name": "Administrator",
-  "email": "admin@example.com",
-  "role": "SUPER_ADMIN",
-  "isActive": true
-}
-```
 
 ## Cloudinary
 
