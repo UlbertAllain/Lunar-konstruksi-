@@ -1,12 +1,8 @@
 import { NextRequest } from "next/server";
 import { detailFAQ, removeFAQ, updateFAQData } from "@/services/faq.service";
-import {
-  emptySuccess,
-  HttpError,
-  requireAdmin,
-  routeError,
-  success,
-} from "@/lib/route";
+import { emptySuccess, requireAdmin, routeError, success } from "@/lib/route";
+
+import { HttpError } from "@/lib/route-response";
 
 type Context = { params: Promise<{ id: string }> };
 

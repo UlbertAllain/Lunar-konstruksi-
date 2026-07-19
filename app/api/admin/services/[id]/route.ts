@@ -4,13 +4,9 @@ import {
   removeService,
   updateServiceData,
 } from "@/services/service.service";
-import {
-  emptySuccess,
-  HttpError,
-  requireAdmin,
-  routeError,
-  success,
-} from "@/lib/route";
+
+import { HttpError } from "@/lib/route-response";
+import { emptySuccess, requireAdmin, routeError, success } from "@/lib/route";
 
 type Context = { params: Promise<{ id: string }> };
 

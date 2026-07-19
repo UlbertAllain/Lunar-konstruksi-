@@ -1,4 +1,4 @@
-import { routeError, success } from "@/lib/route";
+import { routeError, success } from "@/lib/route-response";
 import { getPublishedFAQs } from "@/repositories/faq.repository";
 import { getPublishedProjects } from "@/repositories/project.repository";
 import { getPublishedServices } from "@/repositories/service.repository";

@@ -1,4 +1,4 @@
-import { HttpError, routeError, success } from "@/lib/route";
+import { HttpError, routeError, success } from "@/lib/route-response";
 import { getProjectBySlug } from "@/repositories/project.repository";
 
 type Context = { params: Promise<{ slug: string }> };

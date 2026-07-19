@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
-import { HttpError, requireAdmin, routeError, success } from "@/lib/route";
+import { HttpError } from "@/lib/route-response";
+import { requireAdmin, routeError, success } from "@/lib/route";
 import { uploadMultipleImages } from "@/services/upload.service";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -13,7 +14,10 @@ const ALLOWED_TYPES = new Set([
 ]);
 
 function sanitizeFolder(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9/_-]/g, "").slice(0, 80);
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9/_-]/g, "")
+    .slice(0, 80);
 }
 
 export async function POST(request: NextRequest) {
@@ -37,7 +41,10 @@ export async function POST(request: NextRequest) {
           throw new HttpError("File upload tidak valid.", 400);
         }
         if (!ALLOWED_TYPES.has(entry.type)) {
-          throw new HttpError("Format gambar harus JPG, PNG, WEBP, atau AVIF.", 415);
+          throw new HttpError(
+            "Format gambar harus JPG, PNG, WEBP, atau AVIF.",
+            415,
+          );
         }
         if (entry.size > MAX_FILE_SIZE) {
           throw new HttpError("Ukuran setiap gambar maksimal 5 MB.", 413);

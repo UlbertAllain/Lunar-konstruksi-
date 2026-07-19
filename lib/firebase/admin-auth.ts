@@ -1,12 +1,22 @@
+import { getApps, initializeApp, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
-import { getApps } from "firebase-admin/app";
 
-export function getAdminAuth() {
-  const app = getApps()[0];
+function getFirebaseAdminApp() {
+  const apps = getApps();
 
-  if (!app) {
-    throw new Error("Firebase Admin belum diinisialisasi.");
+  if (apps.length > 0) {
+    return apps[0];
   }
 
-  return getAuth(app);
+  return initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    }),
+  });
+}
+
+export function getAdminAuth() {
+  return getAuth(getFirebaseAdminApp());
 }

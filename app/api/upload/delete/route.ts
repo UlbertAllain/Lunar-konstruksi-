@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
-import { HttpError, emptySuccess, requireAdmin, routeError } from "@/lib/route";
+import { HttpError } from "@/lib/route-response";
+import { emptySuccess, requireAdmin, routeError } from "@/lib/route";
 import { deleteImage } from "@/services/upload.service";
 
 export async function DELETE(request: NextRequest) {

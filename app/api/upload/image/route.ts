@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 
-import { requireAdmin, routeError, success, HttpError } from "@/lib/route";
+import { HttpError } from "@/lib/route-response";
+import { requireAdmin, routeError, success } from "@/lib/route";
 import { uploadImage } from "@/services/upload.service";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -12,7 +13,10 @@ const ALLOWED_TYPES = new Set([
 ]);
 
 function sanitizeFolder(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9/_-]/g, "").slice(0, 80);
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9/_-]/g, "")
+    .slice(0, 80);
 }
 
 export async function POST(request: NextRequest) {
@@ -27,7 +31,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!ALLOWED_TYPES.has(file.type)) {
-      throw new HttpError("Format gambar harus JPG, PNG, WEBP, atau AVIF.", 415);
+      throw new HttpError(
+        "Format gambar harus JPG, PNG, WEBP, atau AVIF.",
+        415,
+      );
     }
 
     if (file.size > MAX_FILE_SIZE) {
