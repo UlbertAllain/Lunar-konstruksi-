@@ -3,7 +3,7 @@ import { getSiteSettingsWithDefaults } from "@/features/site-settings/server";
 
 import { PublicFooter } from "./redesign/public-footer";
 
-export default async function SiteFooter() {
+export async function SiteFooter() {
   const [navigation, settings] = await Promise.all([
     getNavigationSettingsWithDefaults(),
     getSiteSettingsWithDefaults(),
@@ -11,3 +11,5 @@ export default async function SiteFooter() {
 
   return <PublicFooter navigation={navigation} settings={settings} />;
 }
+
+export default SiteFooter;

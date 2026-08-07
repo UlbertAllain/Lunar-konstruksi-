@@ -3,7 +3,7 @@ import { getSiteSettingsWithDefaults } from "@/features/site-settings/server";
 
 import { PublicHeader } from "./redesign/public-header";
 
-export default async function SiteHeader() {
+export async function SiteHeader() {
   const [navigation, settings] = await Promise.all([
     getNavigationSettingsWithDefaults(),
     getSiteSettingsWithDefaults(),
@@ -11,3 +11,5 @@ export default async function SiteHeader() {
 
   return <PublicHeader navigation={navigation} settings={settings} />;
 }
+
+export default SiteHeader;
