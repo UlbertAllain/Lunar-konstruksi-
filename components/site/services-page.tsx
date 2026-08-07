@@ -1,17 +1,22 @@
-"use client";
-
 import Link from "next/link";
 import { ArrowUpRight, Check } from "lucide-react";
 
+import { PublicSeoTags } from "@/features/public-site";
+import {
+  getPublicServicesData,
+  getPublicPageContext,
+} from "@/features/public-site/server";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
-import { usePublicOverview } from "./use-public-overview";
-
-export default function ServicesPage() {
-  const { data } = usePublicOverview();
+export default async function ServicesPage() {
+  const [data, pageContext] = await Promise.all([
+    getPublicServicesData(),
+    getPublicPageContext("services"),
+  ]);
 
   return (
     <div className="bg-[#f4f1ea] text-slate-950">
+      <PublicSeoTags metadata={pageContext.metadata} />
       <SiteHeader />
       <main>
         <section className="border-b border-slate-300 py-16 sm:py-24">

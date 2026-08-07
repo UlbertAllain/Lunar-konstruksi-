@@ -1,16 +1,21 @@
-"use client";
-
 import { Check, Compass, Eye, Layers3 } from "lucide-react";
 
+import { PublicSeoTags } from "@/features/public-site";
+import {
+  getPublicAboutData,
+  getPublicPageContext,
+} from "@/features/public-site/server";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
-import { usePublicOverview } from "./use-public-overview";
-
-export default function AboutPage() {
-  const { data } = usePublicOverview();
+export default async function AboutPage() {
+  const [data, pageContext] = await Promise.all([
+    getPublicAboutData(),
+    getPublicPageContext("about"),
+  ]);
 
   return (
     <div className="bg-[#f4f1ea] text-slate-950">
+      <PublicSeoTags metadata={pageContext.metadata} />
       <SiteHeader />
       <main>
         <section className="site-section border-b border-slate-300">

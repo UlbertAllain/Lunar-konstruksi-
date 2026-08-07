@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import {
   ArrowDownRight,
@@ -13,12 +11,18 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { PublicSeoTags } from "@/features/public-site";
+import {
+  getPublicHomeData,
+  getPublicPageContext,
+} from "@/features/public-site/server";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
-import { usePublicOverview } from "./use-public-overview";
-
-export default function HomePage() {
-  const { data } = usePublicOverview();
+export default async function HomePage() {
+  const [data, pageContext] = await Promise.all([
+    getPublicHomeData(),
+    getPublicPageContext("home"),
+  ]);
   const featuredServices = data.services.filter((item) => item.isFeatured).slice(0, 4);
   const services = featuredServices.length ? featuredServices : data.services.slice(0, 4);
   const featuredProjects = data.projects.filter((item) => item.isFeatured).slice(0, 3);
@@ -27,6 +31,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-[#f4f1ea] text-slate-950">
+      <PublicSeoTags metadata={pageContext.metadata} />
       <SiteHeader />
 
       <main>

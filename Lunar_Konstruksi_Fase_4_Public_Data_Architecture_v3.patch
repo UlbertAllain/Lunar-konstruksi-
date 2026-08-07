@@ -1,0 +1,617 @@
+diff --git a/PUBLIC_DATA_ARCHITECTURE.md b/PUBLIC_DATA_ARCHITECTURE.md
+new file mode 100644
+index 0000000..3f362c3
+--- /dev/null
++++ b/PUBLIC_DATA_ARCHITECTURE.md
+@@ -0,0 +1,41 @@
++# Public Data Architecture
++
++Fase 4 memisahkan jalur baca website publik dari CRUD admin.
++
++## Prinsip
++
++- Public pages membaca data di Server Components, bukan `useEffect` dari browser.
++- Tidak ada fallback portfolio/service/team palsu saat database kosong.
++- Query Firestore hanya mengambil record yang boleh dipublikasikan.
++- Data publik memiliki cache 5 menit agar company profile tetap ringan.
++- CMS page, site settings, navigation, dan SEO memiliki resolver publik terpusat.
++- Section CMS dapat di-hydrate dari source `services`, `projects`, `team`, `testimonials`, atau `faqs`.
++
++## Flow
++
++```text
++Public route
++  -> Server Component
++  -> features/public-site
++  -> filtered Firestore query
++  -> cached public read model
++  -> rendered HTML
++```
++
++## Publication fields
++
++| Collection | Public condition |
++| --- | --- |
++| services | `isPublished == true` |
++| projects | `isPublished == true` |
++| team | `isActive == true` |
++| testimonials | `isPublished == true` |
++| faqs | `isPublished == true` |
++
++## CMS section hydration
++
++Source-backed blocks mengambil data dari public read model. `content.featuredOnly` dan `content.limit` didukung secara terkontrol. Renderer visual final akan memakai hasil hydration ini pada fase redesign, sehingga block tidak melakukan query sendiri.
++
++## Legacy compatibility
++
++Endpoint `/api/public/overview`, `use-public-overview.ts`, dan `public-data.ts` boleh tetap berada sementara sampai seluruh detail page/route selesai dimigrasikan. Home, About, Services, dan Projects tidak lagi membutuhkan browser overview fetch setelah patch Fase 4 diterapkan.
+diff --git a/features/public-site/components/public-seo-tags.tsx b/features/public-site/components/public-seo-tags.tsx
+new file mode 100644
+index 0000000..a20547f
+--- /dev/null
++++ b/features/public-site/components/public-seo-tags.tsx
+@@ -0,0 +1,30 @@
++import type { SeoMetadata } from "@/features/seo/seo.types";
++
++export function PublicSeoTags({ metadata }: { metadata: SeoMetadata }) {
++  const robots = [
++    metadata.noIndex ? "noindex" : "index",
++    metadata.noFollow ? "nofollow" : "follow",
++  ].join(", ");
++
++  return (
++    <>
++      {metadata.title ? <title>{metadata.title}</title> : null}
++      {metadata.description ? (
++        <meta name="description" content={metadata.description} />
++      ) : null}
++      <meta name="robots" content={robots} />
++      {metadata.title ? (
++        <meta property="og:title" content={metadata.title} />
++      ) : null}
++      {metadata.description ? (
++        <meta property="og:description" content={metadata.description} />
++      ) : null}
++      {metadata.ogImageUrl ? (
++        <meta property="og:image" content={metadata.ogImageUrl} />
++      ) : null}
++      {metadata.canonicalUrl ? (
++        <link rel="canonical" href={metadata.canonicalUrl} />
++      ) : null}
++    </>
++  );
++}
+diff --git a/features/public-site/index.ts b/features/public-site/index.ts
+new file mode 100644
+index 0000000..e6ac5b9
+--- /dev/null
++++ b/features/public-site/index.ts
+@@ -0,0 +1,2 @@
++export * from "./components/public-seo-tags";
++export * from "./public-site.types";
+diff --git a/features/public-site/public-content.repository.ts b/features/public-site/public-content.repository.ts
+new file mode 100644
+index 0000000..90e715d
+--- /dev/null
++++ b/features/public-site/public-content.repository.ts
+@@ -0,0 +1,83 @@
++import type { QueryDocumentSnapshot } from "firebase-admin/firestore";
++
++import { getAdminDb } from "@/lib/firebase/admin";
++import { serializeDocument } from "@/lib/firestore";
++import type { FAQ } from "@/types/faq";
++import type { Project } from "@/types/project";
++import type { ConstructionService } from "@/types/service";
++import type { TeamMember } from "@/types/team";
++import type { Testimonial } from "@/types/testimonial";
++
++function serializeMany<T>(documents: QueryDocumentSnapshot[]) {
++  return documents.map((document) =>
++    serializeDocument<T>(document.id, document.data()),
++  );
++}
++
++function sortByOrder<T extends { order: number }>(items: T[]) {
++  return [...items].sort((a, b) => a.order - b.order);
++}
++
++async function listPublished<T extends { order: number }>(
++  collection: string,
++  field: "isPublished" | "isActive",
++) {
++  const snapshot = await getAdminDb()
++    .collection(collection)
++    .where(field, "==", true)
++    .get();
++
++  return sortByOrder(serializeMany<T>(snapshot.docs));
++}
++
++async function findPublishedBySlug<T extends { isPublished: boolean }>(
++  collection: string,
++  slug: string,
++) {
++  const snapshot = await getAdminDb()
++    .collection(collection)
++    .where("slug", "==", slug)
++    .limit(1)
++    .get();
++
++  const document = snapshot.docs[0];
++  if (!document) return null;
++
++  const item = serializeDocument<T>(document.id, document.data());
++  return item.isPublished ? item : null;
++}
++
++export function listPublicServices() {
++  return listPublished<ConstructionService>("services", "isPublished");
++}
++
++export function getPublicServiceBySlug(slug: string) {
++  return findPublishedBySlug<ConstructionService>("services", slug);
++}
++
++export async function listPublicProjects() {
++  const projects = await listPublished<Project>("projects", "isPublished");
++
++  return projects.sort(
++    (a, b) =>
++      a.order - b.order ||
++      b.year - a.year ||
++      a.title.localeCompare(b.title),
++  );
++}
++
++export function getPublicProjectBySlug(slug: string) {
++  return findPublishedBySlug<Project>("projects", slug);
++}
++
++export function listPublicTeam() {
++  return listPublished<TeamMember>("team", "isActive");
++}
++
++export function listPublicTestimonials() {
++  return listPublished<Testimonial>("testimonials", "isPublished");
++}
++
++export function listPublicFaqs() {
++  return listPublished<FAQ>("faqs", "isPublished");
++}
+diff --git a/features/public-site/public-seo.ts b/features/public-site/public-seo.ts
+new file mode 100644
+index 0000000..1c58ef6
+--- /dev/null
++++ b/features/public-site/public-seo.ts
+@@ -0,0 +1,37 @@
++import type { CmsSystemPageKey } from "@/features/pages/page.types";
++import type { SeoMetadata } from "@/features/seo/seo.types";
++import type { SiteSettings } from "@/features/site-settings/site-settings.types";
++
++const PAGE_TITLE_FALLBACKS: Record<CmsSystemPageKey, string> = {
++  home: "Lunar Konstruksi",
++  about: "Tentang",
++  services: "Layanan",
++  projects: "Project",
++  contact: "Kontak",
++};
++
++export function resolvePublicSeo(
++  systemKey: CmsSystemPageKey,
++  settings: SiteSettings,
++  pageSeo?: SeoMetadata,
++): SeoMetadata {
++  const siteSeo = settings.defaultSeo;
++  const siteName = settings.identity.siteName || settings.identity.companyName;
++  const fallbackTitle =
++    systemKey === "home"
++      ? siteName || PAGE_TITLE_FALLBACKS.home
++      : `${PAGE_TITLE_FALLBACKS[systemKey]}${siteName ? ` | ${siteName}` : ""}`;
++
++  return {
++    title: pageSeo?.title || siteSeo.title || fallbackTitle,
++    description:
++      pageSeo?.description ||
++      siteSeo.description ||
++      settings.identity.description ||
++      settings.identity.tagline,
++    ogImageUrl: pageSeo?.ogImageUrl || siteSeo.ogImageUrl || undefined,
++    canonicalUrl: pageSeo?.canonicalUrl || siteSeo.canonicalUrl || undefined,
++    noIndex: pageSeo?.noIndex ?? siteSeo.noIndex ?? false,
++    noFollow: pageSeo?.noFollow ?? siteSeo.noFollow ?? false,
++  };
++}
+diff --git a/features/public-site/public-site.service.ts b/features/public-site/public-site.service.ts
+new file mode 100644
+index 0000000..be3e041
+--- /dev/null
++++ b/features/public-site/public-site.service.ts
+@@ -0,0 +1,210 @@
++import { unstable_cache } from "next/cache";
++
++import { resolveCmsBlockSource } from "@/cms/blocks/registry";
++import type { CmsBlock, CmsContentSource } from "@/cms/blocks/block.types";
++import { getNavigationSettingsWithDefaults } from "@/features/navigation/server";
++import type { CmsSystemPageKey } from "@/features/pages/page.types";
++import { getCmsPageRecordBySystemKey } from "@/features/pages/server";
++import { getSiteSettingsWithDefaults } from "@/features/site-settings/server";
++
++import {
++  getPublicProjectBySlug as readPublicProjectBySlug,
++  getPublicServiceBySlug as readPublicServiceBySlug,
++  listPublicFaqs as readPublicFaqs,
++  listPublicProjects as readPublicProjects,
++  listPublicServices as readPublicServices,
++  listPublicTeam as readPublicTeam,
++  listPublicTestimonials as readPublicTestimonials,
++} from "./public-content.repository";
++import { resolvePublicSeo } from "./public-seo";
++import type {
++  HydratedCmsSection,
++  PublicOverviewData,
++  PublicPageContext,
++} from "./public-site.types";
++
++const CACHE_SECONDS = 300;
++
++const getCachedSiteSettings = unstable_cache(getSiteSettingsWithDefaults, [
++  "public-site-settings",
++], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-site-settings"],
++});
++
++const getCachedNavigation = unstable_cache(getNavigationSettingsWithDefaults, [
++  "public-navigation",
++], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-navigation"],
++});
++
++async function getCachedCmsPage(systemKey: CmsSystemPageKey) {
++  return unstable_cache(
++    () => getCmsPageRecordBySystemKey(systemKey),
++    ["public-cms-page", systemKey],
++    {
++      revalidate: CACHE_SECONDS,
++      tags: ["public-cms-pages", `public-cms-page:${systemKey}`],
++    },
++  )();
++}
++
++export const getPublicServices = unstable_cache(readPublicServices, [
++  "public-services",
++], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-services"],
++});
++
++export const getPublicProjects = unstable_cache(readPublicProjects, [
++  "public-projects",
++], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-projects"],
++});
++
++export const getPublicTeam = unstable_cache(readPublicTeam, ["public-team"], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-team"],
++});
++
++export const getPublicTestimonials = unstable_cache(readPublicTestimonials, [
++  "public-testimonials",
++], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-testimonials"],
++});
++
++export const getPublicFaqs = unstable_cache(readPublicFaqs, ["public-faqs"], {
++  revalidate: CACHE_SECONDS,
++  tags: ["public-faqs"],
++});
++
++export async function getPublicProjectBySlug(slug: string) {
++  return unstable_cache(
++    () => readPublicProjectBySlug(slug),
++    ["public-project", slug],
++    { revalidate: CACHE_SECONDS, tags: ["public-projects", `project:${slug}`] },
++  )();
++}
++
++export async function getPublicServiceBySlug(slug: string) {
++  return unstable_cache(
++    () => readPublicServiceBySlug(slug),
++    ["public-service", slug],
++    { revalidate: CACHE_SECONDS, tags: ["public-services", `service:${slug}`] },
++  )();
++}
++
++export async function getPublicOverviewData(): Promise<PublicOverviewData> {
++  const [services, projects, team, testimonials, faqs] = await Promise.all([
++    getPublicServices(),
++    getPublicProjects(),
++    getPublicTeam(),
++    getPublicTestimonials(),
++    getPublicFaqs(),
++  ]);
++
++  return { services, projects, team, testimonials, faqs };
++}
++
++export async function getPublicHomeData() {
++  return getPublicOverviewData();
++}
++
++export async function getPublicAboutData() {
++  return { team: await getPublicTeam() };
++}
++
++export async function getPublicProjectsData() {
++  return { projects: await getPublicProjects() };
++}
++
++export async function getPublicServicesData() {
++  return { services: await getPublicServices() };
++}
++
++function readPositiveInteger(value: unknown) {
++  return typeof value === "number" && Number.isInteger(value) && value > 0
++    ? value
++    : null;
++}
++
++function readBoolean(value: unknown) {
++  return typeof value === "boolean" ? value : false;
++}
++
++function getSourceData(
++  source: CmsContentSource,
++  content: PublicOverviewData,
++): unknown[] {
++  switch (source) {
++    case "services":
++      return content.services;
++    case "projects":
++      return content.projects;
++    case "team":
++      return content.team;
++    case "testimonials":
++      return content.testimonials;
++    case "faqs":
++      return content.faqs;
++  }
++}
++
++async function hydrateSections(
++  sections: CmsBlock[],
++): Promise<HydratedCmsSection[]> {
++  const visible = [...sections]
++    .filter((section) => section.isVisible)
++    .sort((a, b) => a.order - b.order);
++
++  const content = await getPublicOverviewData();
++
++  return visible.map((section) => {
++    const source = resolveCmsBlockSource(section);
++    if (!source) {
++      return { ...section, source: null, data: [] };
++    }
++
++    let data = [...getSourceData(source, content)];
++    if (readBoolean(section.content.featuredOnly)) {
++      data = data.filter(
++        (item) =>
++          typeof item === "object" &&
++          item !== null &&
++          "isFeatured" in item &&
++          item.isFeatured === true,
++      );
++    }
++
++    const limit = readPositiveInteger(section.content.limit);
++    if (limit) {
++      data = data.slice(0, limit);
++    }
++
++    return { ...section, source, data };
++  });
++}
++
++export async function getPublicPageContext(
++  systemKey: CmsSystemPageKey,
++): Promise<PublicPageContext> {
++  const [pageRecord, settings, navigation] = await Promise.all([
++    getCachedCmsPage(systemKey),
++    getCachedSiteSettings(),
++    getCachedNavigation(),
++  ]);
++
++  const page = pageRecord?.status === "published" ? pageRecord : null;
++  const sections = page ? await hydrateSections(page.sections) : [];
++
++  return {
++    page,
++    settings,
++    navigation,
++    sections,
++    metadata: resolvePublicSeo(systemKey, settings, page?.seo),
++  };
++}
+diff --git a/features/public-site/public-site.types.ts b/features/public-site/public-site.types.ts
+new file mode 100644
+index 0000000..cd4f584
+--- /dev/null
++++ b/features/public-site/public-site.types.ts
+@@ -0,0 +1,31 @@
++import type { CmsBlock, CmsContentSource } from "@/cms/blocks/block.types";
++import type { CmsPage } from "@/features/pages/page.types";
++import type { SeoMetadata } from "@/features/seo/seo.types";
++import type { NavigationSettings } from "@/features/navigation/navigation.types";
++import type { SiteSettings } from "@/features/site-settings/site-settings.types";
++import type { FAQ } from "@/types/faq";
++import type { Project } from "@/types/project";
++import type { ConstructionService } from "@/types/service";
++import type { TeamMember } from "@/types/team";
++import type { Testimonial } from "@/types/testimonial";
++
++export interface PublicOverviewData {
++  services: ConstructionService[];
++  projects: Project[];
++  team: TeamMember[];
++  testimonials: Testimonial[];
++  faqs: FAQ[];
++}
++
++export interface HydratedCmsSection extends CmsBlock {
++  source: CmsContentSource | null;
++  data: unknown[];
++}
++
++export interface PublicPageContext {
++  page: CmsPage | null;
++  settings: SiteSettings;
++  navigation: NavigationSettings;
++  sections: HydratedCmsSection[];
++  metadata: SeoMetadata;
++}
+diff --git a/features/public-site/server.ts b/features/public-site/server.ts
+new file mode 100644
+index 0000000..6fdf332
+--- /dev/null
++++ b/features/public-site/server.ts
+@@ -0,0 +1,2 @@
++export * from "./public-seo";
++export * from "./public-site.service";
+diff --git a/components/site/about-page.tsx b/components/site/about-page.tsx
+index 07f602f..b03bee1 100644
+--- a/components/site/about-page.tsx
++++ b/components/site/about-page.tsx
+@@ -1,15 +1,20 @@
+-"use client";
+-
+ import { Check, Compass, Eye, Layers3 } from "lucide-react";
++import { PublicSeoTags } from "@/features/public-site";
++import {
++  getPublicAboutData,
++  getPublicPageContext,
++} from "@/features/public-site/server";
+ 
+ import { SiteFooter } from "./site-footer";
+ import { SiteHeader } from "./site-header";
+-import { usePublicOverview } from "./use-public-overview";
+-
+-export default function AboutPage() {
+-  const { data } = usePublicOverview();
++export default async function AboutPage() {
++  const [data, pageContext] = await Promise.all([
++    getPublicAboutData(),
++    getPublicPageContext("about"),
++  ]);
+ 
+   return (
+     <div className="bg-[#f4f1ea] text-slate-950">
++      <PublicSeoTags metadata={pageContext.metadata} />
+       <SiteHeader />
+       <main>
+diff --git a/components/site/home-page.tsx b/components/site/home-page.tsx
+index 605f3c2..385cc0f 100644
+--- a/components/site/home-page.tsx
++++ b/components/site/home-page.tsx
+@@ -1,4 +1,2 @@
+-"use client";
+-
+ import Link from "next/link";
+ import {
+@@ -13,10 +11,16 @@ import {
+   Sparkles,
+ } from "lucide-react";
++import { PublicSeoTags } from "@/features/public-site";
++import {
++  getPublicHomeData,
++  getPublicPageContext,
++} from "@/features/public-site/server";
+ import { SiteFooter } from "./site-footer";
+ import { SiteHeader } from "./site-header";
+-import { usePublicOverview } from "./use-public-overview";
+-
+-export default function HomePage() {
+-  const { data } = usePublicOverview();
++export default async function HomePage() {
++  const [data, pageContext] = await Promise.all([
++    getPublicHomeData(),
++    getPublicPageContext("home"),
++  ]);
+   const featuredServices = data.services.filter((item) => item.isFeatured).slice(0, 4);
+   const services = featuredServices.length ? featuredServices : data.services.slice(0, 4);
+@@ -27,4 +31,5 @@ export default function HomePage() {
+   return (
+     <div className="bg-[#f4f1ea] text-slate-950">
++      <PublicSeoTags metadata={pageContext.metadata} />
+       <SiteHeader />
+       <main>
+diff --git a/components/site/projects-page.tsx b/components/site/projects-page.tsx
+index a0d0dc9..f6ed9bd 100644
+--- a/components/site/projects-page.tsx
++++ b/components/site/projects-page.tsx
+@@ -1,17 +1,22 @@
+-"use client";
+-
+ import Link from "next/link";
+ import { ArrowUpRight, MapPin } from "lucide-react";
++import { PublicSeoTags } from "@/features/public-site";
++import {
++  getPublicPageContext,
++  getPublicProjectsData,
++} from "@/features/public-site/server";
+ 
+ import { SiteFooter } from "./site-footer";
+ import { SiteHeader } from "./site-header";
+ 
+-import { usePublicOverview } from "./use-public-overview";
+-
+-export default function ProjectsPage() {
+-  const { data } = usePublicOverview();
++export default async function ProjectsPage() {
++  const [data, pageContext] = await Promise.all([
++    getPublicProjectsData(),
++    getPublicPageContext("projects"),
++  ]);
+ 
+   return (
+     <div className="bg-[#f4f1ea] text-slate-950">
++      <PublicSeoTags metadata={pageContext.metadata} />
+       <SiteHeader />
+       <main>
+diff --git a/components/site/services-page.tsx b/components/site/services-page.tsx
+index 4d41a7b..64bc9f2 100644
+--- a/components/site/services-page.tsx
++++ b/components/site/services-page.tsx
+@@ -1,17 +1,22 @@
+-"use client";
+-
+ import Link from "next/link";
+ import { ArrowUpRight, Check } from "lucide-react";
++import { PublicSeoTags } from "@/features/public-site";
++import {
++  getPublicPageContext,
++  getPublicServicesData,
++} from "@/features/public-site/server";
+ import { SiteFooter } from "./site-footer";
+ 
+ import { SiteHeader } from "./site-header";
+ 
+-import { usePublicOverview } from "./use-public-overview";
+-
+-export default function ServicesPage() {
+-  const { data } = usePublicOverview();
++export default async function ServicesPage() {
++  const [data, pageContext] = await Promise.all([
++    getPublicServicesData(),
++    getPublicPageContext("services"),
++  ]);
+ 
+   return (
+     <div className="bg-[#f4f1ea] text-slate-950">
++      <PublicSeoTags metadata={pageContext.metadata} />
+       <SiteHeader />
+       <main>

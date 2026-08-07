@@ -1,0 +1,199 @@
+# Lunar Konstruksi - Fase 4 Public Data Architecture
+# Installer v4: baseline-independent, pattern-based.
+# Run from the repository root: powershell -ExecutionPolicy Bypass -File .\Apply_Lunar_Fase_4_v4.ps1
+
+$ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
+
+function Fail([string]$Message) {
+  throw "[FASE 4] $Message"
+}
+
+function Write-Utf8NoBom([string]$Path, [string]$Content) {
+  $directory = Split-Path -Parent $Path
+  if ($directory -and -not (Test-Path $directory)) {
+    New-Item -ItemType Directory -Force -Path $directory | Out-Null
+  }
+  $utf8 = [System.Text.UTF8Encoding]::new($false)
+  [System.IO.File]::WriteAllText($Path, $Content, $utf8)
+}
+
+function Replace-First([string]$Text, [string]$Search, [string]$Replacement) {
+  $index = $Text.IndexOf($Search, [System.StringComparison]::Ordinal)
+  if ($index -lt 0) { return $null }
+  return $Text.Substring(0, $index) + $Replacement + $Text.Substring($index + $Search.Length)
+}
+
+$repoRoot = (& git rev-parse --show-toplevel 2>$null)
+if (-not $repoRoot) { Fail "Jalankan script ini dari dalam repository Git Lunar Konstruksi." }
+$repoRoot = $repoRoot.Trim()
+Set-Location $repoRoot
+
+$branch = (& git branch --show-current).Trim()
+$head = (& git rev-parse --short HEAD).Trim()
+Write-Host "[FASE 4] Repo   : $repoRoot" -ForegroundColor Cyan
+Write-Host "[FASE 4] Branch : $branch" -ForegroundColor Cyan
+Write-Host "[FASE 4] HEAD   : $head" -ForegroundColor Cyan
+
+$trackedStatus = & git status --porcelain --untracked-files=no
+if ($LASTEXITCODE -ne 0) { Fail "Tidak bisa membaca git status." }
+if ($trackedStatus) {
+  Write-Host $trackedStatus
+  Fail "Ada perubahan TRACKED yang belum disimpan. Commit/stash dulu agar installer aman."
+}
+
+$required = @(
+  "cms/blocks/block.types.ts",
+  "cms/blocks/registry.ts",
+  "features/pages/page.types.ts",
+  "features/pages/server.ts",
+  "features/navigation/navigation.types.ts",
+  "features/navigation/server.ts",
+  "features/site-settings/site-settings.types.ts",
+  "features/site-settings/server.ts",
+  "features/seo/seo.types.ts",
+  "features/content/content.registry.ts",
+  "components/site/home-page.tsx",
+  "components/site/about-page.tsx",
+  "components/site/projects-page.tsx",
+  "components/site/services-page.tsx"
+)
+
+$missing = @($required | Where-Object { -not (Test-Path $_) })
+if ($missing.Count -gt 0) {
+  Write-Host "[FASE 4] Prasyarat yang tidak ditemukan:" -ForegroundColor Yellow
+  $missing | ForEach-Object { Write-Host "  - $_" }
+  Fail "Fase 1-3 pada branch/checkout ini belum lengkap. Tidak ada file yang diubah."
+}
+
+# All prechecks passed. From this point changes are intentional.
+$payload = @{
+  "PUBLIC_DATA_ARCHITECTURE.md" = "IyBQdWJsaWMgRGF0YSBBcmNoaXRlY3R1cmUKCkZhc2UgNCBtZW1pc2Foa2FuIGphbHVyIGJhY2Egd2Vic2l0ZSBwdWJsaWsgZGFyaSBDUlVEIGFkbWluLgoKIyMgUHJpbnNpcAoKLSBQdWJsaWMgcGFnZXMgbWVtYmFjYSBkYXRhIGRpIFNlcnZlciBDb21wb25lbnRzLCBidWthbiBgdXNlRWZmZWN0YCBkYXJpIGJyb3dzZXIuCi0gVGlkYWsgYWRhIGZhbGxiYWNrIHBvcnRmb2xpby9zZXJ2aWNlL3RlYW0gcGFsc3Ugc2FhdCBkYXRhYmFzZSBrb3NvbmcuCi0gUXVlcnkgRmlyZXN0b3JlIGhhbnlhIG1lbmdhbWJpbCByZWNvcmQgeWFuZyBib2xlaCBkaXB1Ymxpa2FzaWthbi4KLSBEYXRhIHB1YmxpayBtZW1pbGlraSBjYWNoZSA1IG1lbml0IGFnYXIgY29tcGFueSBwcm9maWxlIHRldGFwIHJpbmdhbi4KLSBDTVMgcGFnZSwgc2l0ZSBzZXR0aW5ncywgbmF2aWdhdGlvbiwgZGFuIFNFTyBtZW1pbGlraSByZXNvbHZlciBwdWJsaWsgdGVycHVzYXQuCi0gU2VjdGlvbiBDTVMgZGFwYXQgZGktaHlkcmF0ZSBkYXJpIHNvdXJjZSBgc2VydmljZXNgLCBgcHJvamVjdHNgLCBgdGVhbWAsIGB0ZXN0aW1vbmlhbHNgLCBhdGF1IGBmYXFzYC4KCiMjIEZsb3cKCmBgYHRleHQKUHVibGljIHJvdXRlCiAgLT4gU2VydmVyIENvbXBvbmVudAogIC0+IGZlYXR1cmVzL3B1YmxpYy1zaXRlCiAgLT4gZmlsdGVyZWQgRmlyZXN0b3JlIHF1ZXJ5CiAgLT4gY2FjaGVkIHB1YmxpYyByZWFkIG1vZGVsCiAgLT4gcmVuZGVyZWQgSFRNTApgYGAKCiMjIFB1YmxpY2F0aW9uIGZpZWxkcwoKfCBDb2xsZWN0aW9uIHwgUHVibGljIGNvbmRpdGlvbiB8CnwgLS0tIHwgLS0tIHwKfCBzZXJ2aWNlcyB8IGBpc1B1Ymxpc2hlZCA9PSB0cnVlYCB8CnwgcHJvamVjdHMgfCBgaXNQdWJsaXNoZWQgPT0gdHJ1ZWAgfAp8IHRlYW0gfCBgaXNBY3RpdmUgPT0gdHJ1ZWAgfAp8IHRlc3RpbW9uaWFscyB8IGBpc1B1Ymxpc2hlZCA9PSB0cnVlYCB8CnwgZmFxcyB8IGBpc1B1Ymxpc2hlZCA9PSB0cnVlYCB8CgojIyBDTVMgc2VjdGlvbiBoeWRyYXRpb24KClNvdXJjZS1iYWNrZWQgYmxvY2tzIG1lbmdhbWJpbCBkYXRhIGRhcmkgcHVibGljIHJlYWQgbW9kZWwuIGBjb250ZW50LmZlYXR1cmVkT25seWAgZGFuIGBjb250ZW50LmxpbWl0YCBkaWR1a3VuZyBzZWNhcmEgdGVya29udHJvbC4gUmVuZGVyZXIgdmlzdWFsIGZpbmFsIGFrYW4gbWVtYWthaSBoYXNpbCBoeWRyYXRpb24gaW5pIHBhZGEgZmFzZSByZWRlc2lnbiwgc2VoaW5nZ2EgYmxvY2sgdGlkYWsgbWVsYWt1a2FuIHF1ZXJ5IHNlbmRpcmkuCgojIyBMZWdhY3kgY29tcGF0aWJpbGl0eQoKRW5kcG9pbnQgYC9hcGkvcHVibGljL292ZXJ2aWV3YCwgYHVzZS1wdWJsaWMtb3ZlcnZpZXcudHNgLCBkYW4gYHB1YmxpYy1kYXRhLnRzYCBib2xlaCB0ZXRhcCBiZXJhZGEgc2VtZW50YXJhIHNhbXBhaSBzZWx1cnVoIGRldGFpbCBwYWdlL3JvdXRlIHNlbGVzYWkgZGltaWdyYXNpa2FuLiBIb21lLCBBYm91dCwgU2VydmljZXMsIGRhbiBQcm9qZWN0cyB0aWRhayBsYWdpIG1lbWJ1dHVoa2FuIGJyb3dzZXIgb3ZlcnZpZXcgZmV0Y2ggc2V0ZWxhaCBwYXRjaCBGYXNlIDQgZGl0ZXJhcGthbi4K"
+  "features/public-site/components/public-seo-tags.tsx" = "aW1wb3J0IHR5cGUgeyBTZW9NZXRhZGF0YSB9IGZyb20gIkAvZmVhdHVyZXMvc2VvL3Nlby50eXBlcyI7CgpleHBvcnQgZnVuY3Rpb24gUHVibGljU2VvVGFncyh7IG1ldGFkYXRhIH06IHsgbWV0YWRhdGE6IFNlb01ldGFkYXRhIH0pIHsKICBjb25zdCByb2JvdHMgPSBbCiAgICBtZXRhZGF0YS5ub0luZGV4ID8gIm5vaW5kZXgiIDogImluZGV4IiwKICAgIG1ldGFkYXRhLm5vRm9sbG93ID8gIm5vZm9sbG93IiA6ICJmb2xsb3ciLAogIF0uam9pbigiLCAiKTsKCiAgcmV0dXJuICgKICAgIDw+CiAgICAgIHttZXRhZGF0YS50aXRsZSA/IDx0aXRsZT57bWV0YWRhdGEudGl0bGV9PC90aXRsZT4gOiBudWxsfQogICAgICB7bWV0YWRhdGEuZGVzY3JpcHRpb24gPyAoCiAgICAgICAgPG1ldGEgbmFtZT0iZGVzY3JpcHRpb24iIGNvbnRlbnQ9e21ldGFkYXRhLmRlc2NyaXB0aW9ufSAvPgogICAgICApIDogbnVsbH0KICAgICAgPG1ldGEgbmFtZT0icm9ib3RzIiBjb250ZW50PXtyb2JvdHN9IC8+CiAgICAgIHttZXRhZGF0YS50aXRsZSA/ICgKICAgICAgICA8bWV0YSBwcm9wZXJ0eT0ib2c6dGl0bGUiIGNvbnRlbnQ9e21ldGFkYXRhLnRpdGxlfSAvPgogICAgICApIDogbnVsbH0KICAgICAge21ldGFkYXRhLmRlc2NyaXB0aW9uID8gKAogICAgICAgIDxtZXRhIHByb3BlcnR5PSJvZzpkZXNjcmlwdGlvbiIgY29udGVudD17bWV0YWRhdGEuZGVzY3JpcHRpb259IC8+CiAgICAgICkgOiBudWxsfQogICAgICB7bWV0YWRhdGEub2dJbWFnZVVybCA/ICgKICAgICAgICA8bWV0YSBwcm9wZXJ0eT0ib2c6aW1hZ2UiIGNvbnRlbnQ9e21ldGFkYXRhLm9nSW1hZ2VVcmx9IC8+CiAgICAgICkgOiBudWxsfQogICAgICB7bWV0YWRhdGEuY2Fub25pY2FsVXJsID8gKAogICAgICAgIDxsaW5rIHJlbD0iY2Fub25pY2FsIiBocmVmPXttZXRhZGF0YS5jYW5vbmljYWxVcmx9IC8+CiAgICAgICkgOiBudWxsfQogICAgPC8+CiAgKTsKfQo="
+  "features/public-site/index.ts" = "ZXhwb3J0ICogZnJvbSAiLi9jb21wb25lbnRzL3B1YmxpYy1zZW8tdGFncyI7CmV4cG9ydCAqIGZyb20gIi4vcHVibGljLXNpdGUudHlwZXMiOwo="
+  "features/public-site/public-content.repository.ts" = "aW1wb3J0IHR5cGUgeyBRdWVyeURvY3VtZW50U25hcHNob3QgfSBmcm9tICJmaXJlYmFzZS1hZG1pbi9maXJlc3RvcmUiOwoKaW1wb3J0IHsgZ2V0QWRtaW5EYiB9IGZyb20gIkAvbGliL2ZpcmViYXNlL2FkbWluIjsKaW1wb3J0IHsgc2VyaWFsaXplRG9jdW1lbnQgfSBmcm9tICJAL2xpYi9maXJlc3RvcmUiOwppbXBvcnQgdHlwZSB7IEZBUSB9IGZyb20gIkAvdHlwZXMvZmFxIjsKaW1wb3J0IHR5cGUgeyBQcm9qZWN0IH0gZnJvbSAiQC90eXBlcy9wcm9qZWN0IjsKaW1wb3J0IHR5cGUgeyBDb25zdHJ1Y3Rpb25TZXJ2aWNlIH0gZnJvbSAiQC90eXBlcy9zZXJ2aWNlIjsKaW1wb3J0IHR5cGUgeyBUZWFtTWVtYmVyIH0gZnJvbSAiQC90eXBlcy90ZWFtIjsKaW1wb3J0IHR5cGUgeyBUZXN0aW1vbmlhbCB9IGZyb20gIkAvdHlwZXMvdGVzdGltb25pYWwiOwoKZnVuY3Rpb24gc2VyaWFsaXplTWFueTxUPihkb2N1bWVudHM6IFF1ZXJ5RG9jdW1lbnRTbmFwc2hvdFtdKSB7CiAgcmV0dXJuIGRvY3VtZW50cy5tYXAoKGRvY3VtZW50KSA9PgogICAgc2VyaWFsaXplRG9jdW1lbnQ8VD4oZG9jdW1lbnQuaWQsIGRvY3VtZW50LmRhdGEoKSksCiAgKTsKfQoKZnVuY3Rpb24gc29ydEJ5T3JkZXI8VCBleHRlbmRzIHsgb3JkZXI6IG51bWJlciB9PihpdGVtczogVFtdKSB7CiAgcmV0dXJuIFsuLi5pdGVtc10uc29ydCgoYSwgYikgPT4gYS5vcmRlciAtIGIub3JkZXIpOwp9Cgphc3luYyBmdW5jdGlvbiBsaXN0UHVibGlzaGVkPFQgZXh0ZW5kcyB7IG9yZGVyOiBudW1iZXIgfT4oCiAgY29sbGVjdGlvbjogc3RyaW5nLAogIGZpZWxkOiAiaXNQdWJsaXNoZWQiIHwgImlzQWN0aXZlIiwKKSB7CiAgY29uc3Qgc25hcHNob3QgPSBhd2FpdCBnZXRBZG1pbkRiKCkKICAgIC5jb2xsZWN0aW9uKGNvbGxlY3Rpb24pCiAgICAud2hlcmUoZmllbGQsICI9PSIsIHRydWUpCiAgICAuZ2V0KCk7CgogIHJldHVybiBzb3J0QnlPcmRlcihzZXJpYWxpemVNYW55PFQ+KHNuYXBzaG90LmRvY3MpKTsKfQoKYXN5bmMgZnVuY3Rpb24gZmluZFB1Ymxpc2hlZEJ5U2x1ZzxUIGV4dGVuZHMgeyBpc1B1Ymxpc2hlZDogYm9vbGVhbiB9PigKICBjb2xsZWN0aW9uOiBzdHJpbmcsCiAgc2x1Zzogc3RyaW5nLAopIHsKICBjb25zdCBzbmFwc2hvdCA9IGF3YWl0IGdldEFkbWluRGIoKQogICAgLmNvbGxlY3Rpb24oY29sbGVjdGlvbikKICAgIC53aGVyZSgic2x1ZyIsICI9PSIsIHNsdWcpCiAgICAubGltaXQoMSkKICAgIC5nZXQoKTsKCiAgY29uc3QgZG9jdW1lbnQgPSBzbmFwc2hvdC5kb2NzWzBdOwogIGlmICghZG9jdW1lbnQpIHJldHVybiBudWxsOwoKICBjb25zdCBpdGVtID0gc2VyaWFsaXplRG9jdW1lbnQ8VD4oZG9jdW1lbnQuaWQsIGRvY3VtZW50LmRhdGEoKSk7CiAgcmV0dXJuIGl0ZW0uaXNQdWJsaXNoZWQgPyBpdGVtIDogbnVsbDsKfQoKZXhwb3J0IGZ1bmN0aW9uIGxpc3RQdWJsaWNTZXJ2aWNlcygpIHsKICByZXR1cm4gbGlzdFB1Ymxpc2hlZDxDb25zdHJ1Y3Rpb25TZXJ2aWNlPigic2VydmljZXMiLCAiaXNQdWJsaXNoZWQiKTsKfQoKZXhwb3J0IGZ1bmN0aW9uIGdldFB1YmxpY1NlcnZpY2VCeVNsdWcoc2x1Zzogc3RyaW5nKSB7CiAgcmV0dXJuIGZpbmRQdWJsaXNoZWRCeVNsdWc8Q29uc3RydWN0aW9uU2VydmljZT4oInNlcnZpY2VzIiwgc2x1Zyk7Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBsaXN0UHVibGljUHJvamVjdHMoKSB7CiAgY29uc3QgcHJvamVjdHMgPSBhd2FpdCBsaXN0UHVibGlzaGVkPFByb2plY3Q+KCJwcm9qZWN0cyIsICJpc1B1Ymxpc2hlZCIpOwoKICByZXR1cm4gcHJvamVjdHMuc29ydCgKICAgIChhLCBiKSA9PgogICAgICBhLm9yZGVyIC0gYi5vcmRlciB8fAogICAgICBiLnllYXIgLSBhLnllYXIgfHwKICAgICAgYS50aXRsZS5sb2NhbGVDb21wYXJlKGIudGl0bGUpLAogICk7Cn0KCmV4cG9ydCBmdW5jdGlvbiBnZXRQdWJsaWNQcm9qZWN0QnlTbHVnKHNsdWc6IHN0cmluZykgewogIHJldHVybiBmaW5kUHVibGlzaGVkQnlTbHVnPFByb2plY3Q+KCJwcm9qZWN0cyIsIHNsdWcpOwp9CgpleHBvcnQgZnVuY3Rpb24gbGlzdFB1YmxpY1RlYW0oKSB7CiAgcmV0dXJuIGxpc3RQdWJsaXNoZWQ8VGVhbU1lbWJlcj4oInRlYW0iLCAiaXNBY3RpdmUiKTsKfQoKZXhwb3J0IGZ1bmN0aW9uIGxpc3RQdWJsaWNUZXN0aW1vbmlhbHMoKSB7CiAgcmV0dXJuIGxpc3RQdWJsaXNoZWQ8VGVzdGltb25pYWw+KCJ0ZXN0aW1vbmlhbHMiLCAiaXNQdWJsaXNoZWQiKTsKfQoKZXhwb3J0IGZ1bmN0aW9uIGxpc3RQdWJsaWNGYXFzKCkgewogIHJldHVybiBsaXN0UHVibGlzaGVkPEZBUT4oImZhcXMiLCAiaXNQdWJsaXNoZWQiKTsKfQo="
+  "features/public-site/public-seo.ts" = "aW1wb3J0IHR5cGUgeyBDbXNTeXN0ZW1QYWdlS2V5IH0gZnJvbSAiQC9mZWF0dXJlcy9wYWdlcy9wYWdlLnR5cGVzIjsKaW1wb3J0IHR5cGUgeyBTZW9NZXRhZGF0YSB9IGZyb20gIkAvZmVhdHVyZXMvc2VvL3Nlby50eXBlcyI7CmltcG9ydCB0eXBlIHsgU2l0ZVNldHRpbmdzIH0gZnJvbSAiQC9mZWF0dXJlcy9zaXRlLXNldHRpbmdzL3NpdGUtc2V0dGluZ3MudHlwZXMiOwoKY29uc3QgUEFHRV9USVRMRV9GQUxMQkFDS1M6IFJlY29yZDxDbXNTeXN0ZW1QYWdlS2V5LCBzdHJpbmc+ID0gewogIGhvbWU6ICJMdW5hciBLb25zdHJ1a3NpIiwKICBhYm91dDogIlRlbnRhbmciLAogIHNlcnZpY2VzOiAiTGF5YW5hbiIsCiAgcHJvamVjdHM6ICJQcm9qZWN0IiwKICBjb250YWN0OiAiS29udGFrIiwKfTsKCmV4cG9ydCBmdW5jdGlvbiByZXNvbHZlUHVibGljU2VvKAogIHN5c3RlbUtleTogQ21zU3lzdGVtUGFnZUtleSwKICBzZXR0aW5nczogU2l0ZVNldHRpbmdzLAogIHBhZ2VTZW8/OiBTZW9NZXRhZGF0YSwKKTogU2VvTWV0YWRhdGEgewogIGNvbnN0IHNpdGVTZW8gPSBzZXR0aW5ncy5kZWZhdWx0U2VvOwogIGNvbnN0IHNpdGVOYW1lID0gc2V0dGluZ3MuaWRlbnRpdHkuc2l0ZU5hbWUgfHwgc2V0dGluZ3MuaWRlbnRpdHkuY29tcGFueU5hbWU7CiAgY29uc3QgZmFsbGJhY2tUaXRsZSA9CiAgICBzeXN0ZW1LZXkgPT09ICJob21lIgogICAgICA/IHNpdGVOYW1lIHx8IFBBR0VfVElUTEVfRkFMTEJBQ0tTLmhvbWUKICAgICAgOiBgJHtQQUdFX1RJVExFX0ZBTExCQUNLU1tzeXN0ZW1LZXldfSR7c2l0ZU5hbWUgPyBgIHwgJHtzaXRlTmFtZX1gIDogIiJ9YDsKCiAgcmV0dXJuIHsKICAgIHRpdGxlOiBwYWdlU2VvPy50aXRsZSB8fCBzaXRlU2VvLnRpdGxlIHx8IGZhbGxiYWNrVGl0bGUsCiAgICBkZXNjcmlwdGlvbjoKICAgICAgcGFnZVNlbz8uZGVzY3JpcHRpb24gfHwKICAgICAgc2l0ZVNlby5kZXNjcmlwdGlvbiB8fAogICAgICBzZXR0aW5ncy5pZGVudGl0eS5kZXNjcmlwdGlvbiB8fAogICAgICBzZXR0aW5ncy5pZGVudGl0eS50YWdsaW5lLAogICAgb2dJbWFnZVVybDogcGFnZVNlbz8ub2dJbWFnZVVybCB8fCBzaXRlU2VvLm9nSW1hZ2VVcmwgfHwgdW5kZWZpbmVkLAogICAgY2Fub25pY2FsVXJsOiBwYWdlU2VvPy5jYW5vbmljYWxVcmwgfHwgc2l0ZVNlby5jYW5vbmljYWxVcmwgfHwgdW5kZWZpbmVkLAogICAgbm9JbmRleDogcGFnZVNlbz8ubm9JbmRleCA/PyBzaXRlU2VvLm5vSW5kZXggPz8gZmFsc2UsCiAgICBub0ZvbGxvdzogcGFnZVNlbz8ubm9Gb2xsb3cgPz8gc2l0ZVNlby5ub0ZvbGxvdyA/PyBmYWxzZSwKICB9Owp9Cg=="
+  "features/public-site/public-site.service.ts" = "aW1wb3J0IHsgdW5zdGFibGVfY2FjaGUgfSBmcm9tICJuZXh0L2NhY2hlIjsKCmltcG9ydCB7IHJlc29sdmVDbXNCbG9ja1NvdXJjZSB9IGZyb20gIkAvY21zL2Jsb2Nrcy9yZWdpc3RyeSI7CmltcG9ydCB0eXBlIHsgQ21zQmxvY2ssIENtc0NvbnRlbnRTb3VyY2UgfSBmcm9tICJAL2Ntcy9ibG9ja3MvYmxvY2sudHlwZXMiOwppbXBvcnQgeyBnZXROYXZpZ2F0aW9uU2V0dGluZ3NXaXRoRGVmYXVsdHMgfSBmcm9tICJAL2ZlYXR1cmVzL25hdmlnYXRpb24vc2VydmVyIjsKaW1wb3J0IHR5cGUgeyBDbXNTeXN0ZW1QYWdlS2V5IH0gZnJvbSAiQC9mZWF0dXJlcy9wYWdlcy9wYWdlLnR5cGVzIjsKaW1wb3J0IHsgZ2V0Q21zUGFnZVJlY29yZEJ5U3lzdGVtS2V5IH0gZnJvbSAiQC9mZWF0dXJlcy9wYWdlcy9zZXJ2ZXIiOwppbXBvcnQgeyBnZXRTaXRlU2V0dGluZ3NXaXRoRGVmYXVsdHMgfSBmcm9tICJAL2ZlYXR1cmVzL3NpdGUtc2V0dGluZ3Mvc2VydmVyIjsKCmltcG9ydCB7CiAgZ2V0UHVibGljUHJvamVjdEJ5U2x1ZyBhcyByZWFkUHVibGljUHJvamVjdEJ5U2x1ZywKICBnZXRQdWJsaWNTZXJ2aWNlQnlTbHVnIGFzIHJlYWRQdWJsaWNTZXJ2aWNlQnlTbHVnLAogIGxpc3RQdWJsaWNGYXFzIGFzIHJlYWRQdWJsaWNGYXFzLAogIGxpc3RQdWJsaWNQcm9qZWN0cyBhcyByZWFkUHVibGljUHJvamVjdHMsCiAgbGlzdFB1YmxpY1NlcnZpY2VzIGFzIHJlYWRQdWJsaWNTZXJ2aWNlcywKICBsaXN0UHVibGljVGVhbSBhcyByZWFkUHVibGljVGVhbSwKICBsaXN0UHVibGljVGVzdGltb25pYWxzIGFzIHJlYWRQdWJsaWNUZXN0aW1vbmlhbHMsCn0gZnJvbSAiLi9wdWJsaWMtY29udGVudC5yZXBvc2l0b3J5IjsKaW1wb3J0IHsgcmVzb2x2ZVB1YmxpY1NlbyB9IGZyb20gIi4vcHVibGljLXNlbyI7CmltcG9ydCB0eXBlIHsKICBIeWRyYXRlZENtc1NlY3Rpb24sCiAgUHVibGljT3ZlcnZpZXdEYXRhLAogIFB1YmxpY1BhZ2VDb250ZXh0LAp9IGZyb20gIi4vcHVibGljLXNpdGUudHlwZXMiOwoKY29uc3QgQ0FDSEVfU0VDT05EUyA9IDMwMDsKCmNvbnN0IGdldENhY2hlZFNpdGVTZXR0aW5ncyA9IHVuc3RhYmxlX2NhY2hlKGdldFNpdGVTZXR0aW5nc1dpdGhEZWZhdWx0cywgWwogICJwdWJsaWMtc2l0ZS1zZXR0aW5ncyIsCl0sIHsKICByZXZhbGlkYXRlOiBDQUNIRV9TRUNPTkRTLAogIHRhZ3M6IFsicHVibGljLXNpdGUtc2V0dGluZ3MiXSwKfSk7Cgpjb25zdCBnZXRDYWNoZWROYXZpZ2F0aW9uID0gdW5zdGFibGVfY2FjaGUoZ2V0TmF2aWdhdGlvblNldHRpbmdzV2l0aERlZmF1bHRzLCBbCiAgInB1YmxpYy1uYXZpZ2F0aW9uIiwKXSwgewogIHJldmFsaWRhdGU6IENBQ0hFX1NFQ09ORFMsCiAgdGFnczogWyJwdWJsaWMtbmF2aWdhdGlvbiJdLAp9KTsKCmFzeW5jIGZ1bmN0aW9uIGdldENhY2hlZENtc1BhZ2Uoc3lzdGVtS2V5OiBDbXNTeXN0ZW1QYWdlS2V5KSB7CiAgcmV0dXJuIHVuc3RhYmxlX2NhY2hlKAogICAgKCkgPT4gZ2V0Q21zUGFnZVJlY29yZEJ5U3lzdGVtS2V5KHN5c3RlbUtleSksCiAgICBbInB1YmxpYy1jbXMtcGFnZSIsIHN5c3RlbUtleV0sCiAgICB7CiAgICAgIHJldmFsaWRhdGU6IENBQ0hFX1NFQ09ORFMsCiAgICAgIHRhZ3M6IFsicHVibGljLWNtcy1wYWdlcyIsIGBwdWJsaWMtY21zLXBhZ2U6JHtzeXN0ZW1LZXl9YF0sCiAgICB9LAogICkoKTsKfQoKZXhwb3J0IGNvbnN0IGdldFB1YmxpY1NlcnZpY2VzID0gdW5zdGFibGVfY2FjaGUocmVhZFB1YmxpY1NlcnZpY2VzLCBbCiAgInB1YmxpYy1zZXJ2aWNlcyIsCl0sIHsKICByZXZhbGlkYXRlOiBDQUNIRV9TRUNPTkRTLAogIHRhZ3M6IFsicHVibGljLXNlcnZpY2VzIl0sCn0pOwoKZXhwb3J0IGNvbnN0IGdldFB1YmxpY1Byb2plY3RzID0gdW5zdGFibGVfY2FjaGUocmVhZFB1YmxpY1Byb2plY3RzLCBbCiAgInB1YmxpYy1wcm9qZWN0cyIsCl0sIHsKICByZXZhbGlkYXRlOiBDQUNIRV9TRUNPTkRTLAogIHRhZ3M6IFsicHVibGljLXByb2plY3RzIl0sCn0pOwoKZXhwb3J0IGNvbnN0IGdldFB1YmxpY1RlYW0gPSB1bnN0YWJsZV9jYWNoZShyZWFkUHVibGljVGVhbSwgWyJwdWJsaWMtdGVhbSJdLCB7CiAgcmV2YWxpZGF0ZTogQ0FDSEVfU0VDT05EUywKICB0YWdzOiBbInB1YmxpYy10ZWFtIl0sCn0pOwoKZXhwb3J0IGNvbnN0IGdldFB1YmxpY1Rlc3RpbW9uaWFscyA9IHVuc3RhYmxlX2NhY2hlKHJlYWRQdWJsaWNUZXN0aW1vbmlhbHMsIFsKICAicHVibGljLXRlc3RpbW9uaWFscyIsCl0sIHsKICByZXZhbGlkYXRlOiBDQUNIRV9TRUNPTkRTLAogIHRhZ3M6IFsicHVibGljLXRlc3RpbW9uaWFscyJdLAp9KTsKCmV4cG9ydCBjb25zdCBnZXRQdWJsaWNGYXFzID0gdW5zdGFibGVfY2FjaGUocmVhZFB1YmxpY0ZhcXMsIFsicHVibGljLWZhcXMiXSwgewogIHJldmFsaWRhdGU6IENBQ0hFX1NFQ09ORFMsCiAgdGFnczogWyJwdWJsaWMtZmFxcyJdLAp9KTsKCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRQdWJsaWNQcm9qZWN0QnlTbHVnKHNsdWc6IHN0cmluZykgewogIHJldHVybiB1bnN0YWJsZV9jYWNoZSgKICAgICgpID0+IHJlYWRQdWJsaWNQcm9qZWN0QnlTbHVnKHNsdWcpLAogICAgWyJwdWJsaWMtcHJvamVjdCIsIHNsdWddLAogICAgeyByZXZhbGlkYXRlOiBDQUNIRV9TRUNPTkRTLCB0YWdzOiBbInB1YmxpYy1wcm9qZWN0cyIsIGBwcm9qZWN0OiR7c2x1Z31gXSB9LAogICkoKTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldFB1YmxpY1NlcnZpY2VCeVNsdWcoc2x1Zzogc3RyaW5nKSB7CiAgcmV0dXJuIHVuc3RhYmxlX2NhY2hlKAogICAgKCkgPT4gcmVhZFB1YmxpY1NlcnZpY2VCeVNsdWcoc2x1ZyksCiAgICBbInB1YmxpYy1zZXJ2aWNlIiwgc2x1Z10sCiAgICB7IHJldmFsaWRhdGU6IENBQ0hFX1NFQ09ORFMsIHRhZ3M6IFsicHVibGljLXNlcnZpY2VzIiwgYHNlcnZpY2U6JHtzbHVnfWBdIH0sCiAgKSgpOwp9CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2V0UHVibGljT3ZlcnZpZXdEYXRhKCk6IFByb21pc2U8UHVibGljT3ZlcnZpZXdEYXRhPiB7CiAgY29uc3QgW3NlcnZpY2VzLCBwcm9qZWN0cywgdGVhbSwgdGVzdGltb25pYWxzLCBmYXFzXSA9IGF3YWl0IFByb21pc2UuYWxsKFsKICAgIGdldFB1YmxpY1NlcnZpY2VzKCksCiAgICBnZXRQdWJsaWNQcm9qZWN0cygpLAogICAgZ2V0UHVibGljVGVhbSgpLAogICAgZ2V0UHVibGljVGVzdGltb25pYWxzKCksCiAgICBnZXRQdWJsaWNGYXFzKCksCiAgXSk7CgogIHJldHVybiB7IHNlcnZpY2VzLCBwcm9qZWN0cywgdGVhbSwgdGVzdGltb25pYWxzLCBmYXFzIH07Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRQdWJsaWNIb21lRGF0YSgpIHsKICByZXR1cm4gZ2V0UHVibGljT3ZlcnZpZXdEYXRhKCk7Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRQdWJsaWNBYm91dERhdGEoKSB7CiAgcmV0dXJuIHsgdGVhbTogYXdhaXQgZ2V0UHVibGljVGVhbSgpIH07Cn0KCmV4cG9ydCBhc3luYyBmdW5jdGlvbiBnZXRQdWJsaWNQcm9qZWN0c0RhdGEoKSB7CiAgcmV0dXJuIHsgcHJvamVjdHM6IGF3YWl0IGdldFB1YmxpY1Byb2plY3RzKCkgfTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldFB1YmxpY1NlcnZpY2VzRGF0YSgpIHsKICByZXR1cm4geyBzZXJ2aWNlczogYXdhaXQgZ2V0UHVibGljU2VydmljZXMoKSB9Owp9CgpmdW5jdGlvbiByZWFkUG9zaXRpdmVJbnRlZ2VyKHZhbHVlOiB1bmtub3duKSB7CiAgcmV0dXJuIHR5cGVvZiB2YWx1ZSA9PT0gIm51bWJlciIgJiYgTnVtYmVyLmlzSW50ZWdlcih2YWx1ZSkgJiYgdmFsdWUgPiAwCiAgICA/IHZhbHVlCiAgICA6IG51bGw7Cn0KCmZ1bmN0aW9uIHJlYWRCb29sZWFuKHZhbHVlOiB1bmtub3duKSB7CiAgcmV0dXJuIHR5cGVvZiB2YWx1ZSA9PT0gImJvb2xlYW4iID8gdmFsdWUgOiBmYWxzZTsKfQoKZnVuY3Rpb24gZ2V0U291cmNlRGF0YSgKICBzb3VyY2U6IENtc0NvbnRlbnRTb3VyY2UsCiAgY29udGVudDogUHVibGljT3ZlcnZpZXdEYXRhLAopOiB1bmtub3duW10gewogIHN3aXRjaCAoc291cmNlKSB7CiAgICBjYXNlICJzZXJ2aWNlcyI6CiAgICAgIHJldHVybiBjb250ZW50LnNlcnZpY2VzOwogICAgY2FzZSAicHJvamVjdHMiOgogICAgICByZXR1cm4gY29udGVudC5wcm9qZWN0czsKICAgIGNhc2UgInRlYW0iOgogICAgICByZXR1cm4gY29udGVudC50ZWFtOwogICAgY2FzZSAidGVzdGltb25pYWxzIjoKICAgICAgcmV0dXJuIGNvbnRlbnQudGVzdGltb25pYWxzOwogICAgY2FzZSAiZmFxcyI6CiAgICAgIHJldHVybiBjb250ZW50LmZhcXM7CiAgfQp9Cgphc3luYyBmdW5jdGlvbiBoeWRyYXRlU2VjdGlvbnMoCiAgc2VjdGlvbnM6IENtc0Jsb2NrW10sCik6IFByb21pc2U8SHlkcmF0ZWRDbXNTZWN0aW9uW10+IHsKICBjb25zdCB2aXNpYmxlID0gWy4uLnNlY3Rpb25zXQogICAgLmZpbHRlcigoc2VjdGlvbikgPT4gc2VjdGlvbi5pc1Zpc2libGUpCiAgICAuc29ydCgoYSwgYikgPT4gYS5vcmRlciAtIGIub3JkZXIpOwoKICBjb25zdCBjb250ZW50ID0gYXdhaXQgZ2V0UHVibGljT3ZlcnZpZXdEYXRhKCk7CgogIHJldHVybiB2aXNpYmxlLm1hcCgoc2VjdGlvbikgPT4gewogICAgY29uc3Qgc291cmNlID0gcmVzb2x2ZUNtc0Jsb2NrU291cmNlKHNlY3Rpb24pOwogICAgaWYgKCFzb3VyY2UpIHsKICAgICAgcmV0dXJuIHsgLi4uc2VjdGlvbiwgc291cmNlOiBudWxsLCBkYXRhOiBbXSB9OwogICAgfQoKICAgIGxldCBkYXRhID0gWy4uLmdldFNvdXJjZURhdGEoc291cmNlLCBjb250ZW50KV07CiAgICBpZiAocmVhZEJvb2xlYW4oc2VjdGlvbi5jb250ZW50LmZlYXR1cmVkT25seSkpIHsKICAgICAgZGF0YSA9IGRhdGEuZmlsdGVyKAogICAgICAgIChpdGVtKSA9PgogICAgICAgICAgdHlwZW9mIGl0ZW0gPT09ICJvYmplY3QiICYmCiAgICAgICAgICBpdGVtICE9PSBudWxsICYmCiAgICAgICAgICAiaXNGZWF0dXJlZCIgaW4gaXRlbSAmJgogICAgICAgICAgaXRlbS5pc0ZlYXR1cmVkID09PSB0cnVlLAogICAgICApOwogICAgfQoKICAgIGNvbnN0IGxpbWl0ID0gcmVhZFBvc2l0aXZlSW50ZWdlcihzZWN0aW9uLmNvbnRlbnQubGltaXQpOwogICAgaWYgKGxpbWl0KSB7CiAgICAgIGRhdGEgPSBkYXRhLnNsaWNlKDAsIGxpbWl0KTsKICAgIH0KCiAgICByZXR1cm4geyAuLi5zZWN0aW9uLCBzb3VyY2UsIGRhdGEgfTsKICB9KTsKfQoKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldFB1YmxpY1BhZ2VDb250ZXh0KAogIHN5c3RlbUtleTogQ21zU3lzdGVtUGFnZUtleSwKKTogUHJvbWlzZTxQdWJsaWNQYWdlQ29udGV4dD4gewogIGNvbnN0IFtwYWdlUmVjb3JkLCBzZXR0aW5ncywgbmF2aWdhdGlvbl0gPSBhd2FpdCBQcm9taXNlLmFsbChbCiAgICBnZXRDYWNoZWRDbXNQYWdlKHN5c3RlbUtleSksCiAgICBnZXRDYWNoZWRTaXRlU2V0dGluZ3MoKSwKICAgIGdldENhY2hlZE5hdmlnYXRpb24oKSwKICBdKTsKCiAgY29uc3QgcGFnZSA9IHBhZ2VSZWNvcmQ/LnN0YXR1cyA9PT0gInB1Ymxpc2hlZCIgPyBwYWdlUmVjb3JkIDogbnVsbDsKICBjb25zdCBzZWN0aW9ucyA9IHBhZ2UgPyBhd2FpdCBoeWRyYXRlU2VjdGlvbnMocGFnZS5zZWN0aW9ucykgOiBbXTsKCiAgcmV0dXJuIHsKICAgIHBhZ2UsCiAgICBzZXR0aW5ncywKICAgIG5hdmlnYXRpb24sCiAgICBzZWN0aW9ucywKICAgIG1ldGFkYXRhOiByZXNvbHZlUHVibGljU2VvKHN5c3RlbUtleSwgc2V0dGluZ3MsIHBhZ2U/LnNlbyksCiAgfTsKfQo="
+  "features/public-site/public-site.types.ts" = "aW1wb3J0IHR5cGUgeyBDbXNCbG9jaywgQ21zQ29udGVudFNvdXJjZSB9IGZyb20gIkAvY21zL2Jsb2Nrcy9ibG9jay50eXBlcyI7CmltcG9ydCB0eXBlIHsgQ21zUGFnZSB9IGZyb20gIkAvZmVhdHVyZXMvcGFnZXMvcGFnZS50eXBlcyI7CmltcG9ydCB0eXBlIHsgU2VvTWV0YWRhdGEgfSBmcm9tICJAL2ZlYXR1cmVzL3Nlby9zZW8udHlwZXMiOwppbXBvcnQgdHlwZSB7IE5hdmlnYXRpb25TZXR0aW5ncyB9IGZyb20gIkAvZmVhdHVyZXMvbmF2aWdhdGlvbi9uYXZpZ2F0aW9uLnR5cGVzIjsKaW1wb3J0IHR5cGUgeyBTaXRlU2V0dGluZ3MgfSBmcm9tICJAL2ZlYXR1cmVzL3NpdGUtc2V0dGluZ3Mvc2l0ZS1zZXR0aW5ncy50eXBlcyI7CmltcG9ydCB0eXBlIHsgRkFRIH0gZnJvbSAiQC90eXBlcy9mYXEiOwppbXBvcnQgdHlwZSB7IFByb2plY3QgfSBmcm9tICJAL3R5cGVzL3Byb2plY3QiOwppbXBvcnQgdHlwZSB7IENvbnN0cnVjdGlvblNlcnZpY2UgfSBmcm9tICJAL3R5cGVzL3NlcnZpY2UiOwppbXBvcnQgdHlwZSB7IFRlYW1NZW1iZXIgfSBmcm9tICJAL3R5cGVzL3RlYW0iOwppbXBvcnQgdHlwZSB7IFRlc3RpbW9uaWFsIH0gZnJvbSAiQC90eXBlcy90ZXN0aW1vbmlhbCI7CgpleHBvcnQgaW50ZXJmYWNlIFB1YmxpY092ZXJ2aWV3RGF0YSB7CiAgc2VydmljZXM6IENvbnN0cnVjdGlvblNlcnZpY2VbXTsKICBwcm9qZWN0czogUHJvamVjdFtdOwogIHRlYW06IFRlYW1NZW1iZXJbXTsKICB0ZXN0aW1vbmlhbHM6IFRlc3RpbW9uaWFsW107CiAgZmFxczogRkFRW107Cn0KCmV4cG9ydCBpbnRlcmZhY2UgSHlkcmF0ZWRDbXNTZWN0aW9uIGV4dGVuZHMgQ21zQmxvY2sgewogIHNvdXJjZTogQ21zQ29udGVudFNvdXJjZSB8IG51bGw7CiAgZGF0YTogdW5rbm93bltdOwp9CgpleHBvcnQgaW50ZXJmYWNlIFB1YmxpY1BhZ2VDb250ZXh0IHsKICBwYWdlOiBDbXNQYWdlIHwgbnVsbDsKICBzZXR0aW5nczogU2l0ZVNldHRpbmdzOwogIG5hdmlnYXRpb246IE5hdmlnYXRpb25TZXR0aW5nczsKICBzZWN0aW9uczogSHlkcmF0ZWRDbXNTZWN0aW9uW107CiAgbWV0YWRhdGE6IFNlb01ldGFkYXRhOwp9Cg=="
+  "features/public-site/server.ts" = "ZXhwb3J0ICogZnJvbSAiLi9wdWJsaWMtc2VvIjsKZXhwb3J0ICogZnJvbSAiLi9wdWJsaWMtc2l0ZS5zZXJ2aWNlIjsK"
+}
+
+function Get-PayloadContent([string]$Encoded) {
+  $bytes = [System.Convert]::FromBase64String($Encoded)
+  return [System.Text.Encoding]::UTF8.GetString($bytes)
+}
+
+function Patch-PublicPage(
+  [string]$RelativePath,
+  [string]$ComponentName,
+  [string]$DataFunction,
+  [string]$SystemKey
+) {
+  $path = Join-Path $repoRoot $RelativePath
+  $text = [System.IO.File]::ReadAllText($path)
+  $nl = if ($text.Contains("`r`n")) { "`r`n" } else { "`n" }
+
+  if ($text.Contains("<PublicSeoTags metadata={pageContext.metadata} />") -and
+      $text.Contains("export default async function $ComponentName")) {
+    Write-Host "[FASE 4] skip   $RelativePath (sudah termigrasi)" -ForegroundColor DarkGray
+    return $text
+  }
+
+  # Remove client-only marker and legacy public overview import.
+  $text = [System.Text.RegularExpressions.Regex]::Replace(
+    $text,
+    '^\uFEFF?"use client";\r?\n(?:\r?\n)?',
+    ''
+  )
+  $text = [System.Text.RegularExpressions.Regex]::Replace(
+    $text,
+    '(?m)^[ \t]*import[ \t]+\{[ \t]*usePublicOverview[ \t]*\}[ \t]+from[ \t]+"\./use-public-overview";[ \t]*\r?\n(?:\r?\n)?',
+    ''
+  )
+
+  if (-not $text.Contains('from "@/features/public-site"')) {
+    $anchor = 'import { SiteFooter } from "./site-footer";'
+    if (-not $text.Contains($anchor)) {
+      Fail "Anchor SiteFooter tidak ditemukan di $RelativePath. File tidak sesuai struktur yang diharapkan."
+    }
+
+    $imports = @(
+      'import { PublicSeoTags } from "@/features/public-site";',
+      'import {',
+      "  $DataFunction,",
+      '  getPublicPageContext,',
+      '} from "@/features/public-site/server";'
+    ) -join $nl
+
+    $text = $text.Replace($anchor, $imports + $nl + $anchor)
+  }
+
+  $syncSignature = "export default function $ComponentName() {"
+  $asyncSignature = "export default async function $ComponentName() {"
+  if ($text.Contains($syncSignature)) {
+    $text = $text.Replace($syncSignature, $asyncSignature)
+  } elseif (-not $text.Contains($asyncSignature)) {
+    Fail "Function signature $ComponentName tidak ditemukan di $RelativePath."
+  }
+
+  if ($text -match 'usePublicOverview\(\)') {
+    $pattern = '(?m)^[ \t]*const[ \t]+\{[ \t]*data[ \t]*\}[ \t]*=[ \t]*usePublicOverview\(\);[ \t]*\r?$'
+    $replacement = @(
+      '  const [data, pageContext] = await Promise.all([',
+      "    $DataFunction(),",
+      "    getPublicPageContext(`"$SystemKey`"),",
+      '  ]);'
+    ) -join $nl
+    $regex = [System.Text.RegularExpressions.Regex]::new($pattern)
+    if (-not $regex.IsMatch($text)) {
+      Fail "Pemanggilan usePublicOverview ditemukan tetapi format assignment tidak dikenali di $RelativePath."
+    }
+    $text = $regex.Replace($text, [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $replacement }, 1)
+  } elseif (-not $text.Contains('const [data, pageContext] = await Promise.all([')) {
+    Fail "Assignment data legacy maupun assignment Fase 4 tidak ditemukan di $RelativePath."
+  }
+
+  $seoLine = '      <PublicSeoTags metadata={pageContext.metadata} />'
+  if (-not $text.Contains($seoLine)) {
+    $headerLine = '      <SiteHeader />'
+    $replaced = Replace-First $text $headerLine ($seoLine + $nl + $headerLine)
+    if ($null -eq $replaced) { Fail "<SiteHeader /> tidak ditemukan di $RelativePath." }
+    $text = $replaced
+  }
+
+  if ($text -match 'usePublicOverview') { Fail "Legacy usePublicOverview masih tersisa di $RelativePath." }
+  if ($text -notmatch 'export default async function') { Fail "$RelativePath belum menjadi async Server Component." }
+
+  return $text
+}
+
+# Build every modification in memory first. Nothing is written until all four files validate.
+$patchedPages = @{}
+$patchedPages["components/site/home-page.tsx"] = Patch-PublicPage "components/site/home-page.tsx" "HomePage" "getPublicHomeData" "home"
+$patchedPages["components/site/about-page.tsx"] = Patch-PublicPage "components/site/about-page.tsx" "AboutPage" "getPublicAboutData" "about"
+$patchedPages["components/site/projects-page.tsx"] = Patch-PublicPage "components/site/projects-page.tsx" "ProjectsPage" "getPublicProjectsData" "projects"
+$patchedPages["components/site/services-page.tsx"] = Patch-PublicPage "components/site/services-page.tsx" "ServicesPage" "getPublicServicesData" "services"
+
+Write-Host "[FASE 4] Semua transformasi tervalidasi. Menulis perubahan..." -ForegroundColor Cyan
+
+foreach ($entry in $payload.GetEnumerator()) {
+  $content = Get-PayloadContent $entry.Value
+  Write-Utf8NoBom (Join-Path $repoRoot $entry.Key) $content
+  Write-Host "[FASE 4] write  $($entry.Key)" -ForegroundColor DarkGray
+}
+
+foreach ($entry in $patchedPages.GetEnumerator()) {
+  Write-Utf8NoBom (Join-Path $repoRoot $entry.Key) $entry.Value
+  Write-Host "[FASE 4] patch  $($entry.Key)" -ForegroundColor Green
+}
+
+Write-Host ""
+Write-Host "[FASE 4] Selesai menerapkan Public Data Architecture." -ForegroundColor Green
+Write-Host "[FASE 4] Tidak ada dependency baru; npm install tidak diperlukan." -ForegroundColor Green
+Write-Host ""
+Write-Host "Validasi berikutnya:" -ForegroundColor Cyan
+Write-Host "  npm run lint"
+Write-Host "  npm run typecheck"
+Write-Host "  npm run build"
+Write-Host "  git diff --check"
+Write-Host "  git status --short"
