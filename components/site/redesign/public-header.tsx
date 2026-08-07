@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Mail, Menu, Phone, X } from "lucide-react";
 
 import type { NavigationItem, NavigationSettings } from "@/features/navigation/navigation.types";
 import type { SiteSettings } from "@/features/site-settings/site-settings.types";
@@ -18,12 +18,12 @@ function HeaderLink({ item, active, onClick }: { item: NavigationItem; active: b
       target={target}
       rel={target ? "noreferrer" : undefined}
       onClick={onClick}
-      className={`relative px-1 py-2 text-[12px] font-medium uppercase tracking-[0.16em] transition ${
-        active ? "text-white" : "text-white/65 hover:text-white"
+      className={`relative inline-flex min-h-14 items-center px-3 text-[12px] font-semibold uppercase tracking-[0.12em] transition ${
+        active ? "text-[#F26722]" : "text-zinc-700 hover:text-[#F26722]"
       }`}
     >
       {item.label}
-      <span className={`absolute inset-x-0 -bottom-px h-px origin-left bg-[#c7a36d] transition-transform ${active ? "scale-x-100" : "scale-x-0"}`} />
+      {active ? <span className="absolute inset-x-3 bottom-0 h-0.5 bg-[#F26722]" /> : null}
     </Link>
   );
 }
@@ -31,61 +31,95 @@ function HeaderLink({ item, active, onClick }: { item: NavigationItem; active: b
 export function PublicHeader({ navigation, settings }: { navigation: NavigationSettings; settings: SiteSettings }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const items = useMemo(() => navigation.header.filter((item) => item.isVisible).sort((a, b) => a.order - b.order), [navigation.header]);
   const brand = settings.identity.companyName || settings.identity.siteName || "Lunar Konstruksi";
-  const whatsapp = settings.contact.whatsapp?.replace(/[^\d]/g, "");
+  const navItems = useMemo(
+    () => navigation.header.filter((item) => item.isVisible).sort((a, b) => a.order - b.order),
+    [navigation.header],
+  );
+  const whatsapp = settings.contact.whatsapp.replace(/[^\d]/g, "");
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#10100f]/88 backdrop-blur-md">
-      <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-7 lg:px-10">
-        <Link href="/" className="flex items-center gap-3 text-white">
-          {settings.identity.logoDarkUrl || settings.identity.logoUrl ? (
-            <img src={settings.identity.logoDarkUrl || settings.identity.logoUrl} alt={brand} className="h-9 w-auto object-contain" />
+    <header className="sticky top-0 z-50 bg-white shadow-[0_1px_0_rgba(15,23,42,.08)]">
+      <div className="hidden border-b border-black/6 bg-[#F7F7F5] lg:block">
+        <div className="mx-auto flex h-9 w-full max-w-[1440px] items-center justify-end gap-7 px-8 text-[11px] text-zinc-500">
+          {settings.contact.email ? (
+            <a href={`mailto:${settings.contact.email}`} className="inline-flex items-center gap-2 hover:text-[#F26722]">
+              <Mail className="h-3.5 w-3.5" /> {settings.contact.email}
+            </a>
+          ) : null}
+          {settings.contact.phone ? (
+            <a href={`tel:${settings.contact.phone}`} className="inline-flex items-center gap-2 hover:text-[#F26722]">
+              <Phone className="h-3.5 w-3.5" /> {settings.contact.phone}
+            </a>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-7 lg:px-8">
+        <Link href="/" className="flex items-center gap-3">
+          {settings.identity.logoUrl ? (
+            <img src={settings.identity.logoUrl} alt={brand} className="h-11 w-auto max-w-[180px] object-contain" />
           ) : (
-            <span className="flex h-10 w-10 items-center justify-center border border-[#c7a36d]/50 text-[11px] font-semibold tracking-[0.2em] text-[#e4c89e]">
-              {initials(brand)}
-            </span>
+            <>
+              <span className="grid h-11 w-11 place-items-center border-2 border-[#F26722] bg-white text-sm font-black tracking-[0.08em] text-[#222]">
+                {initials(brand)}
+              </span>
+              <span className="leading-tight">
+                <strong className="block text-[15px] font-black uppercase tracking-[0.05em] text-[#202020]">{brand}</strong>
+                <span className="block text-[9px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Construction · Interior</span>
+              </span>
+            </>
           )}
-          <span className="hidden sm:block">
-            <span className="block text-[10px] uppercase tracking-[0.26em] text-[#c7a36d]">Architecture · Build</span>
-            <span className="mt-0.5 block text-sm font-semibold tracking-[0.02em]">{brand}</span>
-          </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {items.map((item) => (
-            <HeaderLink key={item.id} item={item} active={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))} />
-          ))}
+        <nav className="hidden items-stretch lg:flex">
+          {navItems.map((item) => {
+            const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+            return <HeaderLink key={item.id} item={item} active={active} />;
+          })}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center lg:flex">
           <Link
             href={whatsapp ? `https://wa.me/${whatsapp}` : "/contact"}
             target={whatsapp ? "_blank" : undefined}
             rel={whatsapp ? "noreferrer" : undefined}
-            className="inline-flex h-10 items-center border border-[#c7a36d]/60 px-5 text-[11px] font-semibold uppercase tracking-[0.15em] text-[#ead6b7] transition hover:bg-[#c7a36d] hover:text-[#11110f]"
+            className="inline-flex h-11 items-center bg-[#F26722] px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-[#D95113]"
           >
-            Start a project
+            Get a quotation
           </Link>
         </div>
 
-        <button type="button" onClick={() => setOpen((value) => !value)} className="flex h-10 w-10 items-center justify-center border border-white/15 text-white lg:hidden" aria-label="Toggle menu">
+        <button
+          type="button"
+          aria-label="Toggle navigation"
+          onClick={() => setOpen((value) => !value)}
+          className="grid h-11 w-11 place-items-center border border-black/10 text-zinc-900 lg:hidden"
+        >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open ? (
-        <div className="border-t border-white/10 bg-[#10100f] px-5 py-6 lg:hidden">
-          <nav className="flex flex-col gap-4">
-            {items.map((item) => (
-              <HeaderLink key={item.id} item={item} active={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))} onClick={() => setOpen(false)} />
-            ))}
+        <div className="border-t border-black/8 bg-white px-5 py-4 lg:hidden">
+          <nav className="flex flex-col">
+            {navItems.map((item) => {
+              const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              return <HeaderLink key={item.id} item={item} active={active} onClick={() => setOpen(false)} />;
+            })}
           </nav>
-          <Link href="/contact" onClick={() => setOpen(false)} className="mt-6 flex h-11 items-center justify-center border border-[#c7a36d]/60 text-[11px] font-semibold uppercase tracking-[0.15em] text-[#ead6b7]">
-            Start a project
+          <Link
+            href={whatsapp ? `https://wa.me/${whatsapp}` : "/contact"}
+            target={whatsapp ? "_blank" : undefined}
+            rel={whatsapp ? "noreferrer" : undefined}
+            className="mt-3 flex h-12 items-center justify-center bg-[#F26722] px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white"
+          >
+            Get a quotation
           </Link>
         </div>
       ) : null}
     </header>
   );
 }
+
+export default PublicHeader;
