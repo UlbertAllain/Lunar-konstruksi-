@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Boxes,
+  DatabaseZap,
   FileText,
   ImageIcon,
   LayoutDashboard,
@@ -20,6 +21,7 @@ const items = [
   { href: "/admin/cms/content", label: "Content", icon: Boxes },
   { href: "/admin/cms/leads", label: "Leads", icon: MailOpen },
   { href: "/admin/cms/media", label: "Media", icon: ImageIcon },
+  { href: "/admin/cms/seed", label: "Seed", icon: DatabaseZap },
 ];
 
 export function CmsWorkspaceNav() {
