@@ -1,17 +1,24 @@
 export const LOCAL_MEDIA = {
-  hero: "/lunar-static/home-hero.png",
-  aboutHero: "/lunar-static/formwork-about-placeholder.svg",
-  servicesHero: "/lunar-static/formwork-services-placeholder.svg",
-  projectsHero: "/lunar-static/formwork-projects-placeholder.svg",
-  processPlanning: "/lunar-static/formwork-process-planning.svg",
-  processNote: "/lunar-static/formwork-site-note.svg",
+  hero: "/lunar-static/home-hero.jpg",
+  heroEngineer: "/lunar-static/home-hero-engineer.jpg",
+
+  capabilityStructure: "/lunar-static/home-capability-structure.jpg",
+  capabilityBuilding: "/lunar-static/home-capability-building.jpg",
+  capabilityDetail: "/lunar-static/home-capability-detail.jpg",
+
+  processPlanning: "/lunar-static/home-process-plan.jpg",
+  processNote: "/lunar-static/home-process-site.jpg",
+
+  aboutHero: "/lunar-static/about.png",
+  servicesHero: "/lunar-static/services.png",
+  projectsHero: "/lunar-static/project.png",
+
   decorative: [
-    "/home-process-plan.png",
-    "/lunar-static/formwork-detail-02.svg",
-    "/lunar-static/formwork-detail-03.svg",
-    "/lunar-static/formwork-detail-04.svg",
-    "/lunar-static/formwork-detail-05.svg",
-    "/lunar-static/formwork-detail-06.svg",
+    "/lunar-static/home-capability-structure.jpg",
+    "/lunar-static/home-capability-building.jpg",
+    "/lunar-static/home-capability-detail.jpg",
+    "/lunar-static/home-process-plan.jpg",
+    "/lunar-static/home-process-site.jpg",
   ] as string[],
 };
 

@@ -7,6 +7,7 @@ import { FormworkHeader } from "./header";
 import { LOCAL_MEDIA, localMediaAt } from "./local-assets";
 import { DatabaseImage } from "./media";
 import {
+  distinctImages,
   projectModel,
   serviceModel,
   teamModel,
@@ -33,14 +34,18 @@ export function FormworkHome({ data }: { data: SiteData }) {
   const team = data.team.map(teamModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
 
+  const projectImages = distinctImages(projects);
+  const serviceImages = distinctImages(services);
+  const teamImages = distinctImages(team);
 
+  const hero = projects[0];
   const quote = testimonials[0];
 
-  const heroImage = LOCAL_MEDIA.hero;
-  const heroInset = LOCAL_MEDIA.heroEngineer;
-  const capabilityPrimary = LOCAL_MEDIA.capabilityStructure;
-  const capabilitySecondary = LOCAL_MEDIA.capabilityBuilding;
-  const capabilityDetail = LOCAL_MEDIA.capabilityDetail;
+  const heroImage = LOCAL_MEDIA.hero || projectImages[0] || "";
+  const heroInset = projectImages.find((image) => image && image !== heroImage) || teamImages[0] || localMediaAt(1);
+  const capabilityPrimary = serviceImages[0] || projectImages[1] || localMediaAt(2);
+  const capabilitySecondary = projectImages.find((image) => image && image !== heroImage && image !== capabilityPrimary) || teamImages[1] || localMediaAt(3);
+  const capabilityDetail = teamImages.find((image) => image && image !== heroInset && image !== capabilitySecondary) || serviceImages[1] || localMediaAt(4);
 
   const processPrimary = LOCAL_MEDIA.processPlanning || localMediaAt(0);
   const processSecondary = LOCAL_MEDIA.processNote || localMediaAt(5);
