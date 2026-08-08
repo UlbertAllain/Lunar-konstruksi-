@@ -57,20 +57,13 @@ const DIRECT_MEDIA_KEYS = [
   "profilePhotoUrl",
   "profileImageUrl",
   "avatarUrl",
-  "serviceImageUrl",
-  "serviceImage",
-  "projectImageUrl",
-  "projectImage",
   "coverImageUrl",
   "coverUrl",
   "thumbnailUrl",
   "featuredImageUrl",
   "mainImageUrl",
   "heroImageUrl",
-  "bannerUrl",
   "imageUrl",
-  "iconUrl",
-  "logoUrl",
   "mediaUrl",
   "assetUrl",
   "secureUrl",
@@ -82,33 +75,27 @@ const NESTED_MEDIA_KEYS = [
   "profilePhoto",
   "profileImage",
   "avatar",
-  "serviceImage",
-  "projectImage",
   "coverImage",
   "cover",
   "thumbnail",
   "featuredImage",
   "mainImage",
   "heroImage",
-  "banner",
   "image",
-  "icon",
   "media",
   "images",
   "photos",
   "gallery",
   "mediaItems",
   "projectImages",
-  "serviceImages",
   "imageUrls",
   "assets",
 ] as const;
 
 const CLOUDINARY_URL_KEYS = ["secure_url", "secureUrl", "url", "src", "assetUrl", "imageUrl"] as const;
-const MEDIA_KEY_PATTERN = /(image|photo|avatar|cover|media|asset|gallery|thumbnail|banner|icon|logo)/i;
 
-function resolveMediaValue(value: unknown, depth = 0, visited = new Set<object>()): string {
-  if (depth > 6 || value == null) return "";
+function resolveMediaValue(value: unknown, depth = 0): string {
+  if (depth > 4 || value == null) return "";
 
   if (typeof value === "string") {
     return looksLikeMediaUrl(value) ? value.trim() : "";
@@ -116,15 +103,13 @@ function resolveMediaValue(value: unknown, depth = 0, visited = new Set<object>(
 
   if (Array.isArray(value)) {
     for (const entry of value) {
-      const result = resolveMediaValue(entry, depth + 1, visited);
+      const result = resolveMediaValue(entry, depth + 1);
       if (result) return result;
     }
     return "";
   }
 
   if (typeof value === "object") {
-    if (visited.has(value)) return "";
-    visited.add(value);
     const object = value as AnyRecord;
 
     for (const key of CLOUDINARY_URL_KEYS) {
@@ -134,13 +119,7 @@ function resolveMediaValue(value: unknown, depth = 0, visited = new Set<object>(
 
     for (const key of [...DIRECT_MEDIA_KEYS, ...NESTED_MEDIA_KEYS]) {
       if (!(key in object)) continue;
-      const result = resolveMediaValue(object[key], depth + 1, visited);
-      if (result) return result;
-    }
-
-    for (const [key, raw] of Object.entries(object)) {
-      if (!MEDIA_KEY_PATTERN.test(key)) continue;
-      const result = resolveMediaValue(raw, depth + 1, visited);
+      const result = resolveMediaValue(object[key], depth + 1);
       if (result) return result;
     }
   }
@@ -156,12 +135,6 @@ export function pickImage(record: AnyRecord, fallback = "") {
 
   for (const key of NESTED_MEDIA_KEYS) {
     const result = resolveMediaValue(record[key]);
-    if (result) return result;
-  }
-
-  for (const [key, value] of Object.entries(record)) {
-    if (!MEDIA_KEY_PATTERN.test(key)) continue;
-    const result = resolveMediaValue(value);
     if (result) return result;
   }
 
@@ -196,11 +169,11 @@ export function joinLocation(record: AnyRecord) {
 }
 
 export function technicalPlaceholder(label = "Lunar Konstruksi", tone: "light" | "dark" = "light") {
-  const safe = label.replace(/[<>&"']/g, "").slice(0, 46) || "Lunar Konstruksi";
+  const safe = label.replace(/[<>&\"']/g, "").slice(0, 46) || "Lunar Konstruksi";
   const background = tone === "dark" ? "#111111" : "#ECEBE8";
   const grid = tone === "dark" ? "#272727" : "#D6D4CF";
   const text = tone === "dark" ? "#F3F3F1" : "#292929";
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="${background}"/><g stroke="${grid}" stroke-width="1"><path d="M0 100H1200M0 200H1200M0 300H1200M0 400H1200M0 500H1200M0 600H1200M0 700H1200"/><path d="M100 0V800M200 0V800M300 0V800M400 0V800M500 0V800M600 0V800M700 0V800M800 0V800M900 0V800M1000 0V800M1100 0V800"/></g><rect x="78" y="78" width="1044" height="644" fill="none" stroke="#C94A28" stroke-width="4"/><text x="96" y="650" fill="${text}" font-family="Arial,Helvetica,sans-serif" font-size="50" font-weight="700">${safe}</text><text x="96" y="695" fill="#C94A28" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" letter-spacing="4">MEDIA BELUM DIISI</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="${background}"/><g stroke="${grid}" stroke-width="1"><path d="M0 100H1200M0 200H1200M0 300H1200M0 400H1200M0 500H1200M0 600H1200M0 700H1200"/><path d="M100 0V800M200 0V800M300 0V800M400 0V800M500 0V800M600 0V800M700 0V800M800 0V800M900 0V800M1000 0V800M1100 0V800"/></g><rect x="78" y="78" width="1044" height="644" fill="none" stroke="#F26422" stroke-width="4"/><text x="96" y="650" fill="${text}" font-family="Arial,Helvetica,sans-serif" font-size="50" font-weight="700">${safe}</text><text x="96" y="695" fill="#F26422" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" letter-spacing="4">MEDIA BELUM DIISI</text></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
