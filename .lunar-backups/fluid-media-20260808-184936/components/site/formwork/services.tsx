@@ -3,7 +3,6 @@ import Link from "next/link";
 import { BlueprintLayer, MicroLabel, TechnicalArc, displayFont } from "./decor";
 import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
-import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
 import { faqModel, projectModel, serviceModel, type SiteData } from "./data";
 
@@ -21,7 +20,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:px-10">
             <div><MicroLabel>Capabilities / scope of work</MicroLabel><h1 className={`${displayFont} mt-8 text-[clamp(3.7rem,7vw,7.6rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}>Layanan harus saling terhubung.</h1><p className="mt-8 max-w-lg text-[15px] leading-7 text-[#4f514e]">Ruang lingkup dapat disusun sesuai konteks proyek, dari satu pekerjaan teknis sampai koordinasi design-build yang lebih terintegrasi.</p></div>
             <div className="relative min-h-[520px]">
-              <div className="absolute right-0 top-0 w-[82%] overflow-hidden [border-radius:55%_45%_42%_58%/38%_42%_58%_62%]"><DatabaseImage src={LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""} alt={services[0]?.name || "Capabilities"} className="h-[460px] w-full object-cover" /></div>
+              <div className="absolute right-0 top-0 w-[82%] overflow-hidden [border-radius:55%_45%_42%_58%/38%_42%_58%_62%]"><DatabaseImage src={services[0]?.image || projects[0]?.image || ""} alt={services[0]?.name || "Capabilities"} className="h-[460px] w-full object-cover" /></div>
               <TechnicalArc className="bottom-[-8%] left-[8%] h-[340px] w-[500px] rotate-[15deg]" />
             </div>
           </div>

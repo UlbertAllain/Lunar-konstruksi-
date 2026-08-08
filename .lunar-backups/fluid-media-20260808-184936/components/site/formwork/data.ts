@@ -163,14 +163,3 @@ export function faqModel(value: unknown, index = 0) {
     answer: textFrom(record, ["answer", "description", "content"], ""),
   };
 }
-
-export function distinctImages(values: { image: string }[]) {
-  const seen = new Set<string>();
-  return values
-    .map((item) => item.image)
-    .filter((image) => {
-      if (!image || seen.has(image)) return false;
-      seen.add(image);
-      return true;
-    });
-}

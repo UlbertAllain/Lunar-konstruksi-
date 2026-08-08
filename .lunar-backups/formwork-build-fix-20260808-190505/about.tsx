@@ -66,7 +66,7 @@ export function FormworkAbout({ data }: { data: SiteData }) {
           </div>
         </section>
 
-        <section className="relative border-t border-[#d8d1c6] py-20 sm:py-24"><div className="relative mx-auto flex w-full max-w-[1480px] flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10"><div><MicroLabel>Next / project discussion</MicroLabel><h2 className={`${displayFont} mt-5 max-w-3xl text-6xl font-black uppercase leading-[.86] tracking-[-.05em] sm:text-8xl`}>Bicarakan konteks proyek sejak awal.</h2></div><Link href="/contact" className="border-b border-[#e36c2f] pb-2 font-mono text-[10px] font-semibold uppercase tracking-[.08em]">Talk to our team →</Link></div></section>
+        <section className="relative py-20 sm:py-24"><TechnicalArc className="-bottom-[310px] left-[-12%] h-[540px] w-[120%]" /><div className="relative mx-auto flex w-full max-w-[1480px] flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10"><h2 className={`${displayFont} max-w-3xl text-6xl font-black uppercase leading-[.86] tracking-[-.05em] sm:text-8xl`}>Bicarakan konteks proyek sejak awal.</h2><Link href="/contact" className="font-mono text-[10px] font-semibold uppercase tracking-[.08em]">Talk to our team →</Link></div></section>
       </main>
       <FormworkFooter />
     </div>

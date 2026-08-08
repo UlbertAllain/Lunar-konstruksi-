@@ -3,7 +3,6 @@ import Link from "next/link";
 import { BlueprintLayer, MicroLabel, TechnicalArc, displayFont } from "./decor";
 import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
-import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
 import { projectModel, teamModel, type SiteData } from "./data";
 
@@ -27,7 +26,7 @@ export function FormworkAbout({ data }: { data: SiteData }) {
             </div>
             <div className="relative min-h-[600px]">
               <div className="absolute right-0 top-0 w-[78%] overflow-hidden [border-radius:48%_52%_44%_56%/38%_44%_56%_62%]">
-                <DatabaseImage src={LOCAL_MEDIA.aboutHero || project?.image || ""} alt={project?.title ?? "Lunar Konstruksi"} className="h-[500px] w-full object-cover" />
+                <DatabaseImage src={project?.image ?? ""} alt={project?.title ?? "Lunar Konstruksi"} className="h-[500px] w-full object-cover" />
               </div>
               <div className="absolute bottom-0 left-[2%] h-[250px] w-[250px] overflow-hidden rounded-full border-[10px] border-[#f2eee7]">
                 <DatabaseImage src={hero?.image ?? ""} alt={hero?.name ?? "Team Lunar"} className="h-full w-full object-cover" />
@@ -66,7 +65,7 @@ export function FormworkAbout({ data }: { data: SiteData }) {
           </div>
         </section>
 
-        <section className="relative border-t border-[#d8d1c6] py-20 sm:py-24"><div className="relative mx-auto flex w-full max-w-[1480px] flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10"><div><MicroLabel>Next / project discussion</MicroLabel><h2 className={`${displayFont} mt-5 max-w-3xl text-6xl font-black uppercase leading-[.86] tracking-[-.05em] sm:text-8xl`}>Bicarakan konteks proyek sejak awal.</h2></div><Link href="/contact" className="border-b border-[#e36c2f] pb-2 font-mono text-[10px] font-semibold uppercase tracking-[.08em]">Talk to our team →</Link></div></section>
+        <section className="relative py-20 sm:py-24"><TechnicalArc className="-bottom-[310px] left-[-12%] h-[540px] w-[120%]" /><div className="relative mx-auto flex w-full max-w-[1480px] flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10"><h2 className={`${displayFont} max-w-3xl text-6xl font-black uppercase leading-[.86] tracking-[-.05em] sm:text-8xl`}>Bicarakan konteks proyek sejak awal.</h2><Link href="/contact" className="font-mono text-[10px] font-semibold uppercase tracking-[.08em]">Talk to our team →</Link></div></section>
       </main>
       <FormworkFooter />
     </div>

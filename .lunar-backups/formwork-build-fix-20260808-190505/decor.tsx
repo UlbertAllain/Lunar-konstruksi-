@@ -36,13 +36,6 @@ export function HeroMeasureCurve({ className = "" }: { className?: string }) {
   );
 }
 
-// Compatibility export for pages created before the structured-line polish.
-// It intentionally reuses the controlled hero measurement curve instead of
-// restoring the old free-form decorative arc.
-export function TechnicalArc({ className = "" }: { className?: string }) {
-  return <HeroMeasureCurve className={className} />;
-}
-
 export function ProcessGuide({ className = "" }: { className?: string }) {
   return (
     <svg
