@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { adminFetch, type ApiEnvelope } from "@/lib/api";
-import type { ConstructionService } from "@/types/service";
+import type { ConstructionService } from "@/modules/services/service.types";
 
 export function ServiceSelect({
   value,

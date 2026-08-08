@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import {
   createTestimonialData,
   listTestimonials,
-} from "@/services/testimonial.service";
+} from "@/modules/testimonials/testimonial.service";
 import { requireAdmin, routeError, success } from "@/lib/route";
 
 export async function GET(request: NextRequest) {

@@ -1,5 +1,5 @@
 import { routeError, success } from "@/lib/route-response";
-import { getPublishedServices } from "@/repositories/service.repository";
+import { getPublishedServices } from "@/modules/services/service.repository";
 
 export const dynamic = "force-dynamic";
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import type { NavigationSettings } from "@/features/navigation/navigation.types";
-import type { SiteSettings } from "@/features/site-settings/site-settings.types";
+import type { NavigationSettings } from "@/modules/public-site";
+import type { SiteSettings } from "@/modules/public-site";
 
 export function ArchiveFooter({ navigation, settings }: { navigation: NavigationSettings; settings: SiteSettings }) {
   const brand = settings.identity.companyName || settings.identity.siteName || "Lunar Konstruksi";

@@ -1,5 +1,5 @@
 import { routeError, success } from "@/lib/route-response";
-import { getActiveTeamMembers } from "@/repositories/team.repository";
+import { getActiveTeamMembers } from "@/modules/team/team.repository";
 
 export const dynamic = "force-dynamic";
 

@@ -5,7 +5,7 @@ import {
   adminLeadUpdateSchema,
   getLead,
   updateLead,
-} from "@/features/leads/server";
+} from "@/modules/leads/server";
 import { requireAdmin } from "@/lib/route";
 
 type RouteContext = {

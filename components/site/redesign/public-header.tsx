@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
 
-import type { NavigationSettings } from "@/features/navigation/navigation.types";
-import type { SiteSettings } from "@/features/site-settings/site-settings.types";
+import type { NavigationSettings } from "@/modules/public-site";
+import type { SiteSettings } from "@/modules/public-site";
 
 import { initials } from "./public-helpers";
 

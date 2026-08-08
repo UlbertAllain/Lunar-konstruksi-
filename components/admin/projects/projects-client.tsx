@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceList } from "@/components/admin/resource-list";
-import type { Project } from "@/types/project";
+import type { Project } from "@/modules/projects/project.types";
 
 const statusLabel = {
   PLANNING: "Perencanaan",

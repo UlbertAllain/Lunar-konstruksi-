@@ -1,92 +1,84 @@
 # Lunar Konstruksi
 
-Company profile dan CMS konstruksi berbasis **Next.js App Router**, **TypeScript**, **Tailwind CSS**, **Firebase Authentication**, **Cloud Firestore**, dan **Cloudinary**.
+Company profile konstruksi berbasis Next.js dengan admin CRUD klasik untuk mengelola konten bisnis. Full CMS/page builder sudah dipensiunkan agar struktur aplikasi lebih sederhana dan mudah dirawat.
 
-## Fitur
+## Stack
 
-### Admin CMS
+- Next.js 16 + React 19 + TypeScript
+- Tailwind CSS 4
+- Firebase Authentication
+- Cloud Firestore melalui Firebase Admin SDK di server
+- Cloudinary untuk media
+- Zod untuk validasi payload
 
-- Login Firebase Authentication dengan validasi dokumen admin aktif.
-- Dashboard statistik real-time.
-- CRUD penuh Services, Projects, Team, Testimonials, dan FAQ.
-- Publish/draft atau active/inactive langsung dari tabel.
-- Upload gambar dari perangkat ke Cloudinary—bukan input URL manual.
-- Cover project, gallery multi-image, cover layanan, foto anggota tim, dan foto testimoni.
-- Lifecycle media: media lama dibersihkan dari Cloudinary setelah record diperbarui atau dihapus.
-- API admin terproteksi Bearer token dan pemeriksaan role admin.
-- Validasi payload dengan Zod.
+## Admin
 
-### Website Publik
+Admin menggunakan pola CRUD yang jelas:
 
-- Homepage editorial company profile.
-- Halaman portfolio dan detail project.
-- Halaman detail layanan.
-- Halaman tentang perusahaan dan tim.
-- Form konsultasi yang meneruskan data ke WhatsApp.
-- Data publik berasal dari Firestore, dengan fallback visual ketika database masih kosong.
+- Dashboard
+- Services
+- Projects
+- Team
+- Testimonials
+- FAQ
 
-## Menjalankan Proyek
+Tidak ada Pages/Sections builder, CMS Workspace, atau editor layout dinamis.
 
-1. Salin environment example:
+## Struktur
 
-```bash
-cp .env.example .env.local
+```text
+app/                    # routing, pages, API routes
+components/             # UI admin dan website publik
+lib/                    # infrastructure: Firebase, Cloudinary, HTTP helpers
+modules/                # business/domain backend
+  _shared/              # primitives lintas domain
+  admin/
+  faqs/
+  leads/
+  media/
+  projects/
+  public-site/          # read-model website publik; bukan CMS
+  services/
+  team/
+  testimonials/
+shared/                 # helper aplikasi lintas domain
+scripts/                # maintenance/bootstrap scripts
+public/                 # static assets
 ```
 
-2. Isi seluruh kredensial Firebase dan Cloudinary pada `.env.local`.
+Setiap domain menyimpan type, schema, repository, dan service di folder yang sama. Contoh:
 
-3. Install dependency:
-
-```bash
-npm install
+```text
+modules/projects/
+  project.types.ts
+  project.schema.ts
+  project.repository.ts
+  project.service.ts
+  index.ts
+  server.ts
 ```
 
-4. Buat akun admin pertama. Isi `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME`, dan `ADMIN_ROLE` pada `.env.local`, lalu jalankan:
+## Data publik
 
-```bash
-npm run create-admin
+Website publik membaca koleksi Services, Projects, Team, Testimonials, dan FAQ langsung melalui read-model server `modules/public-site`.
+
+Data `siteSettings/general` dan `navigation/main` yang sudah pernah tersimpan tetap dibaca sebagai konfigurasi tampilan global, tetapi tidak ada lagi UI Full CMS untuk mengubah layout/section halaman.
+
+## Alur backend
+
+```text
+Admin API Route
+  -> requireAdmin
+  -> domain service
+  -> Zod schema
+  -> domain repository
+  -> Firestore / Cloudinary
 ```
 
-5. Jalankan development server:
-
-```bash
-npm run dev
-```
-
-- Website publik: `http://localhost:3000`
-
-## Firebase
-
-Aktifkan **Email/Password** pada Firebase Authentication. Semua akses data website dilakukan melalui Firebase Admin SDK pada server. File `firestore.rules` menolak akses Firestore langsung dari client.
-
-Struktur koleksi:
-
-- `admins/{uid}`
-- `services/{id}`
-- `projects/{id}`
-- `team/{id}`
-- `testimonials/{id}`
-- `faqs/{id}`
-
-
-## Cloudinary
-
-Gambar diunggah melalui route server terautentikasi ke folder:
-
-- `lunar-konstruksi/services`
-- `lunar-konstruksi/projects/cover`
-- `lunar-konstruksi/projects/gallery`
-- `lunar-konstruksi/team`
-- `lunar-konstruksi/testimonials`
-
-Format yang diterima: JPG, PNG, WEBP, AVIF. Ukuran maksimum setiap gambar: 5 MB. Gallery project maksimum 10 gambar.
-
-## Validasi Sebelum Deploy
+## Validasi
 
 ```bash
 npm run lint
 npm run typecheck
 npm run build
 ```
-
-Deploy dapat dilakukan ke Vercel. Masukkan seluruh variabel `.env.example` pada Project Settings → Environment Variables.

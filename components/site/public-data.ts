@@ -1,8 +1,8 @@
-import type { FAQ } from "@/types/faq";
-import type { Project } from "@/types/project";
-import type { ConstructionService } from "@/types/service";
-import type { TeamMember } from "@/types/team";
-import type { Testimonial } from "@/types/testimonial";
+import type { FAQ } from "@/modules/faqs/faq.types";
+import type { Project } from "@/modules/projects/project.types";
+import type { ConstructionService } from "@/modules/services/service.types";
+import type { TeamMember } from "@/modules/team/team.types";
+import type { Testimonial } from "@/modules/testimonials/testimonial.types";
 
 export type PublicOverview = {
   services: ConstructionService[];

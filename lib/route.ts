@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { verifyAdmin } from "@/lib/auth";
+import { verifyAdmin } from "@/modules/admin/admin-auth.service";
 
 import { HttpError } from "@/lib/route-response";
 

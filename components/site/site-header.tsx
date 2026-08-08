@@ -1,5 +1,5 @@
-import { getNavigationSettingsWithDefaults } from "@/features/navigation/server";
-import { getSiteSettingsWithDefaults } from "@/features/site-settings/server";
+import { getNavigationSettingsWithDefaults } from "@/modules/public-site/server";
+import { getSiteSettingsWithDefaults } from "@/modules/public-site/server";
 import { ArchiveHeader } from "./redesign/archive/archive-header";
 
 export async function SiteHeader() {

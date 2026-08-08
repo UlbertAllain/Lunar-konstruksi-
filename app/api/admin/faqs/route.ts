@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { createFAQData, listFAQs } from "@/services/faq.service";
+import { createFAQData, listFAQs } from "@/modules/faqs/faq.service";
 import { requireAdmin, routeError, success } from "@/lib/route";
 
 export async function GET(request: NextRequest) {

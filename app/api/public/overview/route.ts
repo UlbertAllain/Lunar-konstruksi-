@@ -1,9 +1,9 @@
 import { routeError, success } from "@/lib/route-response";
-import { getPublishedFAQs } from "@/repositories/faq.repository";
-import { getPublishedProjects } from "@/repositories/project.repository";
-import { getPublishedServices } from "@/repositories/service.repository";
-import { getActiveTeamMembers } from "@/repositories/team.repository";
-import { getPublishedTestimonials } from "@/repositories/testimonial.repository";
+import { getPublishedFAQs } from "@/modules/faqs/faq.repository";
+import { getPublishedProjects } from "@/modules/projects/project.repository";
+import { getPublishedServices } from "@/modules/services/service.repository";
+import { getActiveTeamMembers } from "@/modules/team/team.repository";
+import { getPublishedTestimonials } from "@/modules/testimonials/testimonial.repository";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 

@@ -4,8 +4,8 @@ import { ChangeEvent, useRef, useState } from "react";
 import { ImagePlus, LoaderCircle, Trash2, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
 
-import type { MediaImage } from "@/types/media";
-import { uploadImage, uploadMultipleImages } from "@/utils/upload-client";
+import type { MediaImage } from "@/modules/media/media.types";
+import { uploadImage, uploadMultipleImages } from "@/shared/upload-client";
 
 type SingleProps = {
   label: string;

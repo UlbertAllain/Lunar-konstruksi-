@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import type { FAQ } from "@/types/faq";
+import type { FAQ } from "@/modules/faqs/faq.types";
 import {
   BooleanField,
   FormActions,

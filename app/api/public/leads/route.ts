@@ -6,7 +6,7 @@ import {
   createLead,
   LeadRateLimitError,
   publicLeadSchema,
-} from "@/features/leads/server";
+} from "@/modules/leads/server";
 
 export async function POST(request: NextRequest) {
   try {

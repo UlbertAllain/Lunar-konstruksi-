@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Paperclip } from "lucide-react";
 
-import type { PublicOverviewData, PublicPageContext } from "@/features/public-site/public-site.types";
+import type { PublicOverviewData, PublicPageContext } from "@/modules/public-site/public-site.types";
 
 import { PublicContactForm } from "../public-contact-form";
 import { asRecord, joinLocation, pickImage, pickText, slugToHref } from "../public-helpers";

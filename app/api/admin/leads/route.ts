@@ -4,7 +4,7 @@ import {
   LEAD_STATUSES,
   listLeads,
   type LeadStatus,
-} from "@/features/leads/server";
+} from "@/modules/leads/server";
 import { requireAdmin } from "@/lib/route";
 
 function errorStatus(error: unknown) {

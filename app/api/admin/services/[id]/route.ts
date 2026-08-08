@@ -3,7 +3,7 @@ import {
   detailService,
   removeService,
   updateServiceData,
-} from "@/services/service.service";
+} from "@/modules/services/service.service";
 
 import { HttpError } from "@/lib/route-response";
 import { emptySuccess, requireAdmin, routeError, success } from "@/lib/route";

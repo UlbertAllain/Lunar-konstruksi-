@@ -1,8 +1,8 @@
-import { PublicSeoTags } from "@/features/public-site";
+import { PublicSeoTags } from "@/modules/public-site";
 import {
   getPublicHomeData,
   getPublicPageContext,
-} from "@/features/public-site/server";
+} from "@/modules/public-site/server";
 import { ArchiveHome } from "./redesign/archive/archive-home";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";

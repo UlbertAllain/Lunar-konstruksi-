@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceList } from "@/components/admin/resource-list";
-import type { FAQ } from "@/types/faq";
+import type { FAQ } from "@/modules/faqs/faq.types";
 
 export default function FAQsClient() {
   return (

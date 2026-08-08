@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceList } from "@/components/admin/resource-list";
-import type { Testimonial } from "@/types/testimonial";
+import type { Testimonial } from "@/modules/testimonials/testimonial.types";
 
 export default function TestimonialsClient() {
   return (

@@ -14,8 +14,8 @@ import {
   LoadingForm,
 } from "./form-elements";
 import { loadRecord, saveRecord } from "./form-utils";
-import type { ConstructionService, ServiceFeature } from "@/types/service";
-import type { MediaImage } from "@/types/media";
+import type { ConstructionService, ServiceFeature } from "@/modules/services/service.types";
+import type { MediaImage } from "@/modules/media/media.types";
 
 type Props = { mode: "create" | "edit"; serviceId?: string };
 

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 import { HttpError } from "@/lib/route-response";
 import { requireAdmin, routeError, success } from "@/lib/route";
-import { uploadImage } from "@/services/upload.service";
+import { uploadImage } from "@/modules/media/upload.service";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = new Set([

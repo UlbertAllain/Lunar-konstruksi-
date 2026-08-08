@@ -1,5 +1,5 @@
-import { PublicSeoTags } from "@/features/public-site";
-import { getPublicPageContext } from "@/features/public-site/server";
+import { PublicSeoTags } from "@/modules/public-site";
+import { getPublicPageContext } from "@/modules/public-site/server";
 import { ArchivePageRenderer } from "./redesign/archive/archive-page-renderer";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";

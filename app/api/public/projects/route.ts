@@ -1,5 +1,5 @@
 import { routeError, success } from "@/lib/route-response";
-import { getPublishedProjects } from "@/repositories/project.repository";
+import { getPublishedProjects } from "@/modules/projects/project.repository";
 
 export const dynamic = "force-dynamic";
 

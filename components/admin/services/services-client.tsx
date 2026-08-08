@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceList } from "@/components/admin/resource-list";
-import type { ConstructionService } from "@/types/service";
+import type { ConstructionService } from "@/modules/services/service.types";
 
 export default function ServicesClient() {
   return (

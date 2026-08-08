@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import type { HydratedCmsSection, PublicPageContext } from "@/features/public-site/public-site.types";
+import type { HydratedCmsSection, PublicPageContext } from "@/modules/public-site/public-site.types";
 
 import { PublicContactForm } from "../public-contact-form";
 import { asRecord, joinLocation, pickImage, pickText, slugToHref } from "../public-helpers";

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { detailFAQ, removeFAQ, updateFAQData } from "@/services/faq.service";
+import { detailFAQ, removeFAQ, updateFAQData } from "@/modules/faqs/faq.service";
 import { emptySuccess, requireAdmin, routeError, success } from "@/lib/route";
 
 import { HttpError } from "@/lib/route-response";

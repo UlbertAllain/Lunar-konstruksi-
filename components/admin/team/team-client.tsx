@@ -1,7 +1,7 @@
 "use client";
 
 import { ResourceList } from "@/components/admin/resource-list";
-import type { TeamMember } from "@/types/team";
+import type { TeamMember } from "@/modules/team/team.types";
 
 export default function TeamClient() {
   return (

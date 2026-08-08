@@ -8,8 +8,8 @@ import {
   MediaUploader,
   MultipleMediaUploader,
 } from "@/components/admin/media-uploader";
-import type { MediaImage } from "@/types/media";
-import type { Project, ProjectStatus } from "@/types/project";
+import type { MediaImage } from "@/modules/media/media.types";
+import type { Project, ProjectStatus } from "@/modules/projects/project.types";
 import {
   BooleanField,
   FormActions,

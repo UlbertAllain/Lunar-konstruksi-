@@ -3,7 +3,7 @@ import {
   detailTeam,
   removeTeam,
   updateTeamData,
-} from "@/services/team.service";
+} from "@/modules/team/team.service";
 
 import { HttpError } from "@/lib/route-response";
 import { emptySuccess, requireAdmin, routeError, success } from "@/lib/route";

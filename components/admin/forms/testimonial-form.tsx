@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { MediaUploader } from "@/components/admin/media-uploader";
-import type { MediaImage } from "@/types/media";
-import type { Testimonial } from "@/types/testimonial";
+import type { MediaImage } from "@/modules/media/media.types";
+import type { Testimonial } from "@/modules/testimonials/testimonial.types";
 import {
   BooleanField,
   FormActions,
