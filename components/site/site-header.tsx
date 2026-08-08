@@ -1,12 +1,9 @@
-import { getNavigationSettingsWithDefaults } from "@/modules/public-site/server";
-import { getSiteSettingsWithDefaults } from "@/modules/public-site/server";
-import { ArchiveHeader } from "./redesign/archive/archive-header";
+"use client";
 
-export async function SiteHeader() {
-  const [navigation, settings] = await Promise.all([
-    getNavigationSettingsWithDefaults(),
-    getSiteSettingsWithDefaults(),
-  ]);
-  return <ArchiveHeader navigation={navigation} settings={settings} />;
+import { FormworkHeader } from "./formwork/header";
+
+export function SiteHeader() {
+  return <FormworkHeader />;
 }
+
 export default SiteHeader;

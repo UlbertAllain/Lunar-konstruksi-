@@ -1,6 +1,7 @@
-import { getNavigationSettingsWithDefaults } from "@/modules/public-site/server";
-import { getSiteSettingsWithDefaults } from "@/modules/public-site/server";
-import { ArchiveFooter } from "./redesign/archive/archive-footer";
+import { FormworkFooter } from "./formwork/footer";
 
-export async function SiteFooter(){const [navigation,settings]=await Promise.all([getNavigationSettingsWithDefaults(),getSiteSettingsWithDefaults()]);return <ArchiveFooter navigation={navigation} settings={settings}/>}
+export function SiteFooter() {
+  return <FormworkFooter />;
+}
+
 export default SiteFooter;

@@ -1,7 +1,7 @@
-import { PublicSeoTags } from "@/modules/public-site";
-import { getPublicPageContext } from "@/modules/public-site/server";
-import { ArchivePageRenderer } from "./redesign/archive/archive-page-renderer";
-import { SiteFooter } from "./site-footer";
-import { SiteHeader } from "./site-header";
+import { getPublicHomeData } from "@/modules/public-site/server";
+import { FormworkProjects } from "./formwork/projects";
 
-export default async function ProjectsPage(){const context=await getPublicPageContext("projects");return <><PublicSeoTags metadata={context.metadata}/><SiteHeader/><main><ArchivePageRenderer context={context} pageKey="projects"/></main><SiteFooter/></>}
+export default async function ProjectsPage() {
+  const data = await getPublicHomeData();
+  return <FormworkProjects data={data} />;
+}
