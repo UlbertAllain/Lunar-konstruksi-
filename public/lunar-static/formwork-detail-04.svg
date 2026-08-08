@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000" fill="none">
+  <rect width="1400" height="1000" fill="#F2EEE7"/>
+  <g opacity="0.08">
+    <path d="M0 120H1400M0 280H1400M0 440H1400M0 600H1400M0 760H1400M180 0V1000M420 0V1000M660 0V1000M900 0V1000M1140 0V1000" stroke="#202829" stroke-width="1"/>
+  </g>
+  <path d="M92 120H310" stroke="#E36C2F" stroke-width="3"/>
+  <path d="M1050 840C950 770 810 740 650 740C490 740 350 785 220 890" stroke="#E36C2F" stroke-width="3"/>
+  <circle cx="1050" cy="840" r="8" fill="#E36C2F"/>
+  <circle cx="220" cy="890" r="8" fill="#E36C2F"/>
+  <rect x="86" y="80" width="280" height="70" rx="6" fill="#F7F4EE" stroke="#D8D1C6"/>
+  <text x="110" y="125" fill="#68645E" font-family="Courier New, monospace" font-size="24" letter-spacing="4">DETAIL 04</text>
+  <text x="92" y="340" fill="#202829" font-family="Arial Narrow, Arial, sans-serif" font-weight="700" font-size="130">MEDIA</text>
+  <text x="92" y="455" fill="#202829" font-family="Arial Narrow, Arial, sans-serif" font-weight="700" font-size="130">BELUM</text>
+  <text x="92" y="570" fill="#202829" font-family="Arial Narrow, Arial, sans-serif" font-weight="700" font-size="130">DIISI</text>
+  <text x="92" y="665" fill="#68645E" font-family="Courier New, monospace" font-size="24" letter-spacing="4">Field package / Construction</text>
+  <text x="92" y="710" fill="#68645E" font-family="Courier New, monospace" font-size="22" letter-spacing="3">Tambahkan file lokal yang relevan untuk slot ini.</text>
+  <text x="960" y="170" fill="#E36C2F" font-family="Courier New, monospace" font-size="22" letter-spacing="5">GRID / 04</text>
+  <text x="1080" y="205" fill="#68645E" font-family="Courier New, monospace" font-size="22" letter-spacing="5">PHASE / 02</text>
+</svg>
