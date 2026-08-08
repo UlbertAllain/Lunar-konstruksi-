@@ -37,6 +37,9 @@ export function AdminSidebar() {
       <div className="my-7 h-px bg-white/5" />
       <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-600">Navigation</p>
       <nav className="space-y-1.5">
+        <a data-lunar-cms-entry="true" href="/admin/cms" className="mb-3 flex items-center justify-between rounded-xl border border-black/10 bg-black px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800">
+          <span>CMS Workspace</span><span aria-hidden="true">â†—</span>
+        </a>
         {menu.map((item) => {
           const active = pathname === item.href || (item.href !== "/admin/dashboard" && pathname.startsWith(`${item.href}/`));
           const Icon = item.icon;
