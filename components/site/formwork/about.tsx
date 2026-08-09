@@ -20,9 +20,9 @@ export function FormworkAbout({ data }: { data: SiteData }) {
           <BlueprintLayer />
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-12 px-5 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:px-10">
             <div>
-              <MicroLabel>A-01 / About / field organisation</MicroLabel>
+              <MicroLabel>A-01 / Tentang Lunar</MicroLabel>
               <h1 className={`${displayFont} mt-8 text-[clamp(3.8rem,7vw,7.8rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}>Keputusan teknis dimulai sebelum pekerjaan lapangan.</h1>
-              <p className="mt-8 max-w-xl text-[15px] leading-7 text-[#566476]">Lunar Konstruksi menghubungkan perencanaan, estimasi, koordinasi, dan pelaksanaan agar proyek bergerak dengan struktur kerja yang dapat dibaca dan dipertanggungjawabkan.</p>
+              <p className="mt-8 max-w-xl text-[15px] leading-7 text-[#566476]">Lunar Konstruksi mendampingi proyek melalui perencanaan, estimasi, koordinasi, dan pelaksanaan yang terarah agar setiap keputusan dapat diterapkan dengan jelas di lapangan.</p>
             </div>
             <div className="relative min-h-[600px]">
               <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(10%_0%,78%_0%,100%_12%,100%_69%,91%_72%,82%_100%,17%_94%,0%_76%,0%_18%)]">
@@ -46,10 +46,10 @@ export function FormworkAbout({ data }: { data: SiteData }) {
 
         <section className="relative py-20 sm:py-28">
           <div className="mx-auto grid w-full max-w-[1480px] gap-12 px-5 sm:px-8 lg:grid-cols-[.65fr_1.35fr] lg:px-10">
-            <div><MicroLabel>Position / responsibility</MicroLabel><h2 className={`${displayFont} mt-5 text-5xl font-black uppercase leading-[.9] tracking-[-.045em] sm:text-7xl`}>Partner teknis, bukan sekadar pelaksana.</h2></div>
+            <div><MicroLabel>Cara kami bekerja</MicroLabel><h2 className={`${displayFont} mt-5 text-5xl font-black uppercase leading-[.9] tracking-[-.045em] sm:text-7xl`}>Partner teknis, bukan sekadar pelaksana.</h2></div>
             <div className="grid gap-8 text-lg leading-8 text-[#566476] md:grid-cols-2">
               <p>Kami merapikan keputusan sebelum menjadi pekerjaan. Lingkup, material, urutan kerja, koordinasi, dan perubahan dibahas dalam konteks dampaknya terhadap waktu, biaya, dan mutu.</p>
-              <p>Setiap proyek memiliki kondisi berbeda. Karena itu, proses Lunar tidak bergantung pada satu formula visual, tetapi pada disiplin dokumentasi, komunikasi, dan kontrol lapangan.</p>
+              <p>Setiap proyek memiliki kebutuhan dan kondisi yang berbeda. Kami menyesuaikan pendekatan kerja dengan tetap menjaga komunikasi, dokumentasi, pengendalian mutu, dan koordinasi lapangan secara konsisten.</p>
             </div>
           </div>
         </section>
@@ -57,11 +57,11 @@ export function FormworkAbout({ data }: { data: SiteData }) {
         <section className="relative border-y border-[#d9d4ca] py-20 sm:py-24">
           <BlueprintLayer className="opacity-[0.08]" />
           <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"><div><MicroLabel>Personnel / project team</MicroLabel><h2 className={`${displayFont} mt-5 text-5xl font-black uppercase leading-[.9] tracking-[-.04em] sm:text-7xl`}>Keahlian lintas fungsi.</h2></div><p className="max-w-md text-sm leading-7 text-[#657184]">Foto dan data personel diambil dari data Team yang dikelola melalui admin.</p></div>
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"><div><MicroLabel>Tim Lunar</MicroLabel><h2 className={`${displayFont} mt-5 text-5xl font-black uppercase leading-[.9] tracking-[-.04em] sm:text-7xl`}>Kolaborasi lintas fungsi.</h2></div><p className="max-w-md text-sm leading-7 text-[#657184]">Setiap anggota tim berperan dalam mendukung koordinasi, pengawasan, dan pelaksanaan pekerjaan sesuai tanggung jawabnya.</p></div>
             <div className="mt-14 grid auto-rows-[180px] grid-cols-2 gap-4 md:auto-rows-[210px] md:grid-cols-6">
               {team.slice(0, 8).map((member, index) => {
                 const layout = ["col-span-2 row-span-2 md:col-span-3", "col-span-2 md:col-span-3", "col-span-1 row-span-2 md:col-span-2", "col-span-1 md:col-span-2", "col-span-2 md:col-span-2", "col-span-2 md:col-span-3"][index % 6];
-                return <article key={member.id} className={`relative overflow-hidden bg-[#d9d4ca] ${layout}`}><DatabaseImage src={member.image} alt={member.name} className="h-full w-full object-cover grayscale-[20%]" /><div className="absolute inset-x-0 bottom-0 bg-[#14243f]/90 p-4 text-white"><p className={`${displayFont} text-xl font-black uppercase leading-none`}>{member.name}</p><p className="mt-1 font-mono text-[8px] uppercase tracking-[.12em] text-[#e5c775]">{member.position}</p></div></article>;
+                return <article key={member.id} className={`relative overflow-hidden bg-[#d9d4ca] ${layout}`}><DatabaseImage src={member.image} alt={member.name} className="h-full w-full object-contain object-center bg-[#ebe6dc] grayscale-[20%]" /><div className="absolute inset-x-0 bottom-0 bg-[#14243f]/90 p-4 text-white"><p className={`${displayFont} text-xl font-black uppercase leading-none`}>{member.name}</p><p className="mt-1 font-mono text-[8px] uppercase tracking-[.12em] text-[#e5c775]">{member.position}</p></div></article>;
               })}
             </div>
           </div>
@@ -69,7 +69,7 @@ export function FormworkAbout({ data }: { data: SiteData }) {
 
         <section className="bg-[#14243f] py-20 text-[#f8f4ec] sm:py-24">
           <div className="mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-3 lg:px-10">
-            {[["01", "Clarity", "Lingkup, prioritas, keputusan, dan risiko dijelaskan sejak awal."], ["02", "Integration", "Desain, biaya, koordinasi, dan pekerjaan lapangan dibaca sebagai satu sistem."], ["03", "Accountability", "Progres dan perubahan harus bisa ditelusuri melalui komunikasi dan dokumentasi yang rapi."]].map(([number,title,text]) => <article key={number} className="border-t border-white/20 pt-5"><p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#dcb458]">{number}</p><h3 className={`${displayFont} mt-8 text-4xl font-black uppercase`}>{title}</h3><p className="mt-4 max-w-sm text-sm leading-7 text-white/55">{text}</p></article>)}
+            {[["01", "Kejelasan", "Lingkup, prioritas, keputusan, dan risiko dijelaskan sejak awal."], ["02", "Koordinasi", "Desain, biaya, koordinasi, dan pekerjaan lapangan dibaca sebagai satu sistem."], ["03", "Tanggung jawab", "Progres dan perubahan harus bisa ditelusuri melalui komunikasi dan dokumentasi yang rapi."]].map(([number,title,text]) => <article key={number} className="border-t border-white/20 pt-5"><p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#dcb458]">{number}</p><h3 className={`${displayFont} mt-8 text-4xl font-black uppercase`}>{title}</h3><p className="mt-4 max-w-sm text-sm leading-7 text-white/55">{text}</p></article>)}
           </div>
         </section>
 

@@ -61,7 +61,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
         </h1>
 
         <p className="mt-7 max-w-[470px] text-[15px] leading-8 text-[#5d6877]">
-          Perencanaan, koordinasi, kontrol mutu, dan pekerjaan lapangan bergerak dalam satu alur yang mudah dibacaâ€”bukan saling mengejar ketika pekerjaan sudah berjalan.
+          Perencanaan, koordinasi, kontrol mutu, dan pekerjaan lapangan bergerak dalam satu alur yang mudah dibaca - bukan saling mengejar ketika pekerjaan sudah berjalan.
         </p>
 
         <Link
@@ -132,9 +132,9 @@ export function FormworkHome({ data }: { data: SiteData }) {
       </svg>
 
       <div className="absolute bottom-[5%] right-[4%] hidden grid-cols-3 gap-6 xl:grid">
-        {metric("08", "years / field practice")}
-        {metric(`${projects.length || 0}+`, "projects / documented")}
-        {metric("97%", "delivery / coordinated")}
+        {metric("08", "tahun pengalaman")}
+        {metric(`${projects.length || 0}+`, "proyek terdokumentasi")}
+        {metric("97%", "pekerjaan terkoordinasi")}
       </div>
     </div>
   </div>
@@ -160,7 +160,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
                 src={featuredProject.image}
                 alt={featuredProject.title}
                 className="h-[360px] w-full object-cover transition duration-700 group-hover:scale-[1.015] sm:h-[420px]"
-                placeholderLabel="Media project utama belum diisi"
+                placeholderLabel="Foto proyek belum tersedia"
               />
               <div className="border-t border-[#ddd5c8] bg-[#f8f4ec] px-5 py-5">
                 <MicroLabel>Proyek pilihan / 01</MicroLabel>
@@ -183,7 +183,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
                   src={secondaryProjects[0].image}
                   alt={secondaryProjects[0].title}
                   className="aspect-[5/4] w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-                  placeholderLabel="Media project pendukung belum diisi"
+                  placeholderLabel="Foto proyek belum tersedia"
                 />
                 <div className="px-4 py-4">
                   <MicroLabel>File / 02</MicroLabel>
@@ -196,19 +196,19 @@ export function FormworkHome({ data }: { data: SiteData }) {
           </div>
         ) : (
           <div className="mt-8 border border-dashed border-[#bdb6ac] px-6 py-12 text-center">
-            <MicroLabel>Belum ada project published</MicroLabel>
+            <MicroLabel>Belum ada proyek yang ditampilkan</MicroLabel>
           </div>
         )}
       </div>
 
       <div className="xl:pl-4">
         <div className="border-t border-[#cfc8bd] pt-6">
-          <MicroLabel>Selected record / editorial note</MicroLabel>
+          <MicroLabel>Proyek pilihan</MicroLabel>
           <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(3rem,4.7vw,5.3rem)] font-black uppercase leading-[.89] tracking-[-.04em] text-[#14243f]`}>
-            Project dibaca sebagai rangkaian keputusan.
+            Setiap proyek dibangun dari keputusan yang tepat.
           </h2>
           <p className="mt-6 max-w-lg text-[15px] leading-8 text-[#5f6976]">
-            Satu proyek utama menjadi focal point. Project kedua cukup hadir sebagai record pendukungâ€”tanpa daftar judul yang mengulang informasi yang sudah tampil di visual.
+            Proyek pilihan kami menampilkan lingkup pekerjaan dan hasil yang telah diselesaikan, sementara proyek lainnya dapat dilihat pada halaman portofolio. - tanpa daftar judul yang mengulang informasi yang sudah tampil di visual.
           </p>
 
           <Link
@@ -221,12 +221,12 @@ export function FormworkHome({ data }: { data: SiteData }) {
 
         <div className="mt-12 grid grid-cols-2 gap-4 border-y border-[#ddd5c8] py-5">
           <div>
-            <MicroLabel>Record logic</MicroLabel>
-            <p className="mt-2 text-[12px] leading-6 text-[#5f6976]">Featured work menjadi bukti utama, bukan sekadar thumbnail katalog.</p>
+            <MicroLabel>Proses pekerjaan</MicroLabel>
+            <p className="mt-2 text-[12px] leading-6 text-[#5f6976]">Setiap proyek ditampilkan untuk memberikan gambaran nyata mengenai lingkup dan hasil pekerjaan kami.</p>
           </div>
           <div>
-            <MicroLabel>Archive route</MicroLabel>
-            <p className="mt-2 text-[12px] leading-6 text-[#5f6976]">Semua record lengkap tetap tersedia di halaman Projects.</p>
+            <MicroLabel>Lihat proyek</MicroLabel>
+            <p className="mt-2 text-[12px] leading-6 text-[#5f6976]">Lihat proyek lainnya untuk mengenal lebih jauh pengalaman dan hasil pekerjaan Lunar Konstruksi.</p>
           </div>
         </div>
       </div>
@@ -239,7 +239,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
           <div className="mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.66fr_.72fr_.62fr] lg:px-10">
             <div>
               <MicroLabel>04 / Alur kerja</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.9rem,4.5vw,4.7rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Rencana harus bisa dibangun.</h2>
+              <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.9rem,4.5vw,4.7rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Perencanaan yang siap diterapkan di lapangan.</h2>
               <p className="mt-5 max-w-sm text-sm leading-7 text-[#657184]">Empat tahap utama membantu setiap pekerjaan tetap terarah, dari kebutuhan awal sampai serah terima.</p>
             </div>
 
@@ -263,8 +263,8 @@ export function FormworkHome({ data }: { data: SiteData }) {
                 <DatabaseImage src={processPrimary} alt="Perencanaan dan koordinasi proyek" className="aspect-[4/3] w-full object-cover" placeholderLabel="Tambahkan gambar statis perencanaan" />
               </div>
               <div className="border-l-2 border-[#dcb458] bg-[#ece7df] p-4">
-                <MicroLabel>Site note / QC-04</MicroLabel>
-                <p className={`${displayFont} mt-3 max-w-[280px] text-[1.6rem] font-black uppercase leading-[.96]`}>Keputusan teknis tidak boleh hilang di antara rapat dan lapangan.</p>
+                <MicroLabel>Catatan lapangan / QC-04</MicroLabel>
+                <p className={`${displayFont} mt-3 max-w-[280px] text-[1.6rem] font-black uppercase leading-[.96]`}>Keputusan teknis harus tetap jelas dari perencanaan hingga pelaksanaan.</p>
               </div>
             </div>
           </div>
@@ -288,18 +288,18 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div>
         <MicroLabel className="!text-[#dcb458]">05 / Kontrol mutu / serah terima</MicroLabel>
         <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(3rem,5vw,5.8rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
-          Presisi menjaga semuanya tetap terhubung.
+          Kontrol yang konsisten menjaga kualitas pekerjaan.
         </h2>
         <p className="mt-6 max-w-md text-[14px] leading-7 text-white/58">
-          Kontrol lapangan bukan satu checklist di akhir. Ia berjalan bersama keputusan, klarifikasi, dan handover sepanjang proyek.
+          Pengendalian mutu dilakukan sepanjang proyek untuk menjaga pekerjaan tetap sesuai rencana dan mendukung proses serah terima yang tertib.
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3 lg:pb-2">
         {[
-          ["QC", "04", "Quality checkpoints", "Keputusan mutu dicatat sebelum pekerjaan bergerak ke tahap berikutnya."],
-          ["RFI", "12", "Clarify / close", "Pertanyaan teknis ditutup dengan jawaban yang bisa dilacak kembali."],
-          ["H/O", "100%", "Verify / handover", "Penyerahan akhir dirapikan menjadi close-out yang mudah dibaca."],
+          ["QC", "04", "Pemeriksaan mutu", "Keputusan mutu dicatat sebelum pekerjaan bergerak ke tahap berikutnya."],
+          ["RFI", "12", "Klarifikasi teknis", "Pertanyaan teknis ditutup dengan jawaban yang bisa dilacak kembali."],
+          ["H/O", "100%", "Serah terima", "Penyerahan akhir dirapikan menjadi close-out yang mudah dibaca."],
         ].map(([code, value, label, description], index) => (
           <div
             key={code}
@@ -327,11 +327,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div>
         <MicroLabel>06 / Tim Lunar</MicroLabel>
         <h2 className={`${displayFont} mt-5 max-w-[560px] text-[clamp(2.9rem,4.7vw,5.3rem)] font-black uppercase leading-[0.9] tracking-[-0.045em] text-[#14243f]`}>
-          Tim lapangan dan koordinasi.
+          Tim yang menjaga proyek tetap berjalan.
         </h2>
       </div>
       <p className="max-w-lg text-[14px] leading-7 text-[#5f6976]">
-        Layout menyesuaikan jumlah personel. Satu orang tampil sebagai dossier horizontal; ketika data bertambah, section otomatis berubah menjadi bento tanpa memakan ruang kosong berlebihan.
+        Setiap anggota tim memiliki peran dalam menjaga koordinasi, komunikasi, dan kualitas pekerjaan dari awal hingga penyelesaian proyek.
       </p>
     </div>
 
@@ -342,26 +342,26 @@ export function FormworkHome({ data }: { data: SiteData }) {
             src={team[0].image}
             alt={team[0].name}
             className="h-[260px] w-full object-cover object-center md:h-full"
-            placeholderLabel="Media personnel belum diisi"
+            placeholderLabel="Foto anggota tim belum tersedia"
           />
 
           <div className="flex flex-col justify-between gap-7 px-6 py-6 sm:px-8">
             <div>
-              <MicroLabel>Personnel / 01</MicroLabel>
+              <MicroLabel>Anggota tim / 01</MicroLabel>
               <h3 className="mt-4 text-[clamp(1.8rem,3vw,3rem)] font-semibold uppercase leading-[0.94] tracking-[-0.04em] text-[#14243f]">
                 {team[0].name}
               </h3>
               <p className="mt-2 text-[13px] uppercase tracking-[0.08em] text-[#697482]">{team[0].position}</p>
             </div>
             <p className="max-w-xl text-[13px] leading-7 text-[#5f6976]">
-              Personel tampil sebagai bagian dari sistem kerja, bukan card kecil yang meninggalkan ruang kosong di tengah halaman.
+              Setiap anggota tim memiliki tanggung jawab yang mendukung koordinasi dan kelancaran pelaksanaan proyek.
             </p>
           </div>
 
           <div className="flex min-w-[180px] flex-col justify-between border-t border-[#e1d8ca] px-6 py-6 font-mono text-[8px] uppercase leading-5 tracking-[0.15em] text-[#77818f] md:border-l md:border-t-0">
-            <span>Field coordination</span>
-            <span>Site communication</span>
-            <span>Delivery support</span>
+            <span>Koordinasi lapangan</span>
+            <span>Komunikasi proyek</span>
+            <span>Dukungan pelaksanaan</span>
           </div>
         </div>
       </div>
@@ -388,7 +388,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
                 src={member.image}
                 alt={member.name}
                 className={`${heights[index] ?? "h-[230px]"} w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]`}
-                placeholderLabel={`Media team ${index + 1} belum diisi`}
+                placeholderLabel={`Foto anggota tim ${index + 1} belum diisi`}
               />
               <div className="px-5 py-5">
                 <MicroLabel>{`Personnel / ${String(index + 1).padStart(2, "0")}`}</MicroLabel>
@@ -422,7 +422,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
           <div className="mx-auto grid w-full max-w-[1480px] gap-7 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10">
             <div>
               <MicroLabel>08 / Mulai proyek Anda</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(3.2rem,5.2vw,5.6rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Mari bangun sesuatu yang bertahan.</h2>
+              <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(3.2rem,5.2vw,5.6rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Wujudkan proyek Anda bersama Lunar Konstruksi.</h2>
               <p className="mt-4 max-w-xl text-sm leading-7 text-[#657184]">Mulai dari kebutuhan, kondisi lapangan, dan keputusan yang benar-benar perlu diselesaikan terlebih dahulu.</p>
             </div>
             <Link href="/contact" className="inline-flex items-center gap-4 border-b border-[#dcb458] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.12em]">Konsultasikan proyek <ArrowRight className="h-4 w-4 text-[#dcb458]" /></Link>
