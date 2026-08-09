@@ -82,7 +82,7 @@ export function MicroLabel({ children, className = "" }: { children: ReactNode; 
 }
 
 export const displayFont =
-  "[font-family:'Aptos_Display','Segoe_UI_Variable_Display','Helvetica_Neue',Arial,sans-serif] [font-stretch:92%]";
+  "[font-family:'Bahnschrift','Arial_Narrow','Roboto_Condensed','Helvetica_Neue_Condensed',Arial,sans-serif] [font-stretch:75%] [font-variation-settings:'wdth'_72,'wght'_720]";
 
 export const bodyFont =
   "[font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]";

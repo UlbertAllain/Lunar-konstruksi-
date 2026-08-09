@@ -76,7 +76,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
             </div>
 
             <div className="relative min-h-[540px] lg:min-h-full">
-              <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(9%_0%,81%_0%,100%_13%,100%_72%,92%_72%,84%_100%,19%_100%,0%_80%,0%_20%)]">
+              <div className="absolute inset-y-[3%] right-[-1%] w-[102%] overflow-hidden border border-[#d8d1c6]/70 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.08)] [clip-path:polygon(13%_0%,100%_0%,100%_82%,91%_82%,83%_100%,20%_100%,0%_78%,0%_18%)] lg:w-[104%]">
                 <DatabaseImage src={heroImage} alt="Lunar Konstruksi — construction field" className="h-full w-full object-contain" placeholderLabel="Tambahkan foto hero lokal di public/" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/15" />
               </div>
