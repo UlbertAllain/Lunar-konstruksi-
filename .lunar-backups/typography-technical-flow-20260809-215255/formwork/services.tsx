@@ -12,16 +12,16 @@ export function FormworkServices({ data }: { data: SiteData }) {
   const faqs = data.faqs.map(faqModel);
 
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d]">
       <FormworkHeader />
       <main>
         <section className="relative border-b border-[#d9d4ca] py-16 sm:py-24">
           <BlueprintLayer />
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:px-10">
-            <div><MicroLabel>S-01 / Capabilities / scope of work</MicroLabel><h1 className={`${displayFont} mt-8 text-[clamp(3.7rem,7vw,7.6rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}>Layanan harus saling terhubung.</h1><p className="mt-8 max-w-lg text-[15px] leading-7 text-[#566476]">Ruang lingkup dapat disusun sesuai konteks proyek, dari satu pekerjaan teknis sampai koordinasi design-build yang lebih terintegrasi.</p></div>
+            <div><MicroLabel>Capabilities / scope of work</MicroLabel><h1 className={`${displayFont} mt-8 text-[clamp(3.7rem,7vw,7.6rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}>Layanan harus saling terhubung.</h1><p className="mt-8 max-w-lg text-[15px] leading-7 text-[#566476]">Ruang lingkup dapat disusun sesuai konteks proyek, dari satu pekerjaan teknis sampai koordinasi design-build yang lebih terintegrasi.</p></div>
             <div className="relative min-h-[520px]">
-              <div className="absolute inset-y-0 right-[-3%] w-[94%] overflow-visible"><DatabaseImage src={LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""} alt={services[0]?.name || "Capabilities"} className="h-[460px] w-full object-cover" /></div>
-              <TechnicalArc label="SCOPE / FLOW" className="bottom-[-8%] left-[8%] h-[340px] w-[500px] rotate-[15deg]" />
+              <div className="absolute right-0 top-0 w-[82%] overflow-hidden [border-radius:55%_45%_42%_58%/38%_42%_58%_62%]"><DatabaseImage src={LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""} alt={services[0]?.name || "Capabilities"} className="h-[460px] w-full object-cover" /></div>
+              <TechnicalArc className="bottom-[-8%] left-[8%] h-[340px] w-[500px] rotate-[15deg]" />
             </div>
           </div>
         </section>

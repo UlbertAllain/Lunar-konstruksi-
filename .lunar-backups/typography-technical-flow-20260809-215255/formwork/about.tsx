@@ -14,25 +14,25 @@ export function FormworkAbout({ data }: { data: SiteData }) {
   const project = projects[0];
 
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d]">
       <FormworkHeader />
       <main>
         <section className="relative border-b border-[#d9d4ca] py-16 sm:py-24">
           <BlueprintLayer />
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-12 px-5 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:px-10">
             <div>
-              <MicroLabel>A-01 / About / field organisation</MicroLabel>
+              <MicroLabel>About / field organisation</MicroLabel>
               <h1 className={`${displayFont} mt-8 text-[clamp(3.8rem,7vw,7.8rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}>Keputusan teknis dimulai sebelum pekerjaan lapangan.</h1>
               <p className="mt-8 max-w-xl text-[15px] leading-7 text-[#566476]">Lunar Konstruksi menghubungkan perencanaan, estimasi, koordinasi, dan pelaksanaan agar proyek bergerak dengan struktur kerja yang dapat dibaca dan dipertanggungjawabkan.</p>
             </div>
             <div className="relative min-h-[600px]">
-              <div className="absolute inset-y-0 right-[-3%] w-[94%] overflow-visible">
+              <div className="absolute right-0 top-0 w-[78%] overflow-hidden [border-radius:48%_52%_44%_56%/38%_44%_56%_62%]">
                 <DatabaseImage src={LOCAL_MEDIA.aboutHero || project?.image || ""} alt={project?.title ?? "Lunar Konstruksi"} className="h-[500px] w-full object-cover" />
               </div>
               <div className="absolute bottom-0 left-[2%] h-[250px] w-[250px] overflow-hidden rounded-full border-[10px] border-[#f5f1e8]">
                 <DatabaseImage src={hero?.image ?? ""} alt={hero?.name ?? "Team Lunar"} className="h-full w-full object-cover" />
               </div>
-              <TechnicalArc label="TEAM / FIELD" className="bottom-[-10%] left-[14%] h-[380px] w-[520px] rotate-[18deg]" />
+              <TechnicalArc className="bottom-[-10%] left-[14%] h-[380px] w-[520px] rotate-[18deg]" />
             </div>
           </div>
         </section>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { displayFont } from "./decor";
 
 const links = [
   { href: "/about", label: "ABOUT" },
@@ -18,7 +17,7 @@ export function FormworkHeader() {
   return (
     <header className="relative z-50 border-b border-[#d9d4ca] bg-[#f5f1e8] text-[#182d4d]">
       <div className="mx-auto flex h-[78px] w-full max-w-[1480px] items-center justify-between px-5 sm:px-8 lg:px-10">
-        <Link href="/" className={`${displayFont} flex items-center gap-2 text-[1.28rem] font-bold tracking-[0.075em]`}>
+        <Link href="/" className="flex items-center gap-2 text-lg font-black tracking-[0.08em]">
           <span>LUNAR</span><span className="text-[#dcb458]">/</span><span>KONSTRUKSI</span>
         </Link>
 
