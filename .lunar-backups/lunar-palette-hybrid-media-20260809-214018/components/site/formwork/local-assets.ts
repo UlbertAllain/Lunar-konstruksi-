@@ -9,10 +9,9 @@ export const LOCAL_MEDIA = {
   processPlanning: "/lunar-static/home-process-plan.png",
   processNote: "/lunar-static/home-process-site.png",
 
-  aboutHero: "/lunar-static/about-hero.png",
-  servicesHero: "/lunar-static/services-hero.png",
-  projectsHero: "/lunar-static/projects-hero.png",
-  contactHero: "/lunar-static/contact-hero.png",
+  aboutHero: "/lunar-static/about.png",
+  servicesHero: "/lunar-static/services.png",
+  projectsHero: "/lunar-static/project.png",
 
   decorative: [
     "/lunar-static/home-capability-structure.png",

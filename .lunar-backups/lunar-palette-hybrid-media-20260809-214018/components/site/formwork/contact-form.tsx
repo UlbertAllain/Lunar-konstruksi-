@@ -41,7 +41,7 @@ export function TechnicalContactForm() {
     setStatus("idle");
   }
 
-  const input = "w-full border-0 border-b border-[#aaa39a] bg-transparent px-0 py-3 text-sm text-[#182d4d] outline-none placeholder:text-[#8b857d] focus:border-[#dcb458]";
+  const input = "w-full border-0 border-b border-[#aaa39a] bg-transparent px-0 py-3 text-sm text-[#202829] outline-none placeholder:text-[#8b857d] focus:border-[#e36c2f]";
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -52,7 +52,7 @@ export function TechnicalContactForm() {
       <input className="hidden" tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => setForm((current) => ({ ...current, website: event.target.value }))} />
       <textarea className={`${input} min-h-28 resize-y sm:col-span-2`} value={form.message} onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))} placeholder="BRIEF / SCOPE / TARGET" required />
       <div className="flex flex-wrap items-center gap-5 sm:col-span-2">
-        <button type="submit" disabled={status === "sending"} className="border-b border-[#dcb458] pb-2 font-mono text-[10px] font-semibold uppercase tracking-[.1em] disabled:opacity-50">{status === "sending" ? "SENDING..." : "SEND PROJECT BRIEF →"}</button>
+        <button type="submit" disabled={status === "sending"} className="border-b border-[#e36c2f] pb-2 font-mono text-[10px] font-semibold uppercase tracking-[.1em] disabled:opacity-50">{status === "sending" ? "SENDING..." : "SEND PROJECT BRIEF →"}</button>
         {status === "sent" ? <span className="font-mono text-[9px] uppercase tracking-[.12em] text-[#347458]">Request recorded.</span> : null}
       </div>
     </form>
