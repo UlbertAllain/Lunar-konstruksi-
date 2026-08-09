@@ -20,18 +20,8 @@ export function FormworkServices({ data }: { data: SiteData }) {
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:px-10">
             <div><MicroLabel>S-01 / Capabilities / scope of work</MicroLabel><h1 className={`${displayFont} mt-8 text-[clamp(3.7rem,7vw,7.6rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}>Layanan harus saling terhubung.</h1><p className="mt-8 max-w-lg text-[15px] leading-7 text-[#566476]">Ruang lingkup dapat disusun sesuai konteks proyek, dari satu pekerjaan teknis sampai koordinasi design-build yang lebih terintegrasi.</p></div>
             <div className="relative min-h-[520px]">
-              <div className="absolute inset-y-[2%] right-[-1%] w-[96%] overflow-hidden border border-[#d8d1c6]/70 bg-[#f5f1e8] shadow-[0_20px_56px_rgba(20,36,63,0.09)] [clip-path:polygon(17%_0%,100%_6%,93%_100%,73%_92%,64%_100%,15%_100%,0%_80%,0%_22%)]"><DatabaseImage src={LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""} alt={services[0]?.name || "Capabilities"} className="h-full min-h-[450px] w-full object-cover object-center" /></div>
-              {/* FLOATING-SERVICES-HERO-CARD */}
-<div className="absolute bottom-[9%] left-[3%] z-30 hidden w-[220px] -rotate-[6deg] overflow-hidden border border-[#d9d1c4] bg-[#f9f6ef]/95 shadow-[0_20px_50px_rgba(20,36,63,0.13)] backdrop-blur-[2px] [clip-path:polygon(9%_0%,100%_0%,92%_100%,0%_89%,0%_16%)] lg:block">
-  <div className="px-4 py-3">
-    <MicroLabel>Service scope / S-02</MicroLabel>
-    <p className="mt-2 text-[11px] leading-5 text-[#4f5968]">Layanan dibaca sebagai paket kerja yang bergerak dari persiapan sampai penyelesaian.</p>
-  </div>
-  <div className="border-t border-[#e5ddd1] px-4 py-3 font-mono text-[8px] uppercase tracking-[0.15em] text-[#748092]">
-    SCOPE / PACKAGE
-  </div>
-</div>
-<TechnicalArc label="SCOPE / FLOW" className="bottom-[-8%] left-[8%] h-[340px] w-[500px] rotate-[15deg]" />
+              <div className="absolute inset-y-0 right-[-3%] w-[94%] overflow-visible"><DatabaseImage src={LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""} alt={services[0]?.name || "Capabilities"} className="h-[460px] w-full object-cover" /></div>
+              <TechnicalArc label="SCOPE / FLOW" className="bottom-[-8%] left-[8%] h-[340px] w-[500px] rotate-[15deg]" />
             </div>
           </div>
         </section>

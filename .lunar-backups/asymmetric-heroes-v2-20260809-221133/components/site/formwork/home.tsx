@@ -76,7 +76,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
             </div>
 
             <div className="relative min-h-[540px] lg:min-h-full">
-              <div className="absolute inset-y-[3%] right-[-1%] w-[102%] overflow-hidden border border-[#d8d1c6]/70 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.08)] [clip-path:polygon(13%_0%,100%_0%,100%_82%,91%_82%,83%_100%,20%_100%,0%_78%,0%_18%)] lg:w-[104%]">
+              <div className="absolute inset-y-[3%] right-[-4%] w-[104%] overflow-visible lg:w-[106%]">
                 <DatabaseImage src={heroImage} alt="Lunar Konstruksi — construction field" className="h-full w-full object-contain" placeholderLabel="Tambahkan foto hero lokal di public/" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/15" />
               </div>
@@ -84,30 +84,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
               <div className="absolute left-[5%] top-[14%] hidden -rotate-55 lg:block"><MicroLabel>Phase 02 / Structure</MicroLabel></div>
               <div className="absolute right-6 top-[30%] hidden flex-col gap-12 font-mono text-[9px] font-semibold text-white/80 lg:flex"><span>+12.400</span><span>+09.600</span><span>+06.800</span></div>
 
-              <div className="absolute bottom-[9%] left-[4%] h-[205px] w-[225px] -rotate-[7deg] overflow-hidden border-[7px] border-[#f5f1e8] bg-[#f8f4ed] shadow-[0_18px_46px_rgba(20,36,63,0.13)] [clip-path:polygon(18%_0%,100%_7%,92%_100%,0%_88%,4%_20%)] sm:h-[235px] sm:w-[255px] lg:left-[5%] lg:h-[265px] lg:w-[290px]">
+              <div className="absolute bottom-[8%] left-[2%] h-[220px] w-[220px] overflow-hidden rounded-full border-[9px] border-[#f5f1e8] sm:h-[255px] sm:w-[255px] lg:left-[4%] lg:h-[285px] lg:w-[285px]">
                 <DatabaseImage src={heroInset} fallbackSrc={localMediaAt(1)} alt="Project detail" className="h-full w-full object-cover" />
               </div>
 
-              {/* FLOATING-HERO-FIELD-CARD */}
-<div className="absolute right-[5%] top-[13%] z-30 hidden w-[218px] rotate-[5deg] overflow-hidden border border-[#d9d1c4] bg-[#f9f6ef]/95 shadow-[0_20px_52px_rgba(20,36,63,0.14)] backdrop-blur-[2px] [clip-path:polygon(10%_0%,100%_0%,94%_88%,84%_100%,0%_91%,0%_16%)] lg:block">
-  <div className="border-b border-[#e5ddd1] px-4 py-3">
-    <MicroLabel>Field note / 01</MicroLabel>
-    <p className="mt-2 text-[11px] leading-5 text-[#4f5968]">
-      Struktur, urutan kerja, dan koordinasi dibaca sebagai satu rangkaian.
-    </p>
-  </div>
-  <div className="grid grid-cols-2 text-[10px] text-[#566171]">
-    <div className="border-r border-[#e5ddd1] px-4 py-3">
-      <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#d2aa4d]">Phase</p>
-      <p className="mt-1 font-semibold">Structure</p>
-    </div>
-    <div className="px-4 py-3">
-      <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#d2aa4d]">Scope</p>
-      <p className="mt-1 font-semibold">Execution</p>
-    </div>
-  </div>
-</div>
-<TechnicalArc label="FIELD / STRUCTURE" className="bottom-[-2%] left-[17%] hidden h-[340px] w-[560px] rotate-[5deg] lg:block" />
+              <TechnicalArc label="FIELD / STRUCTURE" className="bottom-[-2%] left-[17%] hidden h-[340px] w-[560px] rotate-[5deg] lg:block" />
               <div className="absolute left-[40%] top-[74%] hidden lg:block"><MicroLabel>REBAR / FORMWORK / CONCRETE</MicroLabel></div>
               <div className="absolute bottom-[5%] right-[5%] hidden gap-7 xl:grid xl:grid-cols-1">
                 {metric("08", "years / field practice")}

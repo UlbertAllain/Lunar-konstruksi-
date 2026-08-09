@@ -26,23 +26,13 @@ export function FormworkAbout({ data }: { data: SiteData }) {
               <p className="mt-8 max-w-xl text-[15px] leading-7 text-[#566476]">Lunar Konstruksi menghubungkan perencanaan, estimasi, koordinasi, dan pelaksanaan agar proyek bergerak dengan struktur kerja yang dapat dibaca dan dipertanggungjawabkan.</p>
             </div>
             <div className="relative min-h-[600px]">
-              <div className="absolute inset-y-[2%] right-[-1%] w-[96%] overflow-hidden border border-[#d8d1c6]/70 bg-[#f5f1e8] shadow-[0_20px_56px_rgba(20,36,63,0.09)] [clip-path:polygon(12%_0%,100%_0%,100%_72%,89%_72%,81%_100%,20%_100%,0%_80%,0%_14%)]">
-                <DatabaseImage src={LOCAL_MEDIA.aboutHero || project?.image || ""} alt={project?.title ?? "Lunar Konstruksi"} className="h-full min-h-[450px] w-full object-cover object-center" />
+              <div className="absolute inset-y-0 right-[-3%] w-[94%] overflow-visible">
+                <DatabaseImage src={LOCAL_MEDIA.aboutHero || project?.image || ""} alt={project?.title ?? "Lunar Konstruksi"} className="h-[500px] w-full object-cover" />
               </div>
               <div className="absolute bottom-0 left-[2%] h-[250px] w-[250px] overflow-hidden rounded-full border-[10px] border-[#f5f1e8]">
                 <DatabaseImage src={hero?.image ?? ""} alt={hero?.name ?? "Team Lunar"} className="h-full w-full object-cover" />
               </div>
-              {/* FLOATING-ABOUT-HERO-CARD */}
-<div className="absolute bottom-[9%] left-[3%] z-30 hidden w-[220px] -rotate-[6deg] overflow-hidden border border-[#d9d1c4] bg-[#f9f6ef]/95 shadow-[0_20px_50px_rgba(20,36,63,0.13)] backdrop-blur-[2px] [clip-path:polygon(9%_0%,100%_0%,92%_100%,0%_89%,0%_16%)] lg:block">
-  <div className="px-4 py-3">
-    <MicroLabel>Field brief / A-02</MicroLabel>
-    <p className="mt-2 text-[11px] leading-5 text-[#4f5968]">Tim, koordinasi, dan keputusan lapangan perlu terasa sebagai satu sistem kerja.</p>
-  </div>
-  <div className="border-t border-[#e5ddd1] px-4 py-3 font-mono text-[8px] uppercase tracking-[0.15em] text-[#748092]">
-    PEOPLE / CONTROL
-  </div>
-</div>
-<TechnicalArc label="TEAM / FIELD" className="bottom-[-10%] left-[14%] h-[380px] w-[520px] rotate-[18deg]" />
+              <TechnicalArc label="TEAM / FIELD" className="bottom-[-10%] left-[14%] h-[380px] w-[520px] rotate-[18deg]" />
             </div>
           </div>
         </section>
