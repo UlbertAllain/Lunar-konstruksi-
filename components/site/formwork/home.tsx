@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, Quote } from "lucide-react";
 
-import { BlueprintLayer, MicroLabel, TechnicalArc, displayFont } from "./decor";
+import { BlueprintLayer, MicroLabel, displayFont } from "./decor";
 import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
-import { LOCAL_MEDIA, localMediaAt } from "./local-assets";
+import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
-import { ServiceShowcase } from "./service-showcase";
+import { ServiceStaggeredCarousel } from "./service-staggered-carousel";
 import {
   projectModel,
   serviceModel,
@@ -31,53 +31,10 @@ function projectHref(slug: string) {
 export function FormworkHome({ data }: { data: SiteData }) {
   const projects = data.projects.map(projectModel);
   const services = data.services.map(serviceModel);
-  const serviceCards = services.map((service, index) => {
-    const record = service as unknown as Record<string, unknown>;
-    const imageRecord =
-      record.image && typeof record.image === "object"
-        ? (record.image as Record<string, unknown>)
-        : undefined;
-    const coverRecord =
-      record.coverImage && typeof record.coverImage === "object"
-        ? (record.coverImage as Record<string, unknown>)
-        : undefined;
-
-    const image =
-      (typeof record.image === "string" ? record.image : "") ||
-      (typeof imageRecord?.url === "string" ? imageRecord.url : "") ||
-      (typeof record.imageUrl === "string" ? record.imageUrl : "") ||
-      (typeof record.coverImageUrl === "string" ? record.coverImageUrl : "") ||
-      (typeof coverRecord?.url === "string" ? coverRecord.url : "");
-
-    const description =
-      (typeof record.shortDescription === "string" ? record.shortDescription : "") ||
-      (typeof record.description === "string" ? record.description : "") ||
-      (typeof record.summary === "string" ? record.summary : "") ||
-      (typeof record.excerpt === "string" ? record.excerpt : "");
-
-    return {
-      id: String(record.id ?? `service-${index + 1}`),
-      slug: typeof record.slug === "string" ? record.slug : "",
-      title:
-        (typeof record.name === "string" ? record.name : "") ||
-        (typeof record.title === "string" ? record.title : "") ||
-        `Layanan ${index + 1}`,
-      description,
-      image,
-      category:
-        (typeof record.category === "string" ? record.category : "") ||
-        (typeof record.type === "string" ? record.type : "") ||
-        "Field package",
-    };
-  });
   const team = data.team.map(teamModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
 
   const quote = testimonials[0];
-
-  const heroImage = LOCAL_MEDIA.hero;
-  const heroInset = LOCAL_MEDIA.heroEngineer;
-
   const processPrimary = LOCAL_MEDIA.processPlanning;
 
   const featuredProject = projects[0];
@@ -96,7 +53,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div className="max-w-[610px]">
         <div className="flex items-center gap-3">
           <span className="h-px w-9 bg-[#dcb458]" />
-          <MicroLabel>01 / General contracting / field coordination</MicroLabel>
+          <MicroLabel>01 / Perencanaan / konstruksi / koordinasi</MicroLabel>
         </div>
 
         <h1 className={`${displayFont} mt-9 text-[clamp(3.4rem,6vw,6.4rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
@@ -184,92 +141,13 @@ export function FormworkHome({ data }: { data: SiteData }) {
 </section>
 
         {/* CAPABILITIES — dipertahankan */}
-        <section className="relative border-b border-[#ded7cb] bg-[#f5f1e8] py-16 sm:py-20 lg:py-24">
-  <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-    <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
-      <div className="lg:pt-6">
-        <MicroLabel>02 / Capabilities / service field</MicroLabel>
-        <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(3rem,4.9vw,5.6rem)] font-black uppercase leading-[0.89] tracking-[-0.045em] text-[#14243f]`}>
-          Layanan harus langsung terbaca.
-        </h2>
-        <p className="mt-6 max-w-md text-[15px] leading-8 text-[#5d6877]">
-          Setiap layanan tampil sebagai scope kerja utama. Tidak ada collage dekoratif yang mengalahkan informasi yang sebenarnya dicari calon klien.
-        </p>
+                        <ServiceStaggeredCarousel services={services} />
 
-        <div className="mt-9 flex max-w-[330px] items-start gap-4 border-t border-[#d8d0c3] pt-5">
-          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#dcb458]" />
-          <p className="font-mono text-[9px] uppercase leading-5 tracking-[0.13em] text-[#76808e]">
-            Scope / detail / execution / handover
-          </p>
-        </div>
-      </div>
-
-      <div className="grid auto-rows-[minmax(104px,auto)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-flow-dense">
-        {services.slice(0, 6).map((service, index) => {
-          const layouts = [
-            "lg:col-span-7 lg:row-span-2 min-h-[238px]",
-            "lg:col-span-5 min-h-[168px] lg:translate-y-5",
-            "lg:col-span-5 min-h-[176px]",
-            "lg:col-span-7 min-h-[184px] lg:-translate-y-3",
-            "lg:col-span-4 min-h-[166px] lg:translate-y-2",
-            "lg:col-span-8 min-h-[172px]",
-          ];
-          const radii = [
-            "38px 92px 42px 74px / 34px 52px 42px 70px",
-            "84px 30px 70px 38px / 48px 34px 76px 42px",
-            "32px 74px 34px 88px / 56px 36px 70px 42px",
-            "72px 42px 96px 36px / 36px 68px 42px 74px",
-            "46px 88px 34px 76px / 68px 38px 74px 40px",
-            "90px 38px 68px 44px / 42px 72px 40px 64px",
-          ];
-          const isPrimary = index === 0;
-
-          return (
-            <Link
-              key={service.id}
-              href={service.slug ? `/services/${service.slug}` : "/services"}
-              className={`${layouts[index] ?? "lg:col-span-6 min-h-[170px]"} group relative flex overflow-hidden border p-5 transition duration-300 hover:-translate-y-1 ${isPrimary ? "border-[#14243f] bg-[#14243f] text-[#f7f3eb] shadow-[0_22px_46px_rgba(20,36,63,0.16)]" : "border-[#d8d0c3] bg-[#faf7f0] text-[#14243f] shadow-[0_12px_28px_rgba(20,36,63,0.055)] hover:shadow-[0_18px_38px_rgba(20,36,63,0.09)]"}`}
-              style={{ borderRadius: radii[index] ?? radii[0] }}
-            >
-              <div className="relative flex w-full flex-col justify-between gap-7">
-                <div>
-                  <div className="flex items-center justify-between gap-4">
-                    <MicroLabel className={isPrimary ? "!text-[#dcb458]" : ""}>{`SRV-${String(index + 1).padStart(2, "0")}`}</MicroLabel>
-                    <span className={`font-mono text-[8px] uppercase tracking-[0.15em] ${isPrimary ? "text-white/55" : "text-[#7b8491]"}`}>
-                      Field package
-                    </span>
-                  </div>
-
-                  <h3 className={`mt-7 max-w-[13ch] text-[clamp(1.55rem,2.2vw,2.55rem)] font-semibold uppercase leading-[0.94] tracking-[-0.04em] ${isPrimary ? "text-[#f8f4ec]" : "text-[#14243f]"}`}>
-                    {service.name}
-                  </h3>
-
-                  <p className={`mt-4 max-w-[34ch] text-[12px] leading-6 ${isPrimary ? "text-white/68" : "text-[#5f6976]"}`}>
-                    Scope pekerjaan dirapikan dari kebutuhan awal sampai koordinasi dan penyelesaian di lapangan.
-                  </p>
-                </div>
-
-                <div className={`flex items-center justify-between border-t pt-4 ${isPrimary ? "border-white/15" : "border-[#e4dccf]"}`}>
-                  <span className={`font-mono text-[8px] uppercase tracking-[0.15em] ${isPrimary ? "text-white/50" : "text-[#7c8593]"}`}>
-                    Detail / delivery
-                  </span>
-                  <span className={`text-base transition group-hover:translate-x-1 ${isPrimary ? "text-[#dcb458]" : "text-[#14243f]"}`}>â†’</span>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  </div>
-</section>
-
-        {/* SELECTED WORK — editorial spread, bukan grid berulang */}
-        <section className="relative border-b border-[#d8d1c6] py-16 sm:py-20 lg:py-24">
+<section className="relative border-b border-[#d8d1c6] py-16 sm:py-20 lg:py-24">
   <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
     <div className="grid gap-10 xl:grid-cols-[1.16fr_.84fr] xl:gap-16 xl:items-center">
       <div>
-        <MicroLabel>03 / Selected work / project register</MicroLabel>
+        <MicroLabel>03 / Proyek pilihan</MicroLabel>
 
         {featuredProject ? (
           <div className="relative mt-7 min-h-[520px] sm:min-h-[570px]">
@@ -285,7 +163,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
                 placeholderLabel="Media project utama belum diisi"
               />
               <div className="border-t border-[#ddd5c8] bg-[#f8f4ec] px-5 py-5">
-                <MicroLabel>Featured record / 01</MicroLabel>
+                <MicroLabel>Proyek pilihan / 01</MicroLabel>
                 <h3 className="mt-2 text-[clamp(1.6rem,2.4vw,2.4rem)] font-semibold uppercase leading-[.95] tracking-[-.04em] text-[#14243f]">
                   {featuredProject.title}
                 </h3>
@@ -337,7 +215,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
             href="/projects"
             className="mt-7 inline-flex items-center gap-3 border-b border-[#dcb458]/75 pb-2 font-mono text-[10px] uppercase tracking-[.16em] text-[#14243f]"
           >
-            Open full register <span className="h-px w-10 bg-[#dcb458]" /> â†’
+            Lihat semua proyek <span className="h-px w-10 bg-[#dcb458]" /> â†’
           </Link>
         </div>
 
@@ -360,9 +238,9 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <section className="relative border-b border-[#d9d4ca] py-16 sm:py-20">
           <div className="mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.66fr_.72fr_.62fr] lg:px-10">
             <div>
-              <MicroLabel>04 / Site sequence / work logic</MicroLabel>
+              <MicroLabel>04 / Alur kerja</MicroLabel>
               <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.9rem,4.5vw,4.7rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Rencana harus bisa dibangun.</h2>
-              <p className="mt-5 max-w-sm text-sm leading-7 text-[#657184]">Empat tahap utama, tetapi setiap keputusan tetap punya catatan, owner, dan dampak ke tahap berikutnya.</p>
+              <p className="mt-5 max-w-sm text-sm leading-7 text-[#657184]">Empat tahap utama membantu setiap pekerjaan tetap terarah, dari kebutuhan awal sampai serah terima.</p>
             </div>
 
             <div className="relative border-l border-[#b8b1a7] pl-7">
@@ -408,7 +286,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
 
     <div className="relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
       <div>
-        <MicroLabel className="!text-[#dcb458]">05 / Control / tolerance / handover</MicroLabel>
+        <MicroLabel className="!text-[#dcb458]">05 / Kontrol mutu / serah terima</MicroLabel>
         <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(3rem,5vw,5.8rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
           Presisi menjaga semuanya tetap terhubung.
         </h2>
@@ -447,7 +325,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
   <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
     <div className="flex flex-col gap-6 border-b border-[#ddd5c8] pb-8 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <MicroLabel>06 / Field crew / personnel</MicroLabel>
+        <MicroLabel>06 / Tim Lunar</MicroLabel>
         <h2 className={`${displayFont} mt-5 max-w-[560px] text-[clamp(2.9rem,4.7vw,5.3rem)] font-black uppercase leading-[0.9] tracking-[-0.045em] text-[#14243f]`}>
           Tim lapangan dan koordinasi.
         </h2>
@@ -531,7 +409,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
           <div className="mx-auto grid w-full max-w-[1120px] gap-6 px-5 sm:px-8 lg:grid-cols-[100px_1fr_auto] lg:items-start lg:px-10">
             <Quote className="h-16 w-16 text-[#c9c2b8] lg:h-20 lg:w-20" />
             <div>
-              <MicroLabel>07 / Field memo / client record</MicroLabel>
+              <MicroLabel>07 / Cerita klien</MicroLabel>
               <blockquote className="mt-4 max-w-3xl text-xl leading-[1.5] text-[#263b58] sm:text-2xl">“{quote?.quote || "Koordinasi yang baik membuat pekerjaan lapangan jauh lebih tenang karena keputusan penting sudah dibahas sebelum menjadi masalah."}”</blockquote>
               <p className="mt-5 font-mono text-[8px] uppercase tracking-[.15em] text-[#dcb458]">— {quote?.name || "Project Client"}{quote?.role ? ` / ${quote.role}` : ""}</p>
             </div>
@@ -543,11 +421,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <section className="relative py-14 sm:py-16">
           <div className="mx-auto grid w-full max-w-[1480px] gap-7 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10">
             <div>
-              <MicroLabel>08 / Closing note / next project</MicroLabel>
+              <MicroLabel>08 / Mulai proyek Anda</MicroLabel>
               <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(3.2rem,5.2vw,5.6rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Mari bangun sesuatu yang bertahan.</h2>
               <p className="mt-4 max-w-xl text-sm leading-7 text-[#657184]">Mulai dari kebutuhan, kondisi lapangan, dan keputusan yang benar-benar perlu diselesaikan terlebih dahulu.</p>
             </div>
-            <Link href="/contact" className="inline-flex items-center gap-4 border-b border-[#dcb458] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.12em]">Talk to our team <ArrowRight className="h-4 w-4 text-[#dcb458]" /></Link>
+            <Link href="/contact" className="inline-flex items-center gap-4 border-b border-[#dcb458] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.12em]">Konsultasikan proyek <ArrowRight className="h-4 w-4 text-[#dcb458]" /></Link>
           </div>
         </section>
       </main>

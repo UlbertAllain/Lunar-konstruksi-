@@ -5,10 +5,11 @@ import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
 import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
-import { faqModel, serviceModel, type SiteData } from "./data";
+import { faqModel, projectModel, serviceModel, type SiteData } from "./data";
 
 export function FormworkServices({ data }: { data: SiteData }) {
   const services = data.services.map(serviceModel);
+  const projects = data.projects.map(projectModel);
   const faqs = data.faqs.map(faqModel);
 
   return (

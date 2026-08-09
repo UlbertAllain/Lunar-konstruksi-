@@ -6,8 +6,8 @@ import { TechnicalContactForm } from "./contact-form";
 import { DatabaseImage } from "./media";
 import { type SiteData } from "./data";
 
-export function FormworkContact({ data }: {
-  void data; data: SiteData }) {
+export function FormworkContact({ data }: { data: SiteData }) {
+  void data;
   const email = process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "hello@lunarkonstruksi.id";
   const phone = process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "+62 812 0000 0000";
 
