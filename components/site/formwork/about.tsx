@@ -10,7 +10,6 @@ import { projectModel, teamModel, type SiteData } from "./data";
 export function FormworkAbout({ data }: { data: SiteData }) {
   const projects = data.projects.map(projectModel);
   const team = data.team.map(teamModel);
-  const hero = team[0];
   const project = projects[0];
 
   return (

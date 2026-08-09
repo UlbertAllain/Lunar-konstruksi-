@@ -6,6 +6,7 @@ import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
 import { LOCAL_MEDIA, localMediaAt } from "./local-assets";
 import { DatabaseImage } from "./media";
+import { ServiceShowcase } from "./service-showcase";
 import {
   projectModel,
   serviceModel,
@@ -30,6 +31,45 @@ function projectHref(slug: string) {
 export function FormworkHome({ data }: { data: SiteData }) {
   const projects = data.projects.map(projectModel);
   const services = data.services.map(serviceModel);
+  const serviceCards = services.map((service, index) => {
+    const record = service as unknown as Record<string, unknown>;
+    const imageRecord =
+      record.image && typeof record.image === "object"
+        ? (record.image as Record<string, unknown>)
+        : undefined;
+    const coverRecord =
+      record.coverImage && typeof record.coverImage === "object"
+        ? (record.coverImage as Record<string, unknown>)
+        : undefined;
+
+    const image =
+      (typeof record.image === "string" ? record.image : "") ||
+      (typeof imageRecord?.url === "string" ? imageRecord.url : "") ||
+      (typeof record.imageUrl === "string" ? record.imageUrl : "") ||
+      (typeof record.coverImageUrl === "string" ? record.coverImageUrl : "") ||
+      (typeof coverRecord?.url === "string" ? coverRecord.url : "");
+
+    const description =
+      (typeof record.shortDescription === "string" ? record.shortDescription : "") ||
+      (typeof record.description === "string" ? record.description : "") ||
+      (typeof record.summary === "string" ? record.summary : "") ||
+      (typeof record.excerpt === "string" ? record.excerpt : "");
+
+    return {
+      id: String(record.id ?? `service-${index + 1}`),
+      slug: typeof record.slug === "string" ? record.slug : "",
+      title:
+        (typeof record.name === "string" ? record.name : "") ||
+        (typeof record.title === "string" ? record.title : "") ||
+        `Layanan ${index + 1}`,
+      description,
+      image,
+      category:
+        (typeof record.category === "string" ? record.category : "") ||
+        (typeof record.type === "string" ? record.type : "") ||
+        "Field package",
+    };
+  });
   const team = data.team.map(teamModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
 
@@ -37,157 +77,183 @@ export function FormworkHome({ data }: { data: SiteData }) {
 
   const heroImage = LOCAL_MEDIA.hero;
   const heroInset = LOCAL_MEDIA.heroEngineer;
-  const capabilityPrimary = LOCAL_MEDIA.capabilityStructure;
-  const capabilitySecondary = LOCAL_MEDIA.capabilityBuilding;
-  const capabilityDetail = LOCAL_MEDIA.capabilityDetail;
 
   const processPrimary = LOCAL_MEDIA.processPlanning;
 
   const featuredProject = projects[0];
   const secondaryProjects = projects.slice(1, 3);
-  const registerProjects = projects.slice(3, 6);
 
   return (
     <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
       <FormworkHeader />
       <main>
         {/* HERO — dipertahankan, hanya typography/detail dipoles */}
-        <section className="relative border-b border-[#d9d4ca]">
-          <BlueprintLayer className="opacity-[0.07]" />
-          <div className="relative mx-auto grid min-h-[760px] w-full max-w-[1480px] lg:grid-cols-[.78fr_1.22fr] lg:min-h-[850px]">
-            <div className="relative z-20 flex flex-col justify-between px-5 py-14 sm:px-8 lg:px-10 lg:py-18">
-              <div className="max-w-[610px]">
-                <div className="flex items-center gap-3"><span className="h-px w-8 bg-[#dcb458]" /><MicroLabel>01 / General contracting / field coordination</MicroLabel></div>
-                <h1 className={`${displayFont} mt-9 text-[clamp(3.2rem,5.75vw,6.25rem)] font-black uppercase leading-[.88] tracking-[-.045em] text-[#182d4d]`}>
-                  Kami membangun dari dasar yang jelas.
-                </h1>
-                <div className="mt-7 h-px w-10 bg-[#dcb458]" />
-                <p className="mt-5 max-w-[470px] text-[15px] leading-7 text-[#526174]">
-                  Perencanaan, koordinasi, kontrol mutu, dan pekerjaan lapangan perlu bergerak dalam satu alur yang mudah dibaca—bukan saling mengejar di tengah proyek.
-                </p>
-                <Link href="/projects" className="mt-8 inline-flex items-center gap-4 font-mono text-[10px] font-semibold uppercase tracking-[.08em] text-[#263033]">
-                  Lihat pekerjaan kami <span className="h-px w-12 bg-[#dcb458]" /><ArrowRight className="h-4 w-4 text-[#dcb458]" />
-                </Link>
-              </div>
+        <section className="relative overflow-hidden border-b border-[#ded7cb] bg-[#f5f1e8]">
+  <BlueprintLayer className="opacity-[0.035]" />
 
-              <div className="mt-12 flex flex-wrap gap-x-10 gap-y-3 border-t border-[#d4cec4] pt-5 font-mono text-[8px] uppercase tracking-[.12em] text-[#7c8592] lg:mt-0">
-                <span>Planning</span><span>Coordination</span><span>Execution</span><span>Handover</span>
-              </div>
-            </div>
+  <div className="relative mx-auto grid min-h-[760px] w-full max-w-[1480px] lg:grid-cols-[0.78fr_1.22fr] lg:min-h-[820px]">
+    <div className="relative z-20 flex flex-col justify-between px-5 py-14 sm:px-8 lg:px-10 lg:py-20">
+      <div className="max-w-[610px]">
+        <div className="flex items-center gap-3">
+          <span className="h-px w-9 bg-[#dcb458]" />
+          <MicroLabel>01 / General contracting / field coordination</MicroLabel>
+        </div>
 
-            <div className="relative min-h-[540px] lg:min-h-full">
-              <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(9%_0%,81%_0%,100%_13%,100%_72%,92%_72%,84%_100%,19%_100%,0%_80%,0%_20%)]">
-                <DatabaseImage src={heroImage} alt="Lunar Konstruksi — construction field" className="h-full w-full object-contain" placeholderLabel="Tambahkan foto hero lokal di public/" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/15" />
-              </div>
+        <h1 className={`${displayFont} mt-9 text-[clamp(3.4rem,6vw,6.4rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
+          Kami membangun dari dasar yang jelas.
+        </h1>
 
-              <div className="absolute left-[5%] top-[14%] hidden -rotate-55 lg:block"><MicroLabel>Phase 02 / Structure</MicroLabel></div>
-              <div className="absolute right-6 top-[30%] hidden flex-col gap-12 font-mono text-[9px] font-semibold text-white/80 lg:flex"><span>+12.400</span><span>+09.600</span><span>+06.800</span></div>
-
-              <div className="absolute bottom-[9%] left-[4%] h-[205px] w-[225px] -rotate-[7deg] overflow-hidden border-[7px] border-[#f5f1e8] bg-[#f8f4ed] shadow-[0_18px_46px_rgba(20,36,63,0.13)] [clip-path:polygon(18%_0%,100%_7%,92%_100%,0%_88%,4%_20%)] sm:h-[235px] sm:w-[255px] lg:left-[5%] lg:h-[265px] lg:w-[290px]">
-                <DatabaseImage src={heroInset} fallbackSrc={localMediaAt(1)} alt="Project detail" className="h-full w-full object-cover" />
-              </div>
-
-              {/* FLOATING-HERO-FIELD-CARD */}
-<div className="absolute right-[5%] top-[13%] z-30 hidden w-[218px] rotate-[5deg] overflow-hidden border border-[#d9d1c4] bg-[#f9f6ef]/95 shadow-[0_20px_52px_rgba(20,36,63,0.14)] backdrop-blur-[2px] [clip-path:polygon(10%_0%,100%_0%,94%_88%,84%_100%,0%_91%,0%_16%)] lg:block">
-  <div className="border-b border-[#e5ddd1] px-4 py-3">
-    <MicroLabel>Field note / 01</MicroLabel>
-    <p className="mt-2 text-[11px] leading-5 text-[#4f5968]">
-      Struktur, urutan kerja, dan koordinasi dibaca sebagai satu rangkaian.
-    </p>
-  </div>
-  <div className="grid grid-cols-2 text-[10px] text-[#566171]">
-    <div className="border-r border-[#e5ddd1] px-4 py-3">
-      <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#d2aa4d]">Phase</p>
-      <p className="mt-1 font-semibold">Structure</p>
-    </div>
-    <div className="px-4 py-3">
-      <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-[#d2aa4d]">Scope</p>
-      <p className="mt-1 font-semibold">Execution</p>
-    </div>
-  </div>
-</div>
-<TechnicalArc label="FIELD / STRUCTURE" className="bottom-[-2%] left-[17%] hidden h-[340px] w-[560px] rotate-[5deg] lg:block" />
-              <div className="absolute left-[40%] top-[74%] hidden lg:block"><MicroLabel>REBAR / FORMWORK / CONCRETE</MicroLabel></div>
-              <div className="absolute bottom-[5%] right-[5%] hidden gap-7 xl:grid xl:grid-cols-1">
-                {metric("08", "years / field practice")}
-                {metric(`${projects.length || 0}+`, "projects / documented")}
-                {metric("97%", "delivery / coordinated")}
-              </div>
-            </div>
-          </div>
-
-          <div className="relative mx-auto grid w-full max-w-[1480px] grid-cols-3 gap-4 px-5 pb-10 sm:px-8 lg:hidden">
-            {metric("08", "years")}{metric(`${projects.length || 0}+`, "projects")}{metric("97%", "coordinated")}
-          </div>
-        </section>
-
-        {/* CAPABILITIES — dipertahankan */}
-        <section className="relative border-b border-[#d8d1c6] py-16 sm:py-20 lg:py-24">
-  <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-    <div className="grid gap-10 lg:grid-cols-[.68fr_1.32fr] lg:gap-16">
-      <div className="lg:pt-4">
-        <MicroLabel>02 / Capabilities / field package</MicroLabel>
-        <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(2.9rem,4.8vw,5.4rem)] font-black uppercase leading-[.9] tracking-[-.038em] text-[#14243f]`}>
-          Layanan harus langsung terbaca.
-        </h2>
-        <p className="mt-6 max-w-md text-[15px] leading-8 text-[#5f6976]">
-          Capabilities sekarang berfungsi sebagai service showcase. Pengguna bisa langsung melihat apa yang Lunar kerjakan tanpa harus membaca collage visual terlebih dahulu.
+        <p className="mt-7 max-w-[470px] text-[15px] leading-8 text-[#5d6877]">
+          Perencanaan, koordinasi, kontrol mutu, dan pekerjaan lapangan bergerak dalam satu alur yang mudah dibacaâ€”bukan saling mengejar ketika pekerjaan sudah berjalan.
         </p>
 
-        <div className="mt-8 hidden max-w-[300px] border-l-2 border-[#dcb458] bg-[#f8f4ec] px-4 py-4 lg:block">
-          <MicroLabel>Scope reading / 02</MicroLabel>
-          <p className="mt-3 text-[12px] leading-6 text-[#5f6976]">
-            Tiap layanan diposisikan sebagai bagian dari alur kerja: persiapan, struktur, instalasi, finishing, sampai handover.
+        <Link
+          href="/projects"
+          className="mt-8 inline-flex items-center gap-4 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[#14243f]"
+        >
+          Lihat pekerjaan kami
+          <span className="h-px w-11 bg-[#dcb458]" />
+          <ArrowRight className="h-4 w-4 text-[#dcb458]" />
+        </Link>
+      </div>
+
+      <div className="mt-12 flex flex-wrap gap-x-8 gap-y-3 border-t border-[#d9d1c4] pt-5 font-mono text-[8px] uppercase tracking-[0.15em] text-[#748092] lg:mt-0">
+        <span>Planning</span>
+        <span>Coordination</span>
+        <span>Execution</span>
+        <span>Handover</span>
+      </div>
+    </div>
+
+    <div className="relative min-h-[530px] lg:min-h-full">
+      <div
+        className="absolute inset-y-[5%] right-[-7%] w-[108%] overflow-hidden"
+        style={{ borderRadius: "44% 56% 34% 66% / 22% 30% 70% 78%" }}
+      >
+        <DatabaseImage
+          src={LOCAL_MEDIA.hero}
+          alt="Lunar Konstruksi"
+          className="h-full w-full scale-[1.03] object-cover object-center mix-blend-multiply"
+          placeholderLabel="Tambahkan home-hero.png"
+        />
+      </div>
+
+      <div
+        className="absolute bottom-[8%] left-[1%] z-20 hidden h-[230px] w-[255px] overflow-hidden border-[7px] border-[#f5f1e8] bg-[#f8f4ec] shadow-[0_20px_50px_rgba(20,36,63,0.12)] sm:block lg:left-[3%] lg:h-[265px] lg:w-[292px]"
+        style={{ borderRadius: "60% 40% 64% 36% / 38% 58% 42% 62%" }}
+      >
+        <DatabaseImage
+          src={LOCAL_MEDIA.heroEngineer}
+          alt="Engineer reviewing project plan"
+          className="h-full w-full object-cover object-center"
+          placeholderLabel="Tambahkan home-hero-engineer.png"
+        />
+      </div>
+
+      <div className="absolute right-[3%] top-[12%] z-20 hidden w-[205px] -rotate-[3deg] border border-[#ded5c7] bg-[#faf7f0]/95 px-4 py-4 shadow-[0_18px_44px_rgba(20,36,63,0.10)] lg:block">
+        <MicroLabel>Field register / 01</MicroLabel>
+        <p className="mt-3 text-[11px] leading-5 text-[#596474]">
+          Struktur, urutan pekerjaan, dan kontrol lapangan dibaca sebagai satu jalur keputusan.
+        </p>
+        <div className="mt-4 flex items-center justify-between border-t border-[#e4dccf] pt-3 font-mono text-[8px] uppercase tracking-[0.14em] text-[#7a8492]">
+          <span>Grid B / 04</span>
+          <span className="text-[#d1a849]">Active</span>
+        </div>
+      </div>
+
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 700 280"
+        className="pointer-events-none absolute bottom-[5%] right-[2%] hidden h-[250px] w-[78%] overflow-visible lg:block"
+        fill="none"
+      >
+        <path d="M12 205C102 248 160 74 286 124C394 167 415 245 520 182C591 140 611 65 688 89" stroke="#dcb458" strokeWidth="1.2" />
+        <path d="M18 220C105 260 171 91 292 140C394 181 432 249 530 198C598 161 626 88 694 104" stroke="#182d4d" strokeOpacity="0.2" strokeDasharray="5 10" />
+        <circle cx="160" cy="103" r="4" fill="#dcb458" />
+        <circle cx="520" cy="182" r="4" fill="#dcb458" />
+        <circle cx="688" cy="89" r="3" fill="#182d4d" />
+      </svg>
+
+      <div className="absolute bottom-[5%] right-[4%] hidden grid-cols-3 gap-6 xl:grid">
+        {metric("08", "years / field practice")}
+        {metric(`${projects.length || 0}+`, "projects / documented")}
+        {metric("97%", "delivery / coordinated")}
+      </div>
+    </div>
+  </div>
+</section>
+
+        {/* CAPABILITIES — dipertahankan */}
+        <section className="relative border-b border-[#ded7cb] bg-[#f5f1e8] py-16 sm:py-20 lg:py-24">
+  <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
+    <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
+      <div className="lg:pt-6">
+        <MicroLabel>02 / Capabilities / service field</MicroLabel>
+        <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(3rem,4.9vw,5.6rem)] font-black uppercase leading-[0.89] tracking-[-0.045em] text-[#14243f]`}>
+          Layanan harus langsung terbaca.
+        </h2>
+        <p className="mt-6 max-w-md text-[15px] leading-8 text-[#5d6877]">
+          Setiap layanan tampil sebagai scope kerja utama. Tidak ada collage dekoratif yang mengalahkan informasi yang sebenarnya dicari calon klien.
+        </p>
+
+        <div className="mt-9 flex max-w-[330px] items-start gap-4 border-t border-[#d8d0c3] pt-5">
+          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#dcb458]" />
+          <p className="font-mono text-[9px] uppercase leading-5 tracking-[0.13em] text-[#76808e]">
+            Scope / detail / execution / handover
           </p>
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:auto-rows-[minmax(92px,auto)]">
+      <div className="grid auto-rows-[minmax(104px,auto)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-flow-dense">
         {services.slice(0, 6).map((service, index) => {
-          const layout = [
-            "lg:col-span-7 lg:row-span-2 min-h-[235px]",
-            "lg:col-span-5 min-h-[170px] lg:translate-y-5",
-            "lg:col-span-4 min-h-[180px]",
-            "lg:col-span-8 min-h-[180px] lg:-translate-y-3",
-            "lg:col-span-5 min-h-[165px] lg:translate-y-3",
-            "lg:col-span-7 min-h-[170px]",
-          ][index] ?? "lg:col-span-6 min-h-[170px]";
-
-          const shapes = [
-            "polygon(8% 0%,100% 0%,100% 86%,92% 100%,0% 100%,0% 14%)",
-            "polygon(0% 0%,92% 0%,100% 15%,100% 100%,10% 100%,0% 82%)",
-            "polygon(10% 0%,100% 0%,92% 100%,0% 100%,0% 12%)",
+          const layouts = [
+            "lg:col-span-7 lg:row-span-2 min-h-[238px]",
+            "lg:col-span-5 min-h-[168px] lg:translate-y-5",
+            "lg:col-span-5 min-h-[176px]",
+            "lg:col-span-7 min-h-[184px] lg:-translate-y-3",
+            "lg:col-span-4 min-h-[166px] lg:translate-y-2",
+            "lg:col-span-8 min-h-[172px]",
           ];
+          const radii = [
+            "38px 92px 42px 74px / 34px 52px 42px 70px",
+            "84px 30px 70px 38px / 48px 34px 76px 42px",
+            "32px 74px 34px 88px / 56px 36px 70px 42px",
+            "72px 42px 96px 36px / 36px 68px 42px 74px",
+            "46px 88px 34px 76px / 68px 38px 74px 40px",
+            "90px 38px 68px 44px / 42px 72px 40px 64px",
+          ];
+          const isPrimary = index === 0;
 
           return (
             <Link
               key={service.id}
               href={service.slug ? `/services/${service.slug}` : "/services"}
-              className={`group relative flex overflow-hidden border border-[#d9d1c4] bg-[#f8f4ec] p-5 shadow-[0_12px_30px_rgba(20,36,63,.055)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(20,36,63,.09)] ${layout}`}
-              style={{ clipPath: shapes[index % shapes.length] }}
+              className={`${layouts[index] ?? "lg:col-span-6 min-h-[170px]"} group relative flex overflow-hidden border p-5 transition duration-300 hover:-translate-y-1 ${isPrimary ? "border-[#14243f] bg-[#14243f] text-[#f7f3eb] shadow-[0_22px_46px_rgba(20,36,63,0.16)]" : "border-[#d8d0c3] bg-[#faf7f0] text-[#14243f] shadow-[0_12px_28px_rgba(20,36,63,0.055)] hover:shadow-[0_18px_38px_rgba(20,36,63,0.09)]"}`}
+              style={{ borderRadius: radii[index] ?? radii[0] }}
             >
-              <span className="pointer-events-none absolute right-3 top-3 h-12 w-12 rounded-full border border-[#dcb458]/35 bg-[#dcb458]/10" />
-
-              <div className="relative flex w-full flex-col justify-between gap-6">
+              <div className="relative flex w-full flex-col justify-between gap-7">
                 <div>
-                  <div className="flex items-start justify-between gap-4">
-                    <MicroLabel>{`SRV-${String(index + 1).padStart(2, "0")}`}</MicroLabel>
-                    <span className="font-mono text-[8px] uppercase tracking-[.15em] text-[#7c8593]">Field package</span>
+                  <div className="flex items-center justify-between gap-4">
+                    <MicroLabel className={isPrimary ? "!text-[#dcb458]" : ""}>{`SRV-${String(index + 1).padStart(2, "0")}`}</MicroLabel>
+                    <span className={`font-mono text-[8px] uppercase tracking-[0.15em] ${isPrimary ? "text-white/55" : "text-[#7b8491]"}`}>
+                      Field package
+                    </span>
                   </div>
 
-                  <h3 className="mt-6 max-w-[13ch] text-[clamp(1.55rem,2.35vw,2.65rem)] font-semibold uppercase leading-[.94] tracking-[-.04em] text-[#14243f]">
+                  <h3 className={`mt-7 max-w-[13ch] text-[clamp(1.55rem,2.2vw,2.55rem)] font-semibold uppercase leading-[0.94] tracking-[-0.04em] ${isPrimary ? "text-[#f8f4ec]" : "text-[#14243f]"}`}>
                     {service.name}
                   </h3>
 
-                  <p className="mt-4 max-w-[34ch] text-[12px] leading-6 text-[#5f6976]">
-                    Ruang lingkup, koordinasi, dan eksekusi layanan dirapikan sebagai satu paket kerja yang mudah dibaca.
+                  <p className={`mt-4 max-w-[34ch] text-[12px] leading-6 ${isPrimary ? "text-white/68" : "text-[#5f6976]"}`}>
+                    Scope pekerjaan dirapikan dari kebutuhan awal sampai koordinasi dan penyelesaian di lapangan.
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-[#e3dacb] pt-4">
-                  <span className="font-mono text-[8px] uppercase tracking-[.16em] text-[#7c8593]">Scope / detail / delivery</span>
-                  <span className="text-sm text-[#14243f] transition group-hover:translate-x-1">â†’</span>
+                <div className={`flex items-center justify-between border-t pt-4 ${isPrimary ? "border-white/15" : "border-[#e4dccf]"}`}>
+                  <span className={`font-mono text-[8px] uppercase tracking-[0.15em] ${isPrimary ? "text-white/50" : "text-[#7c8593]"}`}>
+                    Detail / delivery
+                  </span>
+                  <span className={`text-base transition group-hover:translate-x-1 ${isPrimary ? "text-[#dcb458]" : "text-[#14243f]"}`}>â†’</span>
                 </div>
               </div>
             </Link>
@@ -327,68 +393,137 @@ export function FormworkHome({ data }: { data: SiteData }) {
         </section>
 
         {/* PRECISION — lebih teknis, tanpa card SaaS */}
-        <section className="relative overflow-hidden bg-[#14243f] py-16 text-[#f8f4ec] sm:py-20">
-          <div className="mx-auto grid w-full max-w-[1480px] gap-8 px-5 sm:px-8 lg:grid-cols-[.92fr_1.08fr] lg:items-end lg:px-10">
-            <div>
-              <MicroLabel className="text-white/48">Control / tolerance / handover</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[650px] text-[clamp(3rem,4.8vw,5rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Presisi menjaga semuanya tetap terhubung.</h2>
-            </div>
+        <section className="relative bg-[#f5f1e8] px-5 py-16 sm:px-8 lg:px-10 lg:py-24">
+  <div
+    className="relative mx-auto w-full max-w-[1480px] overflow-hidden bg-[#14243f] px-6 py-14 text-[#f7f3eb] shadow-[0_28px_70px_rgba(20,36,63,0.16)] sm:px-9 lg:px-12 lg:py-16"
+    style={{ borderRadius: "58px 150px 62px 130px / 50px 76px 54px 82px" }}
+  >
+    <svg aria-hidden="true" viewBox="0 0 1200 300" className="pointer-events-none absolute inset-x-0 bottom-0 h-[72%] w-full opacity-70" fill="none">
+      <path d="M-40 235C126 96 238 291 394 166C540 49 671 260 832 132C982 14 1078 198 1250 65" stroke="#dcb458" strokeWidth="1.25" />
+      <path d="M-24 254C140 123 250 308 409 186C553 75 690 278 846 151C993 32 1096 216 1265 89" stroke="rgba(255,255,255,.16)" strokeWidth="1" strokeDasharray="5 11" />
+      <circle cx="394" cy="166" r="5" fill="#dcb458" />
+      <circle cx="832" cy="132" r="5" fill="#dcb458" />
+      <circle cx="1078" cy="198" r="4" fill="#f7f3eb" />
+    </svg>
 
-            <div className="grid gap-0 border-y border-white/15 sm:grid-cols-3">
-              {[
-                ["QC", "CHECK / RECORD", "Keputusan mutu dicatat sebelum pekerjaan bergerak ke tahap berikutnya."],
-                ["RFI", "CLARIFY / CLOSE", "Pertanyaan teknis ditutup dengan jawaban yang bisa dirujuk kembali."],
-                ["H/O", "VERIFY / HANDOVER", "Pemeriksaan akhir dirapikan menjadi close-out yang mudah dibaca."],
-              ].map(([code, label, text], index) => (
-                <div key={code} className={`py-5 sm:px-5 ${index > 0 ? "border-t border-white/15 sm:border-l sm:border-t-0" : ""}`}>
-                  <p className={`${displayFont} text-3xl font-black text-[#dcb458]`}>{code}</p>
-                  <p className="mt-2 font-mono text-[8px] uppercase tracking-[.15em] text-white/68">{label}</p>
-                  <p className="mt-4 max-w-[260px] text-[13px] leading-6 text-white/58">{text}</p>
-                </div>
-              ))}
+    <div className="relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+      <div>
+        <MicroLabel className="!text-[#dcb458]">05 / Control / tolerance / handover</MicroLabel>
+        <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(3rem,5vw,5.8rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
+          Presisi menjaga semuanya tetap terhubung.
+        </h2>
+        <p className="mt-6 max-w-md text-[14px] leading-7 text-white/58">
+          Kontrol lapangan bukan satu checklist di akhir. Ia berjalan bersama keputusan, klarifikasi, dan handover sepanjang proyek.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-3 lg:pb-2">
+        {[
+          ["QC", "04", "Quality checkpoints", "Keputusan mutu dicatat sebelum pekerjaan bergerak ke tahap berikutnya."],
+          ["RFI", "12", "Clarify / close", "Pertanyaan teknis ditutup dengan jawaban yang bisa dilacak kembali."],
+          ["H/O", "100%", "Verify / handover", "Penyerahan akhir dirapikan menjadi close-out yang mudah dibaca."],
+        ].map(([code, value, label, description], index) => (
+          <div
+            key={code}
+            className={`relative border border-white/12 bg-white/[0.035] p-5 backdrop-blur-[1px] ${index === 1 ? "sm:translate-y-5" : ""}`}
+            style={{ borderRadius: index === 0 ? "32px 58px 28px 64px" : index === 1 ? "60px 26px 54px 34px" : "28px 68px 34px 58px" }}
+          >
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-[1.6rem] font-semibold tracking-[-0.04em] text-[#dcb458]">{code}</span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-white/45">{label}</span>
             </div>
+            <p className="mt-5 text-[clamp(2.2rem,3.5vw,3.6rem)] font-semibold leading-none tracking-[-0.05em] text-white">{value}</p>
+            <p className="mt-4 text-[11px] leading-6 text-white/58">{description}</p>
           </div>
-        </section>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
         {/* TEAM — adaptif, tidak menyisakan ruang kosong */}
         {team.length > 0 && (
-          <section className="relative border-b border-[#d9d4ca] py-14 sm:py-18">
-            <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-              <div className="grid gap-7 lg:grid-cols-[.52fr_1.48fr] lg:items-end">
-                <div>
-                  <MicroLabel>06 / Field crew / personnel</MicroLabel>
-                  <h2 className={`${displayFont} mt-4 max-w-[390px] text-[clamp(2.5rem,3.7vw,4rem)] font-black uppercase leading-[.91] tracking-[-.03em]`}>Tim lapangan dan koordinasi.</h2>
-                </div>
-                <p className="max-w-xl text-sm leading-7 text-[#657184] lg:justify-self-end">Tim tidak dipajang sebagai filler. Setiap personel tampil sebagai bagian dari proses koordinasi dan delivery proyek.</p>
-              </div>
+          <section className="relative border-b border-[#ded7cb] bg-[#f5f1e8] py-16 sm:py-20 lg:py-24">
+  <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
+    <div className="flex flex-col gap-6 border-b border-[#ddd5c8] pb-8 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <MicroLabel>06 / Field crew / personnel</MicroLabel>
+        <h2 className={`${displayFont} mt-5 max-w-[560px] text-[clamp(2.9rem,4.7vw,5.3rem)] font-black uppercase leading-[0.9] tracking-[-0.045em] text-[#14243f]`}>
+          Tim lapangan dan koordinasi.
+        </h2>
+      </div>
+      <p className="max-w-lg text-[14px] leading-7 text-[#5f6976]">
+        Layout menyesuaikan jumlah personel. Satu orang tampil sebagai dossier horizontal; ketika data bertambah, section otomatis berubah menjadi bento tanpa memakan ruang kosong berlebihan.
+      </p>
+    </div>
 
-              {team.length === 1 ? (
-                <article className="mt-9 grid gap-6 border-y border-[#cfcac1] py-6 sm:grid-cols-[180px_1fr_auto] sm:items-center">
-                  <DatabaseImage src={team[0].image} alt={team[0].name} className="aspect-square w-full object-cover sm:h-[180px]" placeholderLabel="Foto team belum diisi" />
-                  <div>
-                    <MicroLabel>Personnel / 01</MicroLabel>
-                    <p className={`${displayFont} mt-2 text-[2rem] font-black uppercase leading-none`}>{team[0].name}</p>
-                    <p className="mt-2 text-sm text-[#657184]">{team[0].position}</p>
-                    {team[0].description ? <p className="mt-4 max-w-xl text-sm leading-7 text-[#67625b]">{team[0].description}</p> : null}
-                  </div>
-                  <div className="grid gap-2 font-mono text-[8px] uppercase tracking-[.14em] text-[#848d99]"><span>Field coordination</span><span>Site communication</span><span>Delivery support</span></div>
-                </article>
-              ) : (
-                <div className="mt-9 grid gap-5 md:grid-cols-3">
-                  {team.slice(0, 3).map((member, index) => (
-                    <article key={member.id} className={`${index === 1 ? "md:mt-8" : ""} overflow-hidden border border-[#d9d4ca] bg-[#eee7dc]`}>
-                      <DatabaseImage src={member.image} alt={member.name} className={`w-full object-cover ${index === 1 ? "aspect-[4/5]" : "aspect-[5/4]"}`} placeholderLabel={`Foto team ${index + 1} belum diisi`} />
-                      <div className="p-4">
-                        <MicroLabel>Personnel / {String(index + 1).padStart(2, "0")}</MicroLabel>
-                        <p className={`${displayFont} mt-2 text-[1.3rem] font-black uppercase leading-none`}>{member.name}</p>
-                        <p className="mt-2 text-xs text-[#657184]">{member.position}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              )}
+    {team.length === 1 ? (
+      <div className="mt-9 overflow-hidden border border-[#d8d0c3] bg-[#faf7f0] shadow-[0_14px_32px_rgba(20,36,63,0.055)]" style={{ borderRadius: "40px 96px 44px 72px / 40px 58px 46px 70px" }}>
+        <div className="grid md:grid-cols-[230px_1fr_auto] md:items-stretch">
+          <DatabaseImage
+            src={team[0].image}
+            alt={team[0].name}
+            className="h-[260px] w-full object-cover object-center md:h-full"
+            placeholderLabel="Media personnel belum diisi"
+          />
+
+          <div className="flex flex-col justify-between gap-7 px-6 py-6 sm:px-8">
+            <div>
+              <MicroLabel>Personnel / 01</MicroLabel>
+              <h3 className="mt-4 text-[clamp(1.8rem,3vw,3rem)] font-semibold uppercase leading-[0.94] tracking-[-0.04em] text-[#14243f]">
+                {team[0].name}
+              </h3>
+              <p className="mt-2 text-[13px] uppercase tracking-[0.08em] text-[#697482]">{team[0].position}</p>
             </div>
-          </section>
+            <p className="max-w-xl text-[13px] leading-7 text-[#5f6976]">
+              Personel tampil sebagai bagian dari sistem kerja, bukan card kecil yang meninggalkan ruang kosong di tengah halaman.
+            </p>
+          </div>
+
+          <div className="flex min-w-[180px] flex-col justify-between border-t border-[#e1d8ca] px-6 py-6 font-mono text-[8px] uppercase leading-5 tracking-[0.15em] text-[#77818f] md:border-l md:border-t-0">
+            <span>Field coordination</span>
+            <span>Site communication</span>
+            <span>Delivery support</span>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="mt-9 grid auto-rows-[minmax(110px,auto)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-flow-dense">
+        {team.slice(0, 6).map((member, index) => {
+          const layouts = [
+            "lg:col-span-5 lg:row-span-2",
+            "lg:col-span-4",
+            "lg:col-span-3 lg:row-span-2",
+            "lg:col-span-4",
+            "lg:col-span-5",
+            "lg:col-span-3",
+          ];
+          const heights = ["h-[360px]", "h-[220px]", "h-[330px]", "h-[220px]", "h-[245px]", "h-[220px]"];
+
+          return (
+            <article
+              key={member.id}
+              className={`${layouts[index] ?? "lg:col-span-4"} group overflow-hidden border border-[#d8d0c3] bg-[#faf7f0] shadow-[0_12px_28px_rgba(20,36,63,0.05)]`}
+              style={{ borderRadius: index % 2 === 0 ? "36px 86px 34px 72px" : "78px 32px 68px 38px" }}
+            >
+              <DatabaseImage
+                src={member.image}
+                alt={member.name}
+                className={`${heights[index] ?? "h-[230px]"} w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]`}
+                placeholderLabel={`Media team ${index + 1} belum diisi`}
+              />
+              <div className="px-5 py-5">
+                <MicroLabel>{`Personnel / ${String(index + 1).padStart(2, "0")}`}</MicroLabel>
+                <h3 className="mt-3 text-xl font-semibold uppercase leading-none tracking-[-0.03em] text-[#14243f]">{member.name}</h3>
+                <p className="mt-2 text-[12px] text-[#667180]">{member.position}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</section>
         )}
 
         {/* TESTIMONIAL — field memo compact */}
