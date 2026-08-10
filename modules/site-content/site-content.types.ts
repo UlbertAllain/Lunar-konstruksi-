@@ -9,6 +9,25 @@ export interface SitePartner {
   order: number;
 }
 
+export interface OfficeLocation {
+  name: string;
+  address: string;
+  googleMapsUrl: string;
+  googleMapsEmbedUrl: string;
+  isVisible: boolean;
+}
+
+export interface CompanyProfile {
+  companyName: string;
+  shortDescription: string;
+  email: string;
+  phone: string;
+  whatsapp: string;
+  instagramUrl: string;
+  linkedinUrl: string;
+  copyrightText: string;
+}
+
 export interface SiteContentSettings {
   id: "public";
   homeHero: MediaImage | null;
@@ -16,6 +35,8 @@ export interface SiteContentSettings {
   projectsHero: MediaImage | null;
   contactHero: MediaImage | null;
   partners: SitePartner[];
+  officeLocation: OfficeLocation;
+  companyProfile: CompanyProfile;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
