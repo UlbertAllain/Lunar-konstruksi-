@@ -5,13 +5,11 @@ import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
 import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
-import { faqModel, projectModel, serviceModel, type SiteData } from "./data";
+import { projectModel, serviceModel, type SiteData } from "./data";
 
 export function FormworkServices({ data }: { data: SiteData }) {
   const services = data.services.map(serviceModel);
   const projects = data.projects.map(projectModel);
-  const faqs = data.faqs.map(faqModel);
-
   return (
     <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
       <FormworkHeader />
@@ -22,9 +20,9 @@ export function FormworkServices({ data }: { data: SiteData }) {
             <div>
               <MicroLabel>S-01 / Capabilities / scope of work</MicroLabel>
               <h1
-                className={`${displayFont} mt-8 text-[clamp(3rem,5.1vw,5.25rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}
+                className={`${displayFont} mt-8 text-[clamp(2.3rem,10vw,4.7rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}
               >
-                Layanan harus saling terhubung.
+                Layanan konstruksi yang terkoordinasi dari awal sampai selesai.
               </h1>
               <p className="mt-8 max-w-lg text-[15px] leading-7 text-[#566476]">
                 Ruang lingkup dapat disusun sesuai konteks proyek, dari satu
@@ -32,7 +30,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
                 terintegrasi.
               </p>
             </div>
-            <div className="relative min-h-[520px]">
+            <div className="relative min-h-[330px] sm:min-h-[430px] lg:min-h-[520px]">
               <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(15%_0%,76%_0%,100%_17%,95%_74%,100%_86%,82%_100%,18%_95%,0%_78%,3%_18%)]">
                 <DatabaseImage
                   src={
@@ -42,8 +40,11 @@ export function FormworkServices({ data }: { data: SiteData }) {
                     ""
                   }
                   alt={services[0]?.name || "Capabilities"}
-                  className="h-full min-h-[500px] w-full object-cover object-center"
-                />
+                  className="h-full min-h-[310px] w-full object-cover object-center sm:min-h-[410px] lg:min-h-[500px]"
+                quality={95}
+                  preload={true}
+                  sizes="(max-width: 1023px) 94vw, 55vw"
+                  />
               </div>
               {/* FLOATING-SERVICES-HERO-CARD */}
               <div className="absolute bottom-[9%] left-[3%] z-30 hidden w-[220px] -rotate-[6deg] overflow-hidden border border-[#d9d1c4] bg-[#f9f6ef]/95 shadow-[0_20px_50px_rgba(20,36,63,0.13)] backdrop-blur-[2px] [clip-path:polygon(9%_0%,100%_0%,92%_100%,0%_89%,0%_16%)] lg:block">
@@ -132,22 +133,22 @@ export function FormworkServices({ data }: { data: SiteData }) {
                 {[
                   {
                     number: "01",
-                    title: "Survey & Brief",
+                    title: "Survei & Kebutuhan",
                     copy: "Memahami kondisi lapangan, kebutuhan, batas pekerjaan, dan target proyek.",
                   },
                   {
                     number: "02",
-                    title: "Plan & Coordinate",
+                    title: "Rencana & Koordinasi",
                     copy: "Menyusun pendekatan kerja, detail kebutuhan, estimasi, serta koordinasi teknis.",
                   },
                   {
                     number: "03",
-                    title: "Build & Control",
+                    title: "Pelaksanaan & Kontrol",
                     copy: "Pelaksanaan berjalan bersama kontrol mutu, progres, dan kesesuaian pekerjaan.",
                   },
                   {
                     number: "04",
-                    title: "Inspect & Deliver",
+                    title: "Pemeriksaan & Serah Terima",
                     copy: "Pemeriksaan akhir, penyelesaian detail, dokumentasi, lalu proses serah terima.",
                   },
                 ].map((step) => (
@@ -181,64 +182,6 @@ export function FormworkServices({ data }: { data: SiteData }) {
           </div>
         </section>
 
-        {faqs.length ? (
-          <section className="relative py-16 sm:py-20 lg:py-24">
-            <BlueprintLayer className="opacity-[0.055]" />
-
-            <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-              <div className="grid gap-8 border-b border-[#cfc8bd] pb-8 lg:grid-cols-[0.65fr_1.35fr] lg:items-end">
-                <div>
-                  <MicroLabel>FAQ / sebelum proyek dimulai</MicroLabel>
-                  <h2
-                    className={`${displayFont} mt-5 max-w-[520px] text-[clamp(2.25rem,3.4vw,3.65rem)] font-black uppercase leading-[.91] tracking-[-.035em]`}
-                  >
-                    Hal penting yang perlu jelas di awal.
-                  </h2>
-                </div>
-
-                <p className="max-w-xl text-[13px] leading-6 text-[#657184] lg:justify-self-end">
-                  Pertanyaan awal kami susun sebagai informasi singkat agar calon
-                  klien dapat memahami proses tanpa membaca blok teks panjang.
-                </p>
-              </div>
-
-              <div className="mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {faqs.map((faq, index) => (
-                  <article
-                    key={faq.id}
-                    className={`group relative min-h-[230px] overflow-hidden border border-[#cec7bc] bg-[#faf7f0] p-5 transition duration-300 hover:border-[#b89a54] hover:shadow-[0_18px_45px_rgba(20,36,63,0.07)] sm:p-6 ${
-                      index === 0 && faqs.length > 2
-                        ? "md:col-span-2 xl:col-span-1"
-                        : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="font-mono text-[9px] font-semibold uppercase tracking-[.14em] text-[#b58c2f]">
-                        Q-{String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="font-mono text-[8px] uppercase tracking-[.12em] text-[#9299a3]">
-                        Pre-project
-                      </span>
-                    </div>
-
-                    <h3
-                      className={`${displayFont} mt-10 max-w-[420px] text-[1.45rem] font-black uppercase leading-[.94] tracking-[-.025em] text-[#14243f]`}
-                    >
-                      {faq.question}
-                    </h3>
-
-                    <p className="mt-4 text-[12px] leading-6 text-[#657184]">
-                      {faq.answer}
-                    </p>
-
-                    <span className="absolute bottom-5 right-5 h-5 w-5 border-b border-r border-[#dcb458]/60 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
-
         <section className="pb-16 sm:pb-20 lg:pb-24">
           <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
             <div className="relative overflow-hidden border border-[#cfc8bd] bg-[#ece6dc] px-6 py-9 sm:px-8 sm:py-10 lg:px-10">
@@ -250,7 +193,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
                   <h2
                     className={`${displayFont} mt-5 max-w-[760px] text-[clamp(2.3rem,3.8vw,4.05rem)] font-black uppercase leading-[.9] tracking-[-.038em] text-[#14243f]`}
                   >
-                    Susun ruang lingkup yang tepat sebelum pekerjaan dimulai.
+                    Pastikan kebutuhan proyek jelas sebelum pekerjaan dimulai.
                   </h2>
                 </div>
 

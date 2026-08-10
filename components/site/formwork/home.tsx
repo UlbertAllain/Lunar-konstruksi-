@@ -8,6 +8,7 @@ import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
 import { ServiceStaggeredCarousel } from "./service-staggered-carousel";
 import {
+  faqModel,
   projectModel,
   serviceModel,
   testimonialModel,
@@ -30,6 +31,7 @@ function projectHref(slug: string) {
 export function FormworkHome({ data }: { data: SiteData }) {
   const projects = data.projects.map(projectModel);
   const services = data.services.map(serviceModel);
+  const faqs = data.faqs.map(faqModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
 
   const quote = testimonials[0];
@@ -46,20 +48,20 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <section className="relative overflow-hidden border-b border-[#ded7cb] bg-[#f5f1e8]">
   <BlueprintLayer className="opacity-[0.035]" />
 
-  <div className="relative mx-auto grid min-h-[760px] w-full max-w-[1480px] lg:grid-cols-[0.78fr_1.22fr] lg:min-h-[820px]">
-    <div className="relative z-20 flex flex-col justify-between px-5 py-14 sm:px-8 lg:px-10 lg:py-20">
+  <div className="relative mx-auto grid w-full max-w-[1480px] lg:min-h-[740px] lg:grid-cols-[0.9fr_1.1fr]">
+    <div className="relative z-20 flex flex-col justify-between px-4 pb-8 pt-10 sm:px-8 sm:pb-10 sm:pt-14 lg:px-10 lg:py-20">
       <div className="max-w-[610px]">
         <div className="flex items-center gap-3">
           <span className="h-px w-9 bg-[#dcb458]" />
           <MicroLabel>01 / Perencanaan / konstruksi / koordinasi</MicroLabel>
         </div>
 
-        <h1 className={`${displayFont} mt-9 text-[clamp(3rem,5.2vw,5.35rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
+        <h1 className={`${displayFont} mt-9 text-[clamp(2.35rem,10.5vw,4.8rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
           Kami membangun dari dasar yang jelas.
         </h1>
 
         <p className="mt-7 max-w-[470px] text-[15px] leading-8 text-[#5d6877]">
-          Perencanaan, koordinasi, kontrol mutu, dan pekerjaan lapangan bergerak dalam satu alur yang mudah dibaca - bukan saling mengejar ketika pekerjaan sudah berjalan.
+          Dari perencanaan sampai pekerjaan selesai, setiap tahap kami susun agar keputusan lebih jelas, koordinasi lebih rapi, dan pekerjaan di lapangan tetap terarah.
         </p>
 
         <Link
@@ -80,21 +82,24 @@ export function FormworkHome({ data }: { data: SiteData }) {
       </div>
     </div>
 
-    <div className="relative min-h-[530px] lg:min-h-full">
+    <div className="relative min-h-[330px] sm:min-h-[470px] lg:min-h-full">
       <div
-        className="absolute inset-y-[5%] right-[-7%] w-[108%] overflow-hidden"
+        className="absolute inset-y-[10%] right-[1%] w-[90%] overflow-hidden lg:inset-y-[9%] lg:right-[2%] lg:w-[91%]"
         style={{ borderRadius: "44% 56% 34% 66% / 22% 30% 70% 78%" }}
       >
         <DatabaseImage
           src={LOCAL_MEDIA.hero}
           alt="Lunar Konstruksi"
-          className="h-full w-full scale-[1.03] object-cover object-center mix-blend-multiply"
+          className="h-full w-full object-cover object-center mix-blend-multiply"
+          preload={true}
+          sizes="(max-width: 1023px) 94vw, 50vw"
           placeholderLabel="Tambahkan home-hero.png"
-        />
+        quality={95}
+          />
       </div>
 
       <div
-        className="absolute bottom-[8%] left-[1%] z-20 hidden h-[230px] w-[255px] overflow-hidden border-[7px] border-[#f5f1e8] bg-[#f8f4ec] shadow-[0_20px_50px_rgba(20,36,63,0.12)] sm:block lg:left-[3%] lg:h-[265px] lg:w-[292px]"
+        className="absolute bottom-[10%] left-[5%] z-20 hidden h-[185px] w-[205px] overflow-hidden border-[6px] border-[#f5f1e8] bg-[#f8f4ec] shadow-[0_20px_50px_rgba(20,36,63,0.12)] sm:block lg:left-[7%] lg:h-[215px] lg:w-[238px]"
         style={{ borderRadius: "60% 40% 64% 36% / 38% 58% 42% 62%" }}
       >
         <DatabaseImage
@@ -102,13 +107,14 @@ export function FormworkHome({ data }: { data: SiteData }) {
           alt="Engineer reviewing project plan"
           className="h-full w-full object-cover object-center"
           placeholderLabel="Tambahkan home-hero-engineer.png"
-        />
+        quality={95}
+          />
       </div>
 
-      <div className="absolute right-[3%] top-[12%] z-20 hidden w-[205px] -rotate-[3deg] border border-[#ded5c7] bg-[#faf7f0]/95 px-4 py-4 shadow-[0_18px_44px_rgba(20,36,63,0.10)] lg:block">
+      <div className="absolute right-[4%] top-[14%] z-20 hidden w-[188px] -rotate-[3deg] border border-[#ded5c7] bg-[#faf7f0]/95 px-4 py-3.5 shadow-[0_18px_44px_rgba(20,36,63,0.10)] lg:block">
         <MicroLabel>Field register / 01</MicroLabel>
         <p className="mt-3 text-[11px] leading-5 text-[#596474]">
-          Struktur, urutan pekerjaan, dan kontrol lapangan dibaca sebagai satu jalur keputusan.
+          Perencanaan, urutan pekerjaan, dan kontrol lapangan kami susun agar setiap keputusan mudah dipahami.
         </p>
         <div className="mt-4 flex items-center justify-between border-t border-[#e4dccf] pt-3 font-mono text-[8px] uppercase tracking-[0.14em] text-[#7a8492]">
           <span>Grid B / 04</span>
@@ -119,7 +125,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <svg
         aria-hidden="true"
         viewBox="0 0 700 280"
-        className="pointer-events-none absolute bottom-[5%] right-[2%] hidden h-[250px] w-[78%] overflow-visible lg:block"
+        className="pointer-events-none absolute bottom-[7%] right-[4%] hidden h-[205px] w-[68%] overflow-visible lg:block"
         fill="none"
       >
         <path d="M12 205C102 248 160 74 286 124C394 167 415 245 520 182C591 140 611 65 688 89" stroke="#dcb458" strokeWidth="1.2" />
@@ -129,7 +135,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <circle cx="688" cy="89" r="3" fill="#182d4d" />
       </svg>
 
-      <div className="absolute bottom-[5%] right-[4%] hidden grid-cols-3 gap-6 xl:grid">
+      <div className="absolute bottom-[6%] right-[7%] hidden grid-cols-3 gap-5 xl:grid">
         {metric("08", "tahun pengalaman")}
         {metric(`${projects.length || 0}+`, "proyek terdokumentasi")}
         {metric("97%", "pekerjaan terkoordinasi")}
@@ -148,16 +154,16 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <MicroLabel>03 / Proyek pilihan</MicroLabel>
 
         {featuredProject ? (
-          <div className="relative mt-7 min-h-[520px] sm:min-h-[570px]">
+          <div className="relative mt-7 sm:min-h-[570px]">
             <Link
               href={projectHref(featuredProject.slug)}
-              className="group absolute inset-x-0 top-0 overflow-hidden border border-[#d8d1c6] bg-[#e7e0d5] shadow-[0_16px_34px_rgba(20,36,63,.07)] sm:right-[16%]"
+              className="group relative block overflow-hidden border border-[#d8d1c6] bg-[#e7e0d5] shadow-[0_16px_34px_rgba(20,36,63,.07)] sm:absolute sm:inset-x-0 sm:top-0 sm:right-[16%]"
               style={{ clipPath: "polygon(0% 0%,92% 0%,100% 10%,100% 88%,92% 100%,8% 100%,0% 90%)" }}
             >
               <DatabaseImage
                 src={featuredProject.image}
                 alt={featuredProject.title}
-                className="h-[360px] w-full object-cover transition duration-700 group-hover:scale-[1.015] sm:h-[420px]"
+                className="h-[250px] w-full object-cover transition duration-700 group-hover:scale-[1.015] sm:h-[420px]"
                 placeholderLabel="Foto proyek belum tersedia"
               />
               <div className="border-t border-[#ddd5c8] bg-[#f8f4ec] px-5 py-5">
@@ -202,11 +208,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div className="xl:pl-4">
         <div className="border-t border-[#cfc8bd] pt-6">
           <MicroLabel>Proyek pilihan</MicroLabel>
-          <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(2.5rem,3.9vw,4.15rem)] font-black uppercase leading-[.89] tracking-[-.04em] text-[#14243f]`}>
+          <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(2.25rem,3.35vw,3.45rem)] font-black uppercase leading-[.89] tracking-[-.04em] text-[#14243f]`}>
             Setiap proyek dibangun dari keputusan yang tepat.
           </h2>
           <p className="mt-6 max-w-lg text-[15px] leading-8 text-[#5f6976]">
-            Proyek pilihan kami menampilkan lingkup pekerjaan dan hasil yang telah diselesaikan, sementara proyek lainnya dapat dilihat pada halaman portofolio. - tanpa daftar judul yang mengulang informasi yang sudah tampil di visual.
+            Lihat beberapa pekerjaan yang telah kami tangani, lengkap dengan lokasi, lingkup pekerjaan, dan dokumentasi hasilnya.
           </p>
 
           <Link
@@ -237,19 +243,19 @@ export function FormworkHome({ data }: { data: SiteData }) {
           <div className="mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.66fr_.72fr_.62fr] lg:px-10">
             <div>
               <MicroLabel>04 / Alur kerja</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.4rem,3.6vw,3.75rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Perencanaan yang siap diterapkan di lapangan.</h2>
+              <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.15rem,3.15vw,3.25rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Perencanaan yang siap diterapkan di lapangan.</h2>
               <p className="mt-5 max-w-sm text-sm leading-7 text-[#657184]">Empat tahap utama membantu setiap pekerjaan tetap terarah, dari kebutuhan awal sampai serah terima.</p>
             </div>
 
-            <div className="relative border-l border-[#b8b1a7] pl-7">
+            <div className="relative sm:border-l sm:border-[#b8b1a7] sm:pl-7">
               {[
-                ["01", "PLAN", "Survey lokasi, kebutuhan, risiko, dan baseline scope."],
-                ["02", "COORDINATE", "Desain, estimasi, material, dan shop drawing diselaraskan."],
-                ["03", "BUILD", "Eksekusi bergerak bersama kontrol mutu dan catatan perubahan."],
-                ["04", "DELIVER", "Inspection, close-out, dan handover dirapikan sebagai satu record."],
+                ["01", "SURVEI", "Kami memahami lokasi, kebutuhan, kondisi awal, dan hal penting yang perlu diperhatikan."],
+                ["02", "PERENCANAAN", "Desain, estimasi, material, dan kebutuhan teknis disusun dalam satu rencana kerja."],
+                ["03", "PELAKSANAAN", "Pekerjaan berjalan bersama kontrol mutu dan pemantauan perubahan di lapangan."],
+                ["04", "SERAH TERIMA", "Pekerjaan diperiksa kembali, dirapikan, dan disiapkan untuk proses serah terima."],
               ].map(([number, title, text]) => (
                 <div key={number} className="relative pb-7 last:pb-0">
-                  <span className="absolute -left-[32px] top-2 h-2.5 w-2.5 rounded-full bg-[#dcb458]" />
+                  <span className="absolute -left-[32px] top-2 hidden h-2.5 w-2.5 rounded-full bg-[#dcb458] sm:block" />
                   <div className="flex items-baseline gap-3"><span className={`${displayFont} text-xl font-black`}>{number}</span><span className={`${displayFont} text-[1.05rem] font-black uppercase`}>{title}</span></div>
                   <p className="mt-2 max-w-sm text-[13px] leading-6 text-[#657184]">{text}</p>
                 </div>
@@ -262,7 +268,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
               </div>
               <div className="border-l-2 border-[#dcb458] bg-[#ece7df] p-4">
                 <MicroLabel>Catatan lapangan / QC-04</MicroLabel>
-                <p className={`${displayFont} mt-3 max-w-[280px] text-[1.6rem] font-black uppercase leading-[.96]`}>Keputusan teknis harus tetap jelas dari perencanaan hingga pelaksanaan.</p>
+                <p className={`${displayFont} mt-3 max-w-[280px] text-[1.6rem] font-black uppercase leading-[.96]`}>Keputusan teknis perlu tetap jelas dari awal sampai pekerjaan selesai.</p>
               </div>
             </div>
           </div>
@@ -285,7 +291,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
     <div className="relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
       <div>
         <MicroLabel className="!text-[#dcb458]">05 / Kontrol mutu / serah terima</MicroLabel>
-        <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(2.5rem,4vw,4.35rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
+        <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(2.2rem,3.3vw,3.4rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
           Kontrol yang konsisten menjaga kualitas pekerjaan.
         </h2>
         <p className="mt-6 max-w-md text-[14px] leading-7 text-white/58">
@@ -296,8 +302,8 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div className="grid gap-4 sm:grid-cols-3 lg:pb-2">
         {[
           ["QC", "04", "Pemeriksaan mutu", "Keputusan mutu dicatat sebelum pekerjaan bergerak ke tahap berikutnya."],
-          ["RFI", "12", "Klarifikasi teknis", "Pertanyaan teknis ditutup dengan jawaban yang bisa dilacak kembali."],
-          ["H/O", "100%", "Serah terima", "Penyerahan akhir dirapikan menjadi close-out yang mudah dibaca."],
+          ["INFO", "12", "Klarifikasi teknis", "Pertanyaan teknis dibahas dan dicatat agar keputusan tidak membingungkan di lapangan."],
+          ["DONE", "100%", "Serah terima", "Pekerjaan akhir diperiksa dan disiapkan agar proses serah terima lebih tertib."],
         ].map(([code, value, label, description], index) => (
           <div
             key={code}
@@ -317,12 +323,63 @@ export function FormworkHome({ data }: { data: SiteData }) {
   </div>
 </section>
 
+        {/* FAQ â€” dipindahkan dari halaman layanan */}
+        {faqs.length ? (
+          <section className="relative border-b border-[#d9d4ca] py-16 sm:py-20">
+            <BlueprintLayer className="opacity-[0.045]" />
+
+            <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
+              <div className="grid gap-7 border-b border-[#cfc8bd] pb-7 lg:grid-cols-[.7fr_1.3fr] lg:items-end">
+                <div>
+                  <MicroLabel>06 / Pertanyaan umum</MicroLabel>
+                  <h2
+                    className={`${displayFont} mt-4 max-w-[560px] text-[clamp(2.15rem,3.3vw,3.35rem)] font-black uppercase leading-[.92] tracking-[-.035em]`}
+                  >
+                    Hal yang biasanya ditanyakan sebelum proyek dimulai.
+                  </h2>
+                </div>
+
+                <p className="max-w-xl text-[13px] leading-6 text-[#657184] lg:justify-self-end">
+                  Beberapa jawaban singkat untuk membantu Anda memahami proses
+                  awal sebelum berdiskusi lebih lanjut dengan Lunar Konstruksi.
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {faqs.slice(0, 6).map((faq, index) => (
+                  <article
+                    key={faq.id}
+                    className="group relative min-h-[210px] overflow-hidden border border-[#cec7bc] bg-[#faf7f0] p-5 transition duration-300 hover:border-[#b89a54] sm:p-6"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="font-mono text-[8px] font-semibold uppercase tracking-[.14em] text-[#b58c2f]">
+                        Q-{String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="h-2 w-2 rounded-full border border-[#dcb458]" />
+                    </div>
+
+                    <h3
+                      className={`${displayFont} mt-8 text-[1.3rem] font-black uppercase leading-[.96] tracking-[-.02em] text-[#14243f]`}
+                    >
+                      {faq.question}
+                    </h3>
+
+                    <p className="mt-4 text-[12px] leading-6 text-[#657184]">
+                      {faq.answer}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
         {/* TESTIMONIAL — field memo compact */}
         <section className="relative border-b border-[#d9d4ca] py-14 sm:py-16">
           <div className="mx-auto grid w-full max-w-[1120px] gap-6 px-5 sm:px-8 lg:grid-cols-[100px_1fr_auto] lg:items-start lg:px-10">
             <Quote className="h-16 w-16 text-[#c9c2b8] lg:h-20 lg:w-20" />
             <div>
-              <MicroLabel>06 / Cerita klien</MicroLabel>
+              <MicroLabel>07 / Cerita klien</MicroLabel>
               <blockquote className="mt-4 max-w-3xl text-xl leading-[1.5] text-[#263b58] sm:text-2xl">“{quote?.quote || "Koordinasi yang baik membuat pekerjaan lapangan jauh lebih tenang karena keputusan penting sudah dibahas sebelum menjadi masalah."}”</blockquote>
               <p className="mt-5 font-mono text-[8px] uppercase tracking-[.15em] text-[#dcb458]">— {quote?.name || "Project Client"}{quote?.role ? ` / ${quote.role}` : ""}</p>
             </div>
@@ -334,9 +391,9 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <section className="relative py-14 sm:py-16">
           <div className="mx-auto grid w-full max-w-[1480px] gap-7 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10">
             <div>
-              <MicroLabel>07 / Mulai proyek Anda</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(2.55rem,4.1vw,4.35rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Wujudkan proyek Anda bersama Lunar Konstruksi.</h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-[#657184]">Mulai dari kebutuhan, kondisi lapangan, dan keputusan yang benar-benar perlu diselesaikan terlebih dahulu.</p>
+              <MicroLabel>08 / Mulai proyek Anda</MicroLabel>
+              <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(2.2rem,3.35vw,3.45rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Wujudkan proyek Anda bersama Lunar Konstruksi.</h2>
+              <p className="mt-4 max-w-xl text-sm leading-7 text-[#657184]">Ceritakan kebutuhan dan kondisi proyek Anda. Kami bantu menentukan langkah awal yang paling sesuai.</p>
             </div>
             <Link href="/contact" className="inline-flex items-center gap-4 border-b border-[#dcb458] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.12em]">Konsultasikan proyek <ArrowRight className="h-4 w-4 text-[#dcb458]" /></Link>
           </div>

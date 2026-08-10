@@ -70,7 +70,7 @@ export default function ProjectDetailPage({
                 </MicroLabel>
 
                 <h1
-                  className={`${displayFont} mt-6 max-w-[720px] text-[clamp(2.9rem,5vw,5.35rem)] font-black uppercase leading-[0.88] tracking-[-0.048em] text-[#14243f]`}
+                  className={`${displayFont} mt-6 max-w-[720px] text-[clamp(2.2rem,9.5vw,4.65rem)] font-black uppercase leading-[0.88] tracking-[-0.048em] text-[#14243f]`}
                 >
                   {project.title}
                 </h1>
@@ -99,7 +99,7 @@ export default function ProjectDetailPage({
                   <img
                     src={project.coverImage.url}
                     alt={project.title}
-                    className="h-[360px] w-full object-cover sm:h-[430px] lg:h-[500px]"
+                    className="h-[260px] w-full object-cover sm:h-[400px] lg:h-[500px]"
                   />
                 </div>
 
@@ -120,7 +120,7 @@ export default function ProjectDetailPage({
         <section className="relative py-16 sm:py-20 lg:py-24">
           <div className="mx-auto grid w-full max-w-[1480px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.7fr_1.3fr] lg:px-10 xl:gap-16">
             <aside>
-              <MicroLabel>Project facts / scope</MicroLabel>
+              <MicroLabel>Informasi proyek</MicroLabel>
 
               <div className="mt-6 border-t border-[#c9c2b7]">
                 <div className="border-b border-[#d8d1c6] py-5">
@@ -164,12 +164,12 @@ export default function ProjectDetailPage({
             </aside>
 
             <article>
-              <MicroLabel>Narrative / execution</MicroLabel>
+              <MicroLabel>Pelaksanaan pekerjaan</MicroLabel>
 
               <h2
-                className={`${displayFont} mt-5 max-w-[760px] text-[clamp(2.2rem,3.4vw,3.7rem)] font-black uppercase leading-[0.92] tracking-[-0.04em] text-[#14243f]`}
+                className={`${displayFont} mt-5 max-w-[760px] text-[clamp(2rem,3vw,3.15rem)] font-black uppercase leading-[0.92] tracking-[-0.04em] text-[#14243f]`}
               >
-                Lingkup dan pelaksanaan dibaca dalam satu konteks.
+                Lingkup pekerjaan dan pelaksanaannya kami jelaskan secara ringkas.
               </h2>
 
               <p className="mt-7 max-w-[850px] whitespace-pre-line text-[16px] leading-8 text-[#5b6776] sm:text-[17px]">
@@ -180,7 +180,7 @@ export default function ProjectDetailPage({
                 <div className="grid gap-5 py-6 sm:grid-cols-[150px_1fr]">
                   <div>
                     <p className="font-mono text-[8px] uppercase tracking-[0.15em] text-[#8a93a0]">
-                      Scope of work
+                      Lingkup pekerjaan
                     </p>
                   </div>
                   <div className="grid gap-3 sm:grid-cols-2">

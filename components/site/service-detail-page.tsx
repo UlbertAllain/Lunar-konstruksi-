@@ -30,7 +30,7 @@ export default function ServiceDetailPage({
               <MicroLabel>S-01 / Capability detail</MicroLabel>
 
               <h1
-                className={`${displayFont} mt-6 max-w-[720px] text-[clamp(2.9rem,5vw,5.25rem)] font-black uppercase leading-[0.88] tracking-[-0.048em] text-[#14243f]`}
+                className={`${displayFont} mt-6 max-w-[720px] text-[clamp(2.2rem,9.5vw,4.6rem)] font-black uppercase leading-[0.88] tracking-[-0.048em] text-[#14243f]`}
               >
                 {service.name}
               </h1>
@@ -54,7 +54,7 @@ export default function ServiceDetailPage({
                 <img
                   src={service.coverImage.url}
                   alt={service.name}
-                  className="h-[340px] w-full object-cover sm:h-[420px] lg:h-[480px]"
+                  className="h-[250px] w-full object-cover sm:h-[390px] lg:h-[480px]"
                 />
               </div>
 
@@ -76,9 +76,9 @@ export default function ServiceDetailPage({
             <div>
               <MicroLabel>Approach / work method</MicroLabel>
               <h2
-                className={`${displayFont} mt-5 max-w-[460px] text-[clamp(2.2rem,3.4vw,3.6rem)] font-black uppercase leading-[0.92] tracking-[-0.04em] text-[#14243f]`}
+                className={`${displayFont} mt-5 max-w-[460px] text-[clamp(2rem,3vw,3.1rem)] font-black uppercase leading-[0.92] tracking-[-0.04em] text-[#14243f]`}
               >
-                Dari kebutuhan menuju detail yang dapat dibangun.
+                Kebutuhan proyek diterjemahkan menjadi langkah kerja yang jelas.
               </h2>
             </div>
 
@@ -123,7 +123,7 @@ export default function ServiceDetailPage({
               <h2
                 className={`${displayFont} mt-5 max-w-[480px] text-[clamp(2.2rem,3.5vw,3.7rem)] font-black uppercase leading-[0.92] tracking-[-0.04em]`}
               >
-                Lingkup kerja yang dapat disesuaikan dengan proyek.
+                Lingkup pekerjaan dapat disesuaikan dengan kebutuhan proyek.
               </h2>
             </div>
 
@@ -148,7 +148,7 @@ export default function ServiceDetailPage({
               <h2
                 className={`${displayFont} mt-5 max-w-[760px] text-[clamp(2.4rem,4vw,4.2rem)] font-black uppercase leading-[0.9] tracking-[-0.04em] text-[#14243f]`}
               >
-                Susun ruang lingkup yang tepat sebelum pekerjaan dimulai.
+                Pastikan kebutuhan proyek jelas sebelum pekerjaan dimulai.
               </h2>
             </div>
 

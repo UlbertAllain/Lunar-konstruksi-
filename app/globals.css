@@ -99,17 +99,17 @@ a { text-decoration: none; }
   .site-button-dark { @apply inline-flex h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-6 text-sm font-semibold text-white transition hover:bg-orange-500 hover:text-slate-950; }
   .site-button-light { @apply inline-flex h-12 items-center justify-center gap-2 rounded-full border border-slate-400 px-6 text-sm font-semibold text-slate-800 transition hover:border-slate-950 hover:bg-white; }
 
-  .admin-panel { @apply relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-900/[0.025] sm:p-6; }
-  .admin-eyebrow { @apply text-[10px] font-bold uppercase tracking-[0.2em] text-orange-600; }
-  .admin-label { @apply mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-600; }
-  .admin-input { @apply h-11 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-100; }
-  .admin-textarea { @apply w-full resize-y rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-3 focus:ring-orange-100; }
-  .admin-button-primary { @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-orange-500 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-50; }
-  .admin-button-secondary { @apply inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50; }
-  .admin-button-danger { @apply inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-red-200 px-4 text-sm font-semibold text-red-600 transition hover:bg-red-50; }
-  .admin-icon-button { @apply inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-600 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50; }
-  .admin-status-active { @apply inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700; }
-  .admin-status-inactive { @apply inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600; }
+  .admin-panel { @apply relative border border-[#d8d1c6] bg-[#faf7f0] p-5 shadow-sm shadow-[#14243f]/[0.035] sm:p-6; }
+  .admin-eyebrow { @apply font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#b58c2f]; }
+  .admin-label { @apply mb-2 block text-[10px] font-semibold uppercase tracking-[0.1em] text-[#59677a]; }
+  .admin-input { @apply h-11 w-full border border-[#cfc8bd] bg-[#fffdf8] px-3.5 text-sm text-[#14243f] outline-none transition placeholder:text-[#9aa1aa] focus:border-[#b58c2f] focus:ring-3 focus:ring-[#dcb458]/15; }
+  .admin-textarea { @apply w-full resize-y border border-[#cfc8bd] bg-[#fffdf8] px-3.5 py-3 text-sm leading-6 text-[#14243f] outline-none transition placeholder:text-[#9aa1aa] focus:border-[#b58c2f] focus:ring-3 focus:ring-[#dcb458]/15; }
+  .admin-button-primary { @apply inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#14243f] px-5 text-sm font-semibold text-[#f8f4ec] transition hover:bg-[#dcb458] hover:text-[#14243f] disabled:cursor-not-allowed disabled:opacity-50; }
+  .admin-button-secondary { @apply inline-flex h-10 items-center justify-center gap-2 rounded-full border border-[#cfc8bd] bg-[#faf7f0] px-4 text-sm font-semibold text-[#14243f] transition hover:border-[#b58c2f] hover:bg-[#eee8df] disabled:cursor-not-allowed disabled:opacity-50; }
+  .admin-button-danger { @apply inline-flex h-10 items-center justify-center gap-2 rounded-full border border-red-200 px-4 text-sm font-semibold text-red-700 transition hover:bg-red-50; }
+  .admin-icon-button { @apply inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#cfc8bd] bg-[#faf7f0] text-[#526074] transition hover:border-[#b58c2f] hover:bg-[#eee8df] hover:text-[#14243f] disabled:cursor-not-allowed disabled:opacity-50; }
+  .admin-status-active { @apply inline-flex rounded-full border border-[#d7c899] bg-[#f2ead8] px-2.5 py-1 text-[11px] font-semibold text-[#6f5720]; }
+  .admin-status-inactive { @apply inline-flex rounded-full border border-[#d8d1c6] bg-[#eee8df] px-2.5 py-1 text-[11px] font-semibold text-[#677383]; }
 
   .contact-label { @apply mb-2 block text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500; }
   .contact-input { @apply h-12 w-full rounded-xl border border-white/10 bg-black/20 px-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-orange-500; }
@@ -131,4 +131,4 @@ a { text-decoration: none; }
     linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 
-::selection { background: #f97316; color: #111827; }
+::selection { background: #dcb458; color: #14243f; }

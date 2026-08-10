@@ -128,7 +128,7 @@ export function FormworkProjects({ data }: { data: SiteData }) {
               <MicroLabel>P-01 / Selected works</MicroLabel>
 
               <h1
-                className={`${displayFont} mt-7 max-w-[680px] text-[clamp(2.8rem,4.8vw,5rem)] font-black uppercase leading-[.87] tracking-[-.05em]`}
+                className={`${displayFont} mt-7 max-w-[680px] text-[clamp(2.7rem,4.35vw,4.55rem)] font-black uppercase leading-[.87] tracking-[-.05em]`}
               >
                 Pekerjaan nyata membentuk arsip kami.
               </h1>
@@ -145,7 +145,10 @@ export function FormworkProjects({ data }: { data: SiteData }) {
                   src={LOCAL_MEDIA.projectsHero || hero?.image || ""}
                   alt={hero?.title ?? "Project"}
                   className="h-full min-h-[430px] w-full object-cover object-center sm:min-h-[460px] lg:min-h-[480px]"
-                />
+                quality={95}
+                  preload={true}
+                  sizes="(max-width: 1023px) 94vw, 55vw"
+                  />
               </div>
 
               <div className="absolute bottom-[9%] left-[3%] z-30 hidden w-[220px] -rotate-[6deg] overflow-hidden border border-[#d9d1c4] bg-[#f9f6ef]/95 shadow-[0_20px_50px_rgba(20,36,63,0.13)] backdrop-blur-[2px] [clip-path:polygon(9%_0%,100%_0%,92%_100%,0%_89%,0%_16%)] lg:block">
@@ -170,7 +173,7 @@ export function FormworkProjects({ data }: { data: SiteData }) {
           </div>
         </section>
 
-        <section className="relative py-14 sm:py-16 lg:py-20">
+        <section className="relative py-10 sm:py-16 lg:py-20">
           <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
             <div className="mb-8 flex flex-col gap-5 border-b border-[#d2cbc0] pb-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -316,7 +319,7 @@ export function FormworkProjects({ data }: { data: SiteData }) {
                           ? `/projects/${project.slug}`
                           : "/projects"
                       }
-                      className="group block w-[82vw] max-w-[610px] shrink-0 snap-start sm:w-[520px] lg:w-[570px] xl:w-[610px]"
+                      className="group block w-[88vw] max-w-[610px] shrink-0 snap-start sm:w-[520px] lg:w-[570px] xl:w-[610px]"
                     >
                       <article className="relative">
                         <div
