@@ -46,7 +46,7 @@ export function FormworkContact({
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.8fr_1.2fr] lg:px-10">
             <div>
               <MicroLabel>
-                C-01 / Konsultasi proyek
+                C-01 / Konsultasi proyek / Solo Raya
               </MicroLabel>
 
               <h1
@@ -57,7 +57,7 @@ export function FormworkContact({
               </h1>
 
               <p className="mt-6 max-w-lg text-[15px] leading-8 text-[#5f6976]">
-                Sampaikan jenis pekerjaan,
+                Untuk kebutuhan proyek di Solo Raya dan sekitarnya, sampaikan jenis pekerjaan,
                 lokasi, kebutuhan, dan
                 target Anda. Informasi
                 awal ini membantu kami
@@ -206,7 +206,7 @@ export function FormworkContact({
         </section>
       </main>
 
-      <FormworkFooter />
+      <FormworkFooter content={data.siteContent} />
     </div>
   );
 }

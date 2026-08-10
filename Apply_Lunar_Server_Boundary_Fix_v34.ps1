@@ -1,3 +1,274 @@
+# Lunar Konstruksi - Server Client Boundary Fix v34
+#
+# Fixes the Firebase Admin / child_process / fs / net / tls build error.
+#
+# Root cause:
+# FormworkProjects is a Client Component and imported FormworkFooter.
+# FormworkFooter imported the Firebase Admin repository.
+# That pulled firebase-admin into the browser bundle.
+#
+# This patch:
+# - makes FormworkFooter a pure presentational component
+# - passes siteContent from existing page data
+# - keeps SiteFooter as a server-side wrapper for detail pages
+# - removes the unused FAQ index lint warning
+#
+# Run:
+# powershell -ExecutionPolicy Bypass -File .\Apply_Lunar_Server_Boundary_Fix_v34.ps1
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+function Write-Utf8NoBom {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Path,
+
+    [Parameter(Mandatory = $true)]
+    [string]$Content
+  )
+
+  $directoryPath =
+    Split-Path -Parent $Path
+
+  if (
+    $directoryPath -and
+    -not (
+      Test-Path -LiteralPath $directoryPath
+    )
+  ) {
+    New-Item `
+      -ItemType Directory `
+      -Force `
+      -Path $directoryPath |
+    Out-Null
+  }
+
+  $utf8NoBom =
+    New-Object `
+      System.Text.UTF8Encoding($false)
+
+  [System.IO.File]::WriteAllText(
+    $Path,
+    $Content,
+    $utf8NoBom
+  )
+}
+
+function Backup-File {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Source,
+
+    [Parameter(Mandatory = $true)]
+    [string]$BackupRoot,
+
+    [Parameter(Mandatory = $true)]
+    [string]$RelativePath
+  )
+
+  if (
+    -not (
+      Test-Path -LiteralPath $Source
+    )
+  ) {
+    return
+  }
+
+  $destination =
+    Join-Path `
+      $BackupRoot `
+      $RelativePath
+
+  $destinationDirectory =
+    Split-Path -Parent $destination
+
+  if ($destinationDirectory) {
+    New-Item `
+      -ItemType Directory `
+      -Force `
+      -Path $destinationDirectory |
+    Out-Null
+  }
+
+  Copy-Item `
+    -LiteralPath $Source `
+    -Destination $destination `
+    -Force
+}
+
+function Replace-AllLiteral {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Path,
+
+    [Parameter(Mandatory = $true)]
+    [string]$OldText,
+
+    [Parameter(Mandatory = $true)]
+    [string]$NewText,
+
+    [Parameter(Mandatory = $true)]
+    [string]$Label
+  )
+
+  $content =
+    [System.IO.File]::ReadAllText(
+      $Path
+    )
+
+  if (
+    -not $content.Contains(
+      $OldText
+    )
+  ) {
+    Write-Host `
+      "  skip: $Label (already fixed or marker not found)" `
+      -ForegroundColor DarkGray
+
+    return
+  }
+
+  $content =
+    $content.Replace(
+      $OldText,
+      $NewText
+    )
+
+  Write-Utf8NoBom `
+    -Path $Path `
+    -Content $content
+
+  Write-Host `
+    "  updated: $Label" `
+    -ForegroundColor DarkGray
+}
+
+$repoRoot =
+  $PSScriptRoot
+
+if (
+  -not (
+    Test-Path -LiteralPath (
+      Join-Path `
+        $repoRoot `
+        "package.json"
+    )
+  )
+) {
+  if (
+    Test-Path -LiteralPath (
+      Join-Path `
+        (Get-Location) `
+        "package.json"
+    )
+  ) {
+    $repoRoot =
+      (Get-Location).Path
+  }
+  else {
+    throw `
+      "Run this patch from the Lunar repository root."
+  }
+}
+
+$footerFile =
+  Join-Path `
+    $repoRoot `
+    "components\site\formwork\footer.tsx"
+
+$siteFooterFile =
+  Join-Path `
+    $repoRoot `
+    "components\site\site-footer.tsx"
+
+$homeFile =
+  Join-Path `
+    $repoRoot `
+    "components\site\formwork\home.tsx"
+
+$servicesFile =
+  Join-Path `
+    $repoRoot `
+    "components\site\formwork\services.tsx"
+
+$projectsFile =
+  Join-Path `
+    $repoRoot `
+    "components\site\formwork\projects.tsx"
+
+$contactFile =
+  Join-Path `
+    $repoRoot `
+    "components\site\formwork\contact.tsx"
+
+foreach ($requiredFile in @(
+  $footerFile,
+  $siteFooterFile,
+  $homeFile,
+  $servicesFile,
+  $projectsFile,
+  $contactFile
+)) {
+  if (
+    -not (
+      Test-Path -LiteralPath $requiredFile
+    )
+  ) {
+    throw `
+      "Required file missing: $requiredFile"
+  }
+}
+
+$timestamp =
+  Get-Date `
+    -Format "yyyyMMdd-HHmmss"
+
+$backupRoot =
+  Join-Path `
+    $repoRoot `
+    ".lunar-backups\server-boundary-v34-$timestamp"
+
+New-Item `
+  -ItemType Directory `
+  -Force `
+  -Path $backupRoot |
+Out-Null
+
+foreach ($relativeFile in @(
+  "components\site\formwork\footer.tsx",
+  "components\site\site-footer.tsx",
+  "components\site\formwork\home.tsx",
+  "components\site\formwork\services.tsx",
+  "components\site\formwork\projects.tsx",
+  "components\site\formwork\contact.tsx"
+)) {
+  Backup-File `
+    -Source (
+      Join-Path `
+        $repoRoot `
+        $relativeFile
+    ) `
+    -BackupRoot $backupRoot `
+    -RelativePath $relativeFile
+}
+
+Write-Host ""
+Write-Host `
+  "=== Lunar / Server-Client Boundary Fix v34 ===" `
+  -ForegroundColor Cyan
+
+# =========================================================
+# 1. PURE FOOTER
+# =========================================================
+
+Write-Host `
+  "[1/4] Removing Firebase Admin from FormworkFooter..." `
+  -ForegroundColor Yellow
+
+Write-Utf8NoBom `
+  -Path $footerFile `
+  -Content @'
 import Link from "next/link";
 import {
   ArrowUpRight,
@@ -253,3 +524,110 @@ export function FormworkFooter({
     </footer>
   );
 }
+
+'@
+
+Write-Host `
+  "  FormworkFooter now receives SiteContentSettings as props." `
+  -ForegroundColor DarkGray
+
+Write-Host `
+  "  No repository or firebase-admin import remains in this component." `
+  -ForegroundColor DarkGray
+
+# =========================================================
+# 2. PAGE DATA -> FOOTER
+# =========================================================
+
+Write-Host `
+  "[2/4] Passing existing siteContent into public footers..." `
+  -ForegroundColor Yellow
+
+foreach ($pageFile in @(
+  $homeFile,
+  $servicesFile,
+  $projectsFile,
+  $contactFile
+)) {
+  Replace-AllLiteral `
+    -Path $pageFile `
+    -OldText "<FormworkFooter />" `
+    -NewText "<FormworkFooter content={data.siteContent} />" `
+    -Label (
+      Split-Path `
+        -Leaf `
+        $pageFile
+    )
+}
+
+# =========================================================
+# 3. DETAIL PAGE SERVER WRAPPER
+# =========================================================
+
+Write-Host `
+  "[3/4] Keeping detail-page footer server-side..." `
+  -ForegroundColor Yellow
+
+Write-Utf8NoBom `
+  -Path $siteFooterFile `
+  -Content @'
+import { getSiteContentSettings } from "@/modules/site-content/site-content.repository";
+import { FormworkFooter } from "./formwork/footer";
+
+export async function SiteFooter() {
+  const content =
+    await getSiteContentSettings();
+
+  return (
+    <FormworkFooter
+      content={content}
+    />
+  );
+}
+
+export default SiteFooter;
+
+'@
+
+Write-Host `
+  "  SiteFooter fetches settings only on the server." `
+  -ForegroundColor DarkGray
+
+# =========================================================
+# 4. LINT WARNING
+# =========================================================
+
+Write-Host `
+  "[4/4] Cleaning lint warning..." `
+  -ForegroundColor Yellow
+
+Replace-AllLiteral `
+  -Path $homeFile `
+  -OldText "faqs.slice(0, 6).map((faq, index) => (" `
+  -NewText "faqs.slice(0, 6).map((faq) => (" `
+  -Label "unused FAQ index"
+
+Write-Host ""
+Write-Host `
+  "=== v34 complete ===" `
+  -ForegroundColor Green
+
+Write-Host `
+  "Backup: $backupRoot" `
+  -ForegroundColor DarkGray
+
+Write-Host ""
+Write-Host `
+  "Run in this exact order:" `
+  -ForegroundColor Cyan
+
+Write-Host "  npm run lint"
+Write-Host "  npm run typecheck"
+Write-Host "  npm run build"
+
+Write-Host ""
+Write-Host `
+  "Do NOT push yet if build still reports an error." `
+  -ForegroundColor Yellow
+
+Write-Host ""

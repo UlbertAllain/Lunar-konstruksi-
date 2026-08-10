@@ -1,19 +1,71 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/seo/json-ld";
 import ProjectDetailPage from "@/components/site/project-detail-page";
+import {
+  buildProjectJsonLd,
+  buildProjectMetadata,
+} from "@/lib/seo";
 import { getPublicProjectBySlug } from "@/modules/public-site/server";
 
 interface ProjectPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-export default async function Page({ params }: ProjectPageProps) {
+export async function generateMetadata({
+  params,
+}: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = await getPublicProjectBySlug(slug);
+
+  const project =
+    await getPublicProjectBySlug(
+      slug,
+    );
+
+  if (!project) {
+    return {
+      title:
+        "Proyek tidak ditemukan",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  return buildProjectMetadata(
+    project,
+  );
+}
+
+export default async function Page({
+  params,
+}: ProjectPageProps) {
+  const { slug } = await params;
+
+  const project =
+    await getPublicProjectBySlug(
+      slug,
+    );
 
   if (!project) {
     notFound();
   }
 
-  return <ProjectDetailPage project={project} />;
+  return (
+    <>
+      <JsonLd
+        data={buildProjectJsonLd(
+          project,
+        )}
+      />
+
+      <ProjectDetailPage
+        project={project}
+      />
+    </>
+  );
 }

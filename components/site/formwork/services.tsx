@@ -18,23 +18,23 @@ export function FormworkServices({ data }: { data: SiteData }) {
           <BlueprintLayer />
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:px-10">
             <div>
-              <MicroLabel>S-01 / Capabilities / scope of work</MicroLabel>
+              <MicroLabel>S-01 / Jasa konstruksi / Solo Raya</MicroLabel>
               <h1
                 className={`${displayFont} mt-8 text-[clamp(2.3rem,10vw,4.7rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}
               >
                 Layanan konstruksi yang terkoordinasi dari awal sampai selesai.
               </h1>
               <p className="mt-8 max-w-lg text-[15px] leading-7 text-[#566476]">
-                Ruang lingkup dapat disusun sesuai konteks proyek, dari satu
-                pekerjaan teknis sampai koordinasi design-build yang lebih
-                terintegrasi.
+                Layanan konstruksi di Solo Raya disusun sesuai kebutuhan proyek, dari
+                pekerjaan teknis, renovasi, interior, sampai koordinasi pekerjaan yang
+                lebih terintegrasi.
               </p>
             </div>
             <div className="relative min-h-[330px] sm:min-h-[430px] lg:min-h-[520px]">
               <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(15%_0%,76%_0%,100%_17%,95%_74%,100%_86%,82%_100%,18%_95%,0%_78%,3%_18%)]">
                 <DatabaseImage
                   src={data.siteContent.servicesHero?.url || LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""}
-                  alt={services[0]?.name || "Capabilities"}
+                  alt={services[0]?.name || "Jasa konstruksi Lunar Konstruksi di Solo Raya"}
                   className="h-full min-h-[310px] w-full object-cover object-center sm:min-h-[410px] lg:min-h-[500px]"
                 quality={95}
                   preload={true}
@@ -211,7 +211,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
             </div>
           </div>
         </section>      </main>
-      <FormworkFooter />
+      <FormworkFooter content={data.siteContent} />
     </div>
   );
 }

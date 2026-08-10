@@ -57,7 +57,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div className="max-w-[610px]">
         <div className="flex items-center gap-3">
           <span className="h-px w-9 bg-[#dcb458]" />
-          <MicroLabel>01 / Perencanaan / konstruksi / koordinasi</MicroLabel>
+          <MicroLabel>01 / Jasa konstruksi / renovasi / Solo Raya</MicroLabel>
         </div>
 
         <h1 className={`${displayFont} mt-9 text-[clamp(2.35rem,10.5vw,4.8rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
@@ -65,7 +65,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
         </h1>
 
         <p className="mt-7 max-w-[470px] text-[15px] leading-8 text-[#5d6877]">
-          Dari perencanaan sampai pekerjaan selesai, setiap tahap kami susun agar keputusan lebih jelas, koordinasi lebih rapi, dan pekerjaan di lapangan tetap terarah.
+          Lunar Konstruksi menangani konstruksi, renovasi, interior, dan kebutuhan bangunan di Solo Raya. Dari perencanaan sampai pekerjaan selesai, setiap tahap kami susun agar keputusan lebih jelas dan pekerjaan tetap terarah.
         </p>
 
         <Link
@@ -93,7 +93,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
       >
         <DatabaseImage
           src={data.siteContent.homeHero?.url || LOCAL_MEDIA.hero}
-          alt="Lunar Konstruksi"
+          alt="Jasa konstruksi Lunar Konstruksi di Solo Raya"
           className="h-full w-full object-cover object-center mix-blend-multiply"
           preload={true}
           sizes="(max-width: 1023px) 94vw, 50vw"
@@ -353,7 +353,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
               </div>
 
               <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {faqs.slice(0, 6).map((faq, index) => (
+                {faqs.slice(0, 6).map((faq) => (
                   <article
                     key={faq.id}
                     className="group relative min-h-[210px] overflow-hidden border border-[#cec7bc] bg-[#faf7f0] p-5 transition duration-300 hover:border-[#b89a54] sm:p-6"
@@ -400,7 +400,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
           </div>
         </section>
       </main>
-      <FormworkFooter />
+      <FormworkFooter content={data.siteContent} />
     </div>
   );
 }

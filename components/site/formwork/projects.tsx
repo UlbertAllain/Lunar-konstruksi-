@@ -125,7 +125,7 @@ export function FormworkProjects({ data }: { data: SiteData }) {
 
           <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.75fr_1.25fr] lg:px-10">
             <div>
-              <MicroLabel>P-01 / Selected works</MicroLabel>
+              <MicroLabel>P-01 / Portofolio konstruksi / Solo Raya</MicroLabel>
 
               <h1
                 className={`${displayFont} mt-7 max-w-[680px] text-[clamp(2.7rem,4.35vw,4.55rem)] font-black uppercase leading-[.87] tracking-[-.05em]`}
@@ -134,8 +134,8 @@ export function FormworkProjects({ data }: { data: SiteData }) {
               </h1>
 
               <p className="mt-7 max-w-lg text-[15px] leading-7 text-[#566476]">
-                Dokumentasi proyek yang memperlihatkan konteks, proses, dan hasil
-                pekerjaan dari berbagai kebutuhan konstruksi.
+                Dokumentasi proyek Lunar Konstruksi di Solo Raya dan area layanan lainnya,
+                memperlihatkan konteks, proses, serta hasil dari berbagai kebutuhan konstruksi.
               </p>
             </div>
 
@@ -401,7 +401,7 @@ export function FormworkProjects({ data }: { data: SiteData }) {
         </section>
       </main>
 
-      <FormworkFooter />
+      <FormworkFooter content={data.siteContent} />
     </div>
   );
 }

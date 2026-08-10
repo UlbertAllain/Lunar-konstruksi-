@@ -1,5 +1,20 @@
-import { ReactNode } from "react";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
-export default function AdminRootLayout({ children }: { children: ReactNode }) {
+export const metadata: Metadata = {
+  title: "Admin",
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+  },
+};
+
+export default function AdminRootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return children;
 }
