@@ -17,13 +17,13 @@ import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
 const galleryLayouts = [
-  "md:col-span-7",
-  "md:col-span-5",
-  "md:col-span-5",
-  "md:col-span-7",
-  "md:col-span-4",
-  "md:col-span-4",
-  "md:col-span-4",
+  "md:col-span-7 md:row-span-2",
+  "md:col-span-5 md:row-span-2",
+  "md:col-span-5 md:row-span-2",
+  "md:col-span-7 md:row-span-2",
+  "md:col-span-4 md:row-span-2",
+  "md:col-span-4 md:row-span-2",
+  "md:col-span-4 md:row-span-2",
 ];
 
 function projectStatusLabel(status: string) {
@@ -209,7 +209,7 @@ export default function ProjectDetailPage({
         </section>
 
         {project.gallery.length ? (
-          <section className="border-y border-[#d8d1c6] bg-[#eee8df] py-16 sm:py-20">
+          <section className="border-y border-[#d8d1c6] bg-[#f5f1e8] py-16 sm:py-20">
             <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -226,11 +226,11 @@ export default function ProjectDetailPage({
                 </p>
               </div>
 
-              <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-12">
+              <div className="mt-10 grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-12 md:auto-rows-[150px] lg:auto-rows-[180px] xl:auto-rows-[205px]">
                 {project.gallery.map((image, index) => (
                   <figure
                     key={image.publicId}
-                    className={`group overflow-hidden border border-[#d2cabc] bg-[#ddd6cb] ${
+                    className={`group relative aspect-[4/3] overflow-hidden border border-[#d2cabc] bg-transparent md:aspect-auto ${
                       galleryLayouts[index % galleryLayouts.length]
                     }`}
                   >
@@ -238,7 +238,7 @@ export default function ProjectDetailPage({
                     <img
                       src={image.url}
                       alt={image.alt || `${project.title} ${index + 1}`}
-                      className="aspect-[4/3] max-h-[460px] w-full object-cover transition duration-700 group-hover:scale-[1.018] sm:aspect-[16/11]"
+                      className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.018]"
                     />
                   </figure>
                 ))}

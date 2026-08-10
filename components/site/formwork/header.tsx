@@ -9,6 +9,7 @@ import { useState } from "react";
 import { displayFont } from "./decor";
 
 const links = [
+  { href: "/", label: "Home" },
   { href: "/projects", label: "Proyek" },
   { href: "/services", label: "Layanan" },
   { href: "/contact", label: "Kontak" },

@@ -110,34 +110,71 @@ export function FormworkServices({ data }: { data: SiteData }) {
           </div>
         </section>
 
-        <section className="bg-[#14243f] py-20 text-white sm:py-24">
+        <section className="relative border-y border-[#263b59] bg-[#14243f] py-16 text-[#f8f4ec] sm:py-20">
           <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-            <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]">
+            <div className="grid gap-8 lg:grid-cols-[0.58fr_1.42fr] lg:items-end">
               <div>
-                <MicroLabel>Work sequence</MicroLabel>
+                <MicroLabel className="!text-[#dcb458]">
+                  Process board / 04 stages
+                </MicroLabel>
                 <h2
-                  className={`${displayFont} mt-5 text-4xl font-black uppercase leading-[.92] sm:text-5xl lg:text-6xl`}
+                  className={`${displayFont} mt-5 max-w-[480px] text-[clamp(2.35rem,3.8vw,4rem)] font-black uppercase leading-[.9] tracking-[-.04em]`}
                 >
-                  Dari brief ke handover.
+                  Alur kerja yang mudah dibaca sejak awal.
                 </h2>
+                <p className="mt-5 max-w-md text-[13px] leading-6 text-white/55">
+                  Setiap pekerjaan bergerak melalui tahapan yang jelas agar
+                  keputusan, pelaksanaan, dan serah terima tetap terkontrol.
+                </p>
               </div>
-              <div className="grid gap-8 sm:grid-cols-2">
+
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {[
-                  ["01", "Survey / brief"],
-                  ["02", "Plan / coordinate"],
-                  ["03", "Build / control"],
-                  ["04", "Inspect / deliver"],
-                ].map(([number, label]) => (
-                  <div key={number} className="border-t border-white/20 pt-4">
-                    <p className="font-mono text-[9px] text-[#dcb458]">
-                      {number}
-                    </p>
-                    <p
-                      className={`${displayFont} mt-4 text-3xl font-black uppercase`}
-                    >
-                      {label}
-                    </p>
-                  </div>
+                  {
+                    number: "01",
+                    title: "Survey & Brief",
+                    copy: "Memahami kondisi lapangan, kebutuhan, batas pekerjaan, dan target proyek.",
+                  },
+                  {
+                    number: "02",
+                    title: "Plan & Coordinate",
+                    copy: "Menyusun pendekatan kerja, detail kebutuhan, estimasi, serta koordinasi teknis.",
+                  },
+                  {
+                    number: "03",
+                    title: "Build & Control",
+                    copy: "Pelaksanaan berjalan bersama kontrol mutu, progres, dan kesesuaian pekerjaan.",
+                  },
+                  {
+                    number: "04",
+                    title: "Inspect & Deliver",
+                    copy: "Pemeriksaan akhir, penyelesaian detail, dokumentasi, lalu proses serah terima.",
+                  },
+                ].map((step) => (
+                  <article
+                    key={step.number}
+                    className="group relative min-h-[250px] overflow-hidden border border-white/14 bg-white/[0.035] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#dcb458]/55 hover:bg-white/[0.06]"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <span className="font-mono text-[10px] font-semibold tracking-[.14em] text-[#dcb458]">
+                        {step.number}
+                      </span>
+                      <span className="h-2 w-2 rounded-full border border-[#dcb458]/70" />
+                    </div>
+
+                    <div className="mt-16">
+                      <h3
+                        className={`${displayFont} text-[1.55rem] font-black uppercase leading-[.92] tracking-[-.025em]`}
+                      >
+                        {step.title}
+                      </h3>
+                      <p className="mt-4 text-[12px] leading-6 text-white/55">
+                        {step.copy}
+                      </p>
+                    </div>
+
+                    <span className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#dcb458] transition-all duration-500 group-hover:w-full" />
+                  </article>
                 ))}
               </div>
             </div>
@@ -145,59 +182,96 @@ export function FormworkServices({ data }: { data: SiteData }) {
         </section>
 
         {faqs.length ? (
-          <section className="relative py-20 sm:py-24">
-            <BlueprintLayer className="opacity-[0.08]" />
-            <div className="relative mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.55fr_1.45fr] lg:px-10">
-              <div>
-                <MicroLabel>FAQ / pre-project</MicroLabel>
-                <h2
-                  className={`${displayFont} mt-5 text-4xl font-black uppercase leading-[.92] sm:text-5xl`}
-                >
-                  Hal yang sering dibahas di awal.
-                </h2>
-              </div>
-              <div className="border-t border-[#c0bbb2]">
-                {faqs.map((faq, index) => (
-                  <div
-                    key={faq.id}
-                    className="grid gap-4 border-b border-[#c0bbb2] py-6 sm:grid-cols-[70px_1fr]"
+          <section className="relative py-16 sm:py-20 lg:py-24">
+            <BlueprintLayer className="opacity-[0.055]" />
+
+            <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
+              <div className="grid gap-8 border-b border-[#cfc8bd] pb-8 lg:grid-cols-[0.65fr_1.35fr] lg:items-end">
+                <div>
+                  <MicroLabel>FAQ / sebelum proyek dimulai</MicroLabel>
+                  <h2
+                    className={`${displayFont} mt-5 max-w-[520px] text-[clamp(2.25rem,3.4vw,3.65rem)] font-black uppercase leading-[.91] tracking-[-.035em]`}
                   >
-                    <span className="font-mono text-[9px] text-[#dcb458]">
-                      Q-{String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <h3
-                        className={`${displayFont} text-2xl font-black uppercase`}
-                      >
-                        {faq.question}
-                      </h3>
-                      <p className="mt-3 text-sm leading-7 text-[#657184]">
-                        {faq.answer}
-                      </p>
+                    Hal penting yang perlu jelas di awal.
+                  </h2>
+                </div>
+
+                <p className="max-w-xl text-[13px] leading-6 text-[#657184] lg:justify-self-end">
+                  Pertanyaan awal kami susun sebagai informasi singkat agar calon
+                  klien dapat memahami proses tanpa membaca blok teks panjang.
+                </p>
+              </div>
+
+              <div className="mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {faqs.map((faq, index) => (
+                  <article
+                    key={faq.id}
+                    className={`group relative min-h-[230px] overflow-hidden border border-[#cec7bc] bg-[#faf7f0] p-5 transition duration-300 hover:border-[#b89a54] hover:shadow-[0_18px_45px_rgba(20,36,63,0.07)] sm:p-6 ${
+                      index === 0 && faqs.length > 2
+                        ? "md:col-span-2 xl:col-span-1"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="font-mono text-[9px] font-semibold uppercase tracking-[.14em] text-[#b58c2f]">
+                        Q-{String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-[8px] uppercase tracking-[.12em] text-[#9299a3]">
+                        Pre-project
+                      </span>
                     </div>
-                  </div>
+
+                    <h3
+                      className={`${displayFont} mt-10 max-w-[420px] text-[1.45rem] font-black uppercase leading-[.94] tracking-[-.025em] text-[#14243f]`}
+                    >
+                      {faq.question}
+                    </h3>
+
+                    <p className="mt-4 text-[12px] leading-6 text-[#657184]">
+                      {faq.answer}
+                    </p>
+
+                    <span className="absolute bottom-5 right-5 h-5 w-5 border-b border-r border-[#dcb458]/60 transition-transform duration-300 group-hover:translate-x-1 group-hover:translate-y-1" />
+                  </article>
                 ))}
               </div>
             </div>
           </section>
         ) : null}
 
-        <section className="border-t border-[#d9d4ca] py-20">
-          <div className="mx-auto flex w-full max-w-[1480px] flex-col gap-7 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10">
-            <h2
-              className={`${displayFont} max-w-3xl text-4xl font-black uppercase leading-[.91] sm:text-5xl lg:text-6xl`}
-            >
-              Susun ruang lingkup yang benar sejak awal.
-            </h2>
-            <Link
-              href="/contact"
-              className="font-mono text-[10px] uppercase tracking-[.1em]"
-            >
-              Start a project →
-            </Link>
+        <section className="pb-16 sm:pb-20 lg:pb-24">
+          <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
+            <div className="relative overflow-hidden border border-[#cfc8bd] bg-[#ece6dc] px-6 py-9 sm:px-8 sm:py-10 lg:px-10">
+              <BlueprintLayer className="opacity-[0.045]" />
+
+              <div className="relative grid gap-8 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
+                <div>
+                  <MicroLabel>Project intake / next step</MicroLabel>
+                  <h2
+                    className={`${displayFont} mt-5 max-w-[760px] text-[clamp(2.3rem,3.8vw,4.05rem)] font-black uppercase leading-[.9] tracking-[-.038em] text-[#14243f]`}
+                  >
+                    Susun ruang lingkup yang tepat sebelum pekerjaan dimulai.
+                  </h2>
+                </div>
+
+                <div className="lg:justify-self-end">
+                  <p className="max-w-md text-[13px] leading-6 text-[#657184]">
+                    Ceritakan kebutuhan, kondisi proyek, dan hasil yang ingin
+                    dicapai. Kami bantu menyusun langkah awal yang lebih terukur.
+                  </p>
+
+                  <Link
+                    href="/contact"
+                    className="mt-6 inline-flex items-center gap-3 border-b border-[#b58c2f] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.13em] text-[#14243f] transition hover:gap-5"
+                  >
+                    Konsultasikan proyek
+                    <span aria-hidden="true">â†’</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
-        </section>
-      </main>
+        </section>      </main>
       <FormworkFooter />
     </div>
   );

@@ -1,3 +1,100 @@
+# Lunar Konstruksi - Project Rail + Compact CTA v20
+# Jalankan dari root project:
+# powershell -ExecutionPolicy Bypass -File .\Apply_Lunar_Project_Rail_v20.ps1
+#
+# Fokus:
+# - portfolio /projects DEFAULT horizontal scroll
+# - tombol panah kiri/kanan
+# - tombol "Lihat semua" untuk expand ke asymmetric grid
+# - tombol "Tampilan horizontal" untuk collapse kembali
+# - CTA project diperkecil
+# - footer brand diperkecil
+# - footer tidak lagi memiliki About
+# - memastikan Home tetap ada di navbar
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+function Write-Utf8NoBom {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$Content
+    )
+
+    $directory = Split-Path -Parent $Path
+
+    if ($directory -and -not (Test-Path $directory)) {
+        New-Item -ItemType Directory -Force -Path $directory | Out-Null
+    }
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
+
+function Backup-File {
+    param(
+        [Parameter(Mandatory = $true)][string]$Source,
+        [Parameter(Mandatory = $true)][string]$BackupRoot,
+        [Parameter(Mandatory = $true)][string]$RelativePath
+    )
+
+    if (-not (Test-Path $Source)) {
+        return
+    }
+
+    $destination = Join-Path $BackupRoot $RelativePath
+    $destinationDir = Split-Path -Parent $destination
+
+    if ($destinationDir) {
+        New-Item -ItemType Directory -Force -Path $destinationDir | Out-Null
+    }
+
+    Copy-Item -Force $Source $destination
+}
+
+$repoRoot = $PSScriptRoot
+
+if (-not (Test-Path (Join-Path $repoRoot "package.json"))) {
+    if (Test-Path (Join-Path (Get-Location) "package.json")) {
+        $repoRoot = (Get-Location).Path
+    }
+    else {
+        throw "Jalankan script dari root repository Lunar Konstruksi."
+    }
+}
+
+$projectsFile = Join-Path $repoRoot "components\site\formwork\projects.tsx"
+$footerFile = Join-Path $repoRoot "components\site\formwork\footer.tsx"
+$headerFile = Join-Path $repoRoot "components\site\formwork\header.tsx"
+
+if (-not (Test-Path $projectsFile)) {
+    throw "File projects tidak ditemukan: $projectsFile"
+}
+
+if (-not (Test-Path $footerFile)) {
+    throw "File footer tidak ditemukan: $footerFile"
+}
+
+if (-not (Test-Path $headerFile)) {
+    throw "File header tidak ditemukan: $headerFile"
+}
+
+Write-Host ""
+Write-Host "=== Lunar Konstruksi / Project Rail v20 ===" -ForegroundColor Cyan
+Write-Host "Repo: $repoRoot" -ForegroundColor DarkGray
+Write-Host ""
+
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+$backupRoot = Join-Path $repoRoot ".lunar-backups\project-rail-v20-$timestamp"
+New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
+
+Backup-File -Source $projectsFile -BackupRoot $backupRoot -RelativePath "components\site\formwork\projects.tsx"
+Backup-File -Source $footerFile -BackupRoot $backupRoot -RelativePath "components\site\formwork\footer.tsx"
+Backup-File -Source $headerFile -BackupRoot $backupRoot -RelativePath "components\site\formwork\header.tsx"
+
+Write-Host "[1/3] Mengubah Projects menjadi horizontal rail + expandable grid..." -ForegroundColor Yellow
+
+$projectsCode = @'
 "use client";
 
 import Link from "next/link";
@@ -401,3 +498,124 @@ export function FormworkProjects({ data }: { data: SiteData }) {
     </div>
   );
 }
+
+'@
+
+Write-Utf8NoBom -Path $projectsFile -Content $projectsCode
+
+Write-Host "  default: horizontal scroll" -ForegroundColor DarkGray
+Write-Host "  arrows: scroll kiri/kanan" -ForegroundColor DarkGray
+Write-Host "  expand: asymmetric grid" -ForegroundColor DarkGray
+Write-Host "  CTA akhir: typography lebih kecil" -ForegroundColor DarkGray
+
+Write-Host "[2/3] Merapikan footer dan membuang About..." -ForegroundColor Yellow
+
+$footerCode = @'
+import Link from "next/link";
+
+import { displayFont } from "./decor";
+
+export function FormworkFooter() {
+  const email =
+    process.env.NEXT_PUBLIC_COMPANY_EMAIL ?? "hello@lunarkonstruksi.id";
+  const phone =
+    process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "+62 812 0000 0000";
+
+  return (
+    <footer className="bg-[#101f37] text-[#f8f4ec]">
+      <div className="mx-auto w-full max-w-[1480px] px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
+        <div className="grid gap-9 border-b border-white/15 pb-9 lg:grid-cols-[1.15fr_.85fr] lg:items-start">
+          <div>
+            <p
+              className={`${displayFont} text-[clamp(2rem,3.1vw,3.2rem)] font-black uppercase leading-[.92] tracking-[-0.035em]`}
+            >
+              Lunar <span className="text-[#dcb458]">/</span> Konstruksi
+            </p>
+
+            <p className="mt-4 max-w-lg text-[13px] leading-6 text-white/55">
+              Perencanaan, koordinasi, dan pekerjaan konstruksi dengan keputusan
+              teknis yang jelas dari awal sampai serah terima.
+            </p>
+          </div>
+
+          <div className="grid gap-7 text-sm sm:grid-cols-2">
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#dcb458]">
+                Contact
+              </p>
+              <p className="mt-3 text-white/75">{email}</p>
+              <p className="mt-1 text-white/75">{phone}</p>
+            </div>
+
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#dcb458]">
+                Navigate
+              </p>
+
+              <div className="mt-3 flex flex-col gap-2 text-white/75">
+                <Link href="/">Home</Link>
+                <Link href="/projects">Proyek</Link>
+                <Link href="/services">Layanan</Link>
+                <Link href="/contact">Kontak</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 pt-5 font-mono text-[8px] uppercase tracking-[.14em] text-white/40 sm:flex-row sm:items-center sm:justify-between">
+          <span>© {new Date().getFullYear()} Lunar Konstruksi</span>
+          <span>Built around structure, coordination, delivery.</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+'@
+
+Write-Utf8NoBom -Path $footerFile -Content $footerCode
+
+Write-Host "  brand footer diperkecil" -ForegroundColor DarkGray
+Write-Host "  menu: Home / Proyek / Layanan / Kontak" -ForegroundColor DarkGray
+
+Write-Host "[3/3] Memastikan tombol Home ada di navbar..." -ForegroundColor Yellow
+
+$headerContent = [System.IO.File]::ReadAllText($headerFile)
+
+if ($headerContent.Contains('{ href: "/", label: "Home" }')) {
+    Write-Host "  Home sudah ada." -ForegroundColor DarkGray
+}
+else {
+    $pattern = 'const links = \['
+    $replacement = 'const links = [' + [Environment]::NewLine + '  { href: "/", label: "Home" },'
+
+    $updatedHeader = [System.Text.RegularExpressions.Regex]::Replace(
+        $headerContent,
+        $pattern,
+        $replacement,
+        1
+    )
+
+    if ($updatedHeader -eq $headerContent) {
+        throw "Array links navbar tidak ditemukan."
+    }
+
+    Write-Utf8NoBom -Path $headerFile -Content $updatedHeader
+    Write-Host "  Home ditambahkan." -ForegroundColor DarkGray
+}
+
+Write-Host ""
+Write-Host "=== Revisi v20 selesai ===" -ForegroundColor Green
+Write-Host "Backup: $backupRoot" -ForegroundColor DarkGray
+Write-Host ""
+Write-Host "Sekarang validasi:" -ForegroundColor Cyan
+Write-Host "  npm run lint"
+Write-Host "  npm run typecheck"
+Write-Host "  npm run build"
+Write-Host ""
+Write-Host "Preview:" -ForegroundColor Cyan
+Write-Host "  npm run dev"
+Write-Host ""
+Write-Host "Cek halaman:" -ForegroundColor Cyan
+Write-Host "  /projects"
+Write-Host ""
