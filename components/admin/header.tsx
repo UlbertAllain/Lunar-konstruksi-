@@ -8,7 +8,9 @@ import {
   CircleHelp,
   ExternalLink,
   FolderKanban,
+  Handshake,
   Home,
+  Images,
   LogOut,
   Menu,
   MessageSquareQuote,
@@ -20,8 +22,10 @@ import { logoutAdmin } from "@/lib/firebase/auth";
 
 const mobileMenu = [
   { name: "Dashboard", href: "/admin/dashboard", icon: Home },
+  { name: "Media Halaman", href: "/admin/site-media", icon: Images },
   { name: "Layanan", href: "/admin/services", icon: Wrench },
   { name: "Proyek", href: "/admin/projects", icon: FolderKanban },
+  { name: "Partner", href: "/admin/partners", icon: Handshake },
   {
     name: "Testimoni",
     href: "/admin/testimonials",

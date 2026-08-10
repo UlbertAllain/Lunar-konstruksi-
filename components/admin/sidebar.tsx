@@ -6,15 +6,19 @@ import { usePathname } from "next/navigation";
 import {
   CircleHelp,
   FolderKanban,
+  Handshake,
   Home,
+  Images,
   MessageSquareQuote,
   Wrench,
 } from "lucide-react";
 
 const menu = [
   { name: "Dashboard", href: "/admin/dashboard", icon: Home },
+  { name: "Media Halaman", href: "/admin/site-media", icon: Images },
   { name: "Layanan", href: "/admin/services", icon: Wrench },
   { name: "Proyek", href: "/admin/projects", icon: FolderKanban },
+  { name: "Partner", href: "/admin/partners", icon: Handshake },
   {
     name: "Testimoni",
     href: "/admin/testimonials",

@@ -3,6 +3,7 @@ import type { Project } from "@/modules/projects/project.types";
 import type { ConstructionService } from "@/modules/services/service.types";
 import type { TeamMember } from "@/modules/team/team.types";
 import type { Testimonial } from "@/modules/testimonials/testimonial.types";
+import type { SiteContentSettings } from "@/modules/site-content/site-content.types";
 
 export type PublicPageKey = "home" | "about" | "services" | "projects" | "contact";
 export type CmsSystemPageKey = PublicPageKey;
@@ -117,6 +118,7 @@ export interface PublicOverviewData {
   team: TeamMember[];
   testimonials: Testimonial[];
   faqs: FAQ[];
+  siteContent: SiteContentSettings;
 }
 
 export interface PublicPageContext {

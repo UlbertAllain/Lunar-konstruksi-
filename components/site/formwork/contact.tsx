@@ -20,8 +20,8 @@ export function FormworkContact({ data }: { data: SiteData }) {
     process.env.NEXT_PUBLIC_COMPANY_PHONE ?? "+62 812 0000 0000";
 
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
-      <FormworkHeader />
+    <div className="lunar-public-page overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+      <FormworkHeader services={data.services} projects={data.projects} />
 
       <main>
         <section className="relative border-b border-[#d9d4ca] py-14 sm:py-18 lg:py-20">
@@ -47,12 +47,13 @@ export function FormworkContact({ data }: { data: SiteData }) {
             <div className="relative min-h-[310px] sm:min-h-[410px] lg:min-h-[460px]">
               <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(14%_0%,84%_0%,100%_18%,95%_70%,100%_86%,83%_100%,17%_94%,0%_76%,4%_19%)]">
                 <DatabaseImage
-                  src={LOCAL_MEDIA.contactHero}
+                  src={data.siteContent.contactHero?.url || LOCAL_MEDIA.contactHero}
                   alt="Konsultasi proyek Lunar Konstruksi"
                   className="h-[290px] w-full object-contain mix-blend-multiply sm:h-[390px] lg:h-[430px]"
                 quality={95}
                   preload={true}
                   sizes="(max-width: 1023px) 94vw, 55vw"
+                  hero
                   />
               </div>
 

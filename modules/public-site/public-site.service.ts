@@ -1,3 +1,4 @@
+import { getSiteContentSettings } from "@/modules/site-content/site-content.repository";
 import { unstable_cache } from "next/cache";
 
 import {
@@ -62,15 +63,16 @@ export async function getPublicServiceBySlug(slug: string) {
 }
 
 export async function getPublicOverviewData(): Promise<PublicOverviewData> {
-  const [services, projects, team, testimonials, faqs] = await Promise.all([
+  const [services, projects, team, testimonials, faqs, siteContent] = await Promise.all([
     getPublicServices(),
     getPublicProjects(),
     getPublicTeam(),
     getPublicTestimonials(),
     getPublicFaqs(),
+    getSiteContentSettings(),
   ]);
 
-  return { services, projects, team, testimonials, faqs };
+  return { services, projects, team, testimonials, faqs, siteContent };
 }
 
 export async function getPublicHomeData() {

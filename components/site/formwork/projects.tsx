@@ -116,8 +116,8 @@ export function FormworkProjects({ data }: { data: SiteData }) {
   }
 
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
-      <FormworkHeader />
+    <div className="lunar-public-page overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+      <FormworkHeader services={data.services} projects={data.projects} />
 
       <main>
         <section className="relative border-b border-[#d9d4ca] py-16 sm:py-20 lg:py-24">
@@ -142,12 +142,13 @@ export function FormworkProjects({ data }: { data: SiteData }) {
             <div className="relative min-h-[430px] sm:min-h-[480px] lg:min-h-[500px]">
               <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(9%_0%,84%_0%,100%_10%,100%_74%,92%_100%,27%_100%,14%_93%,0%_79%,0%_17%)]">
                 <DatabaseImage
-                  src={LOCAL_MEDIA.projectsHero || hero?.image || ""}
+                  src={data.siteContent.projectsHero?.url || LOCAL_MEDIA.projectsHero || hero?.image || ""}
                   alt={hero?.title ?? "Project"}
                   className="h-full min-h-[430px] w-full object-cover object-center sm:min-h-[460px] lg:min-h-[480px]"
                 quality={95}
                   preload={true}
                   sizes="(max-width: 1023px) 94vw, 55vw"
+                  hero
                   />
               </div>
 

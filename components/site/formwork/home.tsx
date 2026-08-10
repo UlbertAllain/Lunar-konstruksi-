@@ -6,6 +6,7 @@ import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
 import { LOCAL_MEDIA } from "./local-assets";
 import { DatabaseImage } from "./media";
+import { PartnersMarquee } from "./partners-marquee";
 import { ServiceStaggeredCarousel } from "./service-staggered-carousel";
 import {
   faqModel,
@@ -30,6 +31,9 @@ function projectHref(slug: string) {
 
 export function FormworkHome({ data }: { data: SiteData }) {
   const projects = data.projects.map(projectModel);
+  const partners = [...data.siteContent.partners]
+    .filter((partner) => partner.isPublished)
+    .sort((a, b) => a.order - b.order);
   const services = data.services.map(serviceModel);
   const faqs = data.faqs.map(faqModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
@@ -41,8 +45,8 @@ export function FormworkHome({ data }: { data: SiteData }) {
   const secondaryProjects = projects.slice(1, 3);
 
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
-      <FormworkHeader />
+    <div className="lunar-public-page overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+      <FormworkHeader services={data.services} projects={data.projects} />
       <main>
         {/* HERO — dipertahankan, hanya typography/detail dipoles */}
         <section className="relative overflow-hidden border-b border-[#ded7cb] bg-[#f5f1e8]">
@@ -88,14 +92,15 @@ export function FormworkHome({ data }: { data: SiteData }) {
         style={{ borderRadius: "44% 56% 34% 66% / 22% 30% 70% 78%" }}
       >
         <DatabaseImage
-          src={LOCAL_MEDIA.hero}
+          src={data.siteContent.homeHero?.url || LOCAL_MEDIA.hero}
           alt="Lunar Konstruksi"
           className="h-full w-full object-cover object-center mix-blend-multiply"
           preload={true}
           sizes="(max-width: 1023px) 94vw, 50vw"
           placeholderLabel="Tambahkan home-hero.png"
         quality={95}
-          />
+          hero
+                  />
       </div>
 
       <div
@@ -146,6 +151,8 @@ export function FormworkHome({ data }: { data: SiteData }) {
 
         {/* CAPABILITIES — dipertahankan */}
                         <ServiceStaggeredCarousel services={services} />
+        <PartnersMarquee partners={partners} />
+
 
 <section className="relative border-b border-[#d8d1c6] py-16 sm:py-20 lg:py-24">
   <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
@@ -219,7 +226,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
             href="/projects"
             className="mt-7 inline-flex items-center gap-3 border-b border-[#dcb458]/75 pb-2 font-mono text-[10px] uppercase tracking-[.16em] text-[#14243f]"
           >
-            Lihat semua proyek <span className="h-px w-10 bg-[#dcb458]" /> â†’
+            Lihat semua proyek <span className="h-px w-10 bg-[#dcb458]" /> <ArrowRight className="h-4 w-4 text-[#dcb458]" />
           </Link>
         </div>
 
@@ -263,7 +270,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
             </div>
 
             <div className="grid content-start gap-4">
-              <div className="overflow-hidden [border-radius:42%_58%_52%_48%/48%_42%_58%_52%] border border-[#d9d4ca] bg-[#e6dfd3]">
+              <div className="lunar-public-page overflow-hidden [border-radius:42%_58%_52%_48%/48%_42%_58%_52%] border border-[#d9d4ca] bg-[#e6dfd3]">
                 <DatabaseImage src={processPrimary} alt="Perencanaan dan koordinasi proyek" className="aspect-[4/3] w-full object-cover" placeholderLabel="Tambahkan gambar statis perencanaan" />
               </div>
               <div className="border-l-2 border-[#dcb458] bg-[#ece7df] p-4">
@@ -323,7 +330,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
   </div>
 </section>
 
-        {/* FAQ â€” dipindahkan dari halaman layanan */}
+        {/* FAQ — dipindahkan dari halaman layanan */}
         {faqs.length ? (
           <section className="relative border-b border-[#d9d4ca] py-16 sm:py-20">
             <BlueprintLayer className="opacity-[0.045]" />
@@ -351,15 +358,9 @@ export function FormworkHome({ data }: { data: SiteData }) {
                     key={faq.id}
                     className="group relative min-h-[210px] overflow-hidden border border-[#cec7bc] bg-[#faf7f0] p-5 transition duration-300 hover:border-[#b89a54] sm:p-6"
                   >
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="font-mono text-[8px] font-semibold uppercase tracking-[.14em] text-[#b58c2f]">
-                        Q-{String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="h-2 w-2 rounded-full border border-[#dcb458]" />
-                    </div>
 
                     <h3
-                      className={`${displayFont} mt-8 text-[1.3rem] font-black uppercase leading-[.96] tracking-[-.02em] text-[#14243f]`}
+                      className={`${displayFont} mt-2 text-[1.3rem] font-black uppercase leading-[.96] tracking-[-.02em] text-[#14243f]`}
                     >
                       {faq.question}
                     </h3>

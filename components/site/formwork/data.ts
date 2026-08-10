@@ -1,9 +1,12 @@
+import type { SiteContentSettings } from "@/modules/site-content/site-content.types";
+
 export type SiteData = {
   services: unknown[];
   projects: unknown[];
   team: unknown[];
   testimonials: unknown[];
   faqs: unknown[];
+  siteContent: SiteContentSettings;
 };
 
 export type UnknownRecord = Record<string, unknown>;

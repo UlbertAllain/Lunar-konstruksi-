@@ -11,8 +11,8 @@ export function FormworkServices({ data }: { data: SiteData }) {
   const services = data.services.map(serviceModel);
   const projects = data.projects.map(projectModel);
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
-      <FormworkHeader />
+    <div className="lunar-public-page overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+      <FormworkHeader services={data.services} projects={data.projects} />
       <main>
         <section className="relative border-b border-[#d9d4ca] py-16 sm:py-24">
           <BlueprintLayer />
@@ -33,17 +33,13 @@ export function FormworkServices({ data }: { data: SiteData }) {
             <div className="relative min-h-[330px] sm:min-h-[430px] lg:min-h-[520px]">
               <div className="absolute inset-y-[2%] right-[-2%] w-[98%] overflow-hidden border border-[#d8d1c6]/60 bg-[#f5f1e8] shadow-[0_22px_60px_rgba(20,36,63,0.10)] [clip-path:polygon(15%_0%,76%_0%,100%_17%,95%_74%,100%_86%,82%_100%,18%_95%,0%_78%,3%_18%)]">
                 <DatabaseImage
-                  src={
-                    LOCAL_MEDIA.servicesHero ||
-                    services[0]?.image ||
-                    projects[0]?.image ||
-                    ""
-                  }
+                  src={data.siteContent.servicesHero?.url || LOCAL_MEDIA.servicesHero || services[0]?.image || projects[0]?.image || ""}
                   alt={services[0]?.name || "Capabilities"}
                   className="h-full min-h-[310px] w-full object-cover object-center sm:min-h-[410px] lg:min-h-[500px]"
                 quality={95}
                   preload={true}
                   sizes="(max-width: 1023px) 94vw, 55vw"
+                  hero
                   />
               </div>
               {/* FLOATING-SERVICES-HERO-CARD */}
@@ -208,7 +204,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
                     className="mt-6 inline-flex items-center gap-3 border-b border-[#b58c2f] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.13em] text-[#14243f] transition hover:gap-5"
                   >
                     Konsultasikan proyek
-                    <span aria-hidden="true">â†’</span>
+                    <span aria-hidden="true">→</span>
                   </Link>
                 </div>
               </div>

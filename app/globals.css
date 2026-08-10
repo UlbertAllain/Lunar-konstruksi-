@@ -132,3 +132,170 @@ a { text-decoration: none; }
 }
 
 ::selection { background: #dcb458; color: #14243f; }
+
+
+
+/* =========================================================
+   LUNAR PUBLIC MOTION
+   ========================================================= */
+
+@keyframes lunarHeroImageIn {
+  from {
+    opacity: 0;
+    transform: scale(0.975) translateY(12px);
+    filter: saturate(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: saturate(1);
+  }
+}
+
+@keyframes lunarDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes lunarMobileMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lunarSectionIn {
+  from {
+    opacity: 0.001;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lunarPartnerMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.lunar-hero-image {
+  animation: lunarHeroImageIn 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lunar-dropdown-panel {
+  transform-origin: top center;
+  animation: lunarDropdownIn 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lunar-mobile-menu {
+  animation: lunarMobileMenuIn 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lunar-partner-track {
+  animation: lunarPartnerMarquee 26s linear infinite;
+  will-change: transform;
+}
+
+.lunar-partner-marquee:hover .lunar-partner-track {
+  animation-play-state: paused;
+}
+
+@supports (animation-timeline: view()) {
+  .lunar-public-page main > section:not(:first-child) {
+    animation: lunarSectionIn linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 24%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lunar-hero-image,
+  .lunar-dropdown-panel,
+  .lunar-mobile-menu,
+  .lunar-public-page main > section,
+  .lunar-partner-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .lunar-partner-marquee {
+    overflow-x: auto;
+  }
+}
+
+
+
+/* =========================================================
+   LUNAR PARTNER MARQUEE V30
+   ========================================================= */
+
+@keyframes lunarPartnerMarqueeV30 {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-10%);
+  }
+}
+
+.lunar-partner-marquee {
+  background: transparent !important;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+}
+
+.lunar-partner-marquee .lunar-partner-track {
+  animation: lunarPartnerMarqueeV30 34s linear infinite !important;
+  will-change: transform;
+}
+
+.lunar-partner-marquee:hover .lunar-partner-track {
+  animation-play-state: paused !important;
+}
+
+@media (max-width: 640px) {
+  .lunar-partner-marquee .lunar-partner-track {
+    animation-duration: 27s !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lunar-partner-marquee .lunar-partner-track {
+    animation: none !important;
+  }
+
+  .lunar-partner-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}

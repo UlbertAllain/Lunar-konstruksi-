@@ -11,7 +11,29 @@ type DatabaseImageProps = {
   preload?: boolean;
   quality?: number;
   unoptimized?: boolean;
+  hero?: boolean;
 };
+
+function cloudinaryHeroSource(src: string) {
+  if (
+    !src.includes("res.cloudinary.com") ||
+    !src.includes("/image/upload/")
+  ) {
+    return src;
+  }
+
+  if (
+    src.includes("/q_auto:best/") ||
+    src.includes("/q_95/")
+  ) {
+    return src;
+  }
+
+  return src.replace(
+    "/image/upload/",
+    "/image/upload/c_limit,w_2400/q_auto:best/f_auto/",
+  );
+}
 
 export function DatabaseImage({
   src,
@@ -23,6 +45,7 @@ export function DatabaseImage({
   preload = false,
   quality = 90,
   unoptimized = false,
+  hero = false,
 }: DatabaseImageProps) {
   const resolved = src || fallbackSrc;
 
@@ -43,21 +66,38 @@ export function DatabaseImage({
 
   const lower = resolved.toLowerCase();
   const isDataUrl = resolved.startsWith("data:");
-  const isSvg = lower.endsWith(".svg") || lower.includes(".svg?");
+  const isSvg =
+    lower.endsWith(".svg") ||
+    lower.includes(".svg?");
+  const isCloudinaryHero =
+    hero &&
+    resolved.includes("res.cloudinary.com") &&
+    resolved.includes("/image/upload/");
+
+  const finalSrc = hero
+    ? cloudinaryHeroSource(resolved)
+    : resolved;
 
   return (
     <Image
-      src={resolved}
+      src={finalSrc}
       alt={alt}
-      width={1800}
-      height={1200}
+      width={hero ? 2400 : 1800}
+      height={hero ? 1500 : 1200}
       sizes={sizes}
-      preload={preload}
+      preload={hero || preload}
       quality={quality}
-      loading={preload ? undefined : "lazy"}
+      loading={hero || preload ? undefined : "lazy"}
       decoding="async"
-      unoptimized={unoptimized || isDataUrl || isSvg}
-      className={className}
+      unoptimized={
+        unoptimized ||
+        isCloudinaryHero ||
+        isDataUrl ||
+        isSvg
+      }
+      className={`${className} ${
+        hero ? "lunar-hero-image" : ""
+      }`}
     />
   );
 }

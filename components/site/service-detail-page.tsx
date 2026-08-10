@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Check, Layers3 } from "lucide-react";
 import type { ConstructionService } from "@/modules/services/service.types";
+import type { Project } from "@/modules/projects/project.types";
 
 import {
   BlueprintLayer,
@@ -9,16 +10,19 @@ import {
 } from "./formwork/decor";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
+import { RelatedProjectsSection } from "./related-projects-section";
 
 interface ServiceDetailPageProps {
   service: ConstructionService;
+  relatedProjects: Project[];
 }
 
 export default function ServiceDetailPage({
   service,
+  relatedProjects,
 }: ServiceDetailPageProps) {
   return (
-    <div className="overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
+    <div className="lunar-public-page overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
       <SiteHeader />
 
       <main>
@@ -141,6 +145,10 @@ export default function ServiceDetailPage({
           </div>
         </section>
 
+        <RelatedProjectsSection
+          projects={relatedProjects}
+          serviceName={service.name}
+        />
         <section className="py-16 sm:py-20">
           <div className="mx-auto flex w-full max-w-[1480px] flex-col gap-7 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10">
             <div>
