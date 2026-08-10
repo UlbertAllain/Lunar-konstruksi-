@@ -10,7 +10,6 @@ import { ServiceStaggeredCarousel } from "./service-staggered-carousel";
 import {
   projectModel,
   serviceModel,
-  teamModel,
   testimonialModel,
   type SiteData,
 } from "./data";
@@ -31,7 +30,6 @@ function projectHref(slug: string) {
 export function FormworkHome({ data }: { data: SiteData }) {
   const projects = data.projects.map(projectModel);
   const services = data.services.map(serviceModel);
-  const team = data.team.map(teamModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
 
   const quote = testimonials[0];
@@ -56,7 +54,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
           <MicroLabel>01 / Perencanaan / konstruksi / koordinasi</MicroLabel>
         </div>
 
-        <h1 className={`${displayFont} mt-9 text-[clamp(3.4rem,6vw,6.4rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
+        <h1 className={`${displayFont} mt-9 text-[clamp(3rem,5.2vw,5.35rem)] font-black uppercase leading-[0.87] tracking-[-0.05em] text-[#14243f]`}>
           Kami membangun dari dasar yang jelas.
         </h1>
 
@@ -204,7 +202,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
       <div className="xl:pl-4">
         <div className="border-t border-[#cfc8bd] pt-6">
           <MicroLabel>Proyek pilihan</MicroLabel>
-          <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(3rem,4.7vw,5.3rem)] font-black uppercase leading-[.89] tracking-[-.04em] text-[#14243f]`}>
+          <h2 className={`${displayFont} mt-5 max-w-[520px] text-[clamp(2.5rem,3.9vw,4.15rem)] font-black uppercase leading-[.89] tracking-[-.04em] text-[#14243f]`}>
             Setiap proyek dibangun dari keputusan yang tepat.
           </h2>
           <p className="mt-6 max-w-lg text-[15px] leading-8 text-[#5f6976]">
@@ -239,7 +237,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
           <div className="mx-auto grid w-full max-w-[1480px] gap-10 px-5 sm:px-8 lg:grid-cols-[.66fr_.72fr_.62fr] lg:px-10">
             <div>
               <MicroLabel>04 / Alur kerja</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.9rem,4.5vw,4.7rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Perencanaan yang siap diterapkan di lapangan.</h2>
+              <h2 className={`${displayFont} mt-4 max-w-[430px] text-[clamp(2.4rem,3.6vw,3.75rem)] font-black uppercase leading-[.9] tracking-[-.035em]`}>Perencanaan yang siap diterapkan di lapangan.</h2>
               <p className="mt-5 max-w-sm text-sm leading-7 text-[#657184]">Empat tahap utama membantu setiap pekerjaan tetap terarah, dari kebutuhan awal sampai serah terima.</p>
             </div>
 
@@ -287,7 +285,7 @@ export function FormworkHome({ data }: { data: SiteData }) {
     <div className="relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
       <div>
         <MicroLabel className="!text-[#dcb458]">05 / Kontrol mutu / serah terima</MicroLabel>
-        <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(3rem,5vw,5.8rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
+        <h2 className={`${displayFont} mt-6 max-w-[670px] text-[clamp(2.5rem,4vw,4.35rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] text-[#f8f4ec]`}>
           Kontrol yang konsisten menjaga kualitas pekerjaan.
         </h2>
         <p className="mt-6 max-w-md text-[14px] leading-7 text-white/58">
@@ -319,97 +317,12 @@ export function FormworkHome({ data }: { data: SiteData }) {
   </div>
 </section>
 
-        {/* TEAM — adaptif, tidak menyisakan ruang kosong */}
-        {team.length > 0 && (
-          <section className="relative border-b border-[#ded7cb] bg-[#f5f1e8] py-16 sm:py-20 lg:py-24">
-  <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8 lg:px-10">
-    <div className="flex flex-col gap-6 border-b border-[#ddd5c8] pb-8 lg:flex-row lg:items-end lg:justify-between">
-      <div>
-        <MicroLabel>06 / Tim Lunar</MicroLabel>
-        <h2 className={`${displayFont} mt-5 max-w-[560px] text-[clamp(2.9rem,4.7vw,5.3rem)] font-black uppercase leading-[0.9] tracking-[-0.045em] text-[#14243f]`}>
-          Tim yang menjaga proyek tetap berjalan.
-        </h2>
-      </div>
-      <p className="max-w-lg text-[14px] leading-7 text-[#5f6976]">
-        Setiap anggota tim memiliki peran dalam menjaga koordinasi, komunikasi, dan kualitas pekerjaan dari awal hingga penyelesaian proyek.
-      </p>
-    </div>
-
-    {team.length === 1 ? (
-      <div className="mt-9 overflow-hidden border border-[#d8d0c3] bg-[#faf7f0] shadow-[0_14px_32px_rgba(20,36,63,0.055)]" style={{ borderRadius: "40px 96px 44px 72px / 40px 58px 46px 70px" }}>
-        <div className="grid md:grid-cols-[230px_1fr_auto] md:items-stretch">
-          <DatabaseImage
-            src={team[0].image}
-            alt={team[0].name}
-            className="h-[260px] w-full object-cover object-center md:h-full"
-            placeholderLabel="Foto anggota tim belum tersedia"
-          />
-
-          <div className="flex flex-col justify-between gap-7 px-6 py-6 sm:px-8">
-            <div>
-              <MicroLabel>Anggota tim / 01</MicroLabel>
-              <h3 className="mt-4 text-[clamp(1.8rem,3vw,3rem)] font-semibold uppercase leading-[0.94] tracking-[-0.04em] text-[#14243f]">
-                {team[0].name}
-              </h3>
-              <p className="mt-2 text-[13px] uppercase tracking-[0.08em] text-[#697482]">{team[0].position}</p>
-            </div>
-            <p className="max-w-xl text-[13px] leading-7 text-[#5f6976]">
-              Setiap anggota tim memiliki tanggung jawab yang mendukung koordinasi dan kelancaran pelaksanaan proyek.
-            </p>
-          </div>
-
-          <div className="flex min-w-[180px] flex-col justify-between border-t border-[#e1d8ca] px-6 py-6 font-mono text-[8px] uppercase leading-5 tracking-[0.15em] text-[#77818f] md:border-l md:border-t-0">
-            <span>Koordinasi lapangan</span>
-            <span>Komunikasi proyek</span>
-            <span>Dukungan pelaksanaan</span>
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div className="mt-9 grid auto-rows-[minmax(110px,auto)] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-flow-dense">
-        {team.slice(0, 6).map((member, index) => {
-          const layouts = [
-            "lg:col-span-5 lg:row-span-2",
-            "lg:col-span-4",
-            "lg:col-span-3 lg:row-span-2",
-            "lg:col-span-4",
-            "lg:col-span-5",
-            "lg:col-span-3",
-          ];
-          const heights = ["h-[360px]", "h-[220px]", "h-[330px]", "h-[220px]", "h-[245px]", "h-[220px]"];
-
-          return (
-            <article
-              key={member.id}
-              className={`${layouts[index] ?? "lg:col-span-4"} group overflow-hidden border border-[#d8d0c3] bg-[#faf7f0] shadow-[0_12px_28px_rgba(20,36,63,0.05)]`}
-              style={{ borderRadius: index % 2 === 0 ? "36px 86px 34px 72px" : "78px 32px 68px 38px" }}
-            >
-              <DatabaseImage
-                src={member.image}
-                alt={member.name}
-                className={`${heights[index] ?? "h-[230px]"} w-full object-cover object-center transition duration-500 group-hover:scale-[1.02]`}
-                placeholderLabel={`Foto anggota tim ${index + 1} belum diisi`}
-              />
-              <div className="px-5 py-5">
-                <MicroLabel>{`Personnel / ${String(index + 1).padStart(2, "0")}`}</MicroLabel>
-                <h3 className="mt-3 text-xl font-semibold uppercase leading-none tracking-[-0.03em] text-[#14243f]">{member.name}</h3>
-                <p className="mt-2 text-[12px] text-[#667180]">{member.position}</p>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    )}
-  </div>
-</section>
-        )}
-
         {/* TESTIMONIAL — field memo compact */}
         <section className="relative border-b border-[#d9d4ca] py-14 sm:py-16">
           <div className="mx-auto grid w-full max-w-[1120px] gap-6 px-5 sm:px-8 lg:grid-cols-[100px_1fr_auto] lg:items-start lg:px-10">
             <Quote className="h-16 w-16 text-[#c9c2b8] lg:h-20 lg:w-20" />
             <div>
-              <MicroLabel>07 / Cerita klien</MicroLabel>
+              <MicroLabel>06 / Cerita klien</MicroLabel>
               <blockquote className="mt-4 max-w-3xl text-xl leading-[1.5] text-[#263b58] sm:text-2xl">“{quote?.quote || "Koordinasi yang baik membuat pekerjaan lapangan jauh lebih tenang karena keputusan penting sudah dibahas sebelum menjadi masalah."}”</blockquote>
               <p className="mt-5 font-mono text-[8px] uppercase tracking-[.15em] text-[#dcb458]">— {quote?.name || "Project Client"}{quote?.role ? ` / ${quote.role}` : ""}</p>
             </div>
@@ -421,8 +334,8 @@ export function FormworkHome({ data }: { data: SiteData }) {
         <section className="relative py-14 sm:py-16">
           <div className="mx-auto grid w-full max-w-[1480px] gap-7 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10">
             <div>
-              <MicroLabel>08 / Mulai proyek Anda</MicroLabel>
-              <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(3.2rem,5.2vw,5.6rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Wujudkan proyek Anda bersama Lunar Konstruksi.</h2>
+              <MicroLabel>07 / Mulai proyek Anda</MicroLabel>
+              <h2 className={`${displayFont} mt-4 max-w-[760px] text-[clamp(2.55rem,4.1vw,4.35rem)] font-black uppercase leading-[.88] tracking-[-.04em]`}>Wujudkan proyek Anda bersama Lunar Konstruksi.</h2>
               <p className="mt-4 max-w-xl text-sm leading-7 text-[#657184]">Mulai dari kebutuhan, kondisi lapangan, dan keputusan yang benar-benar perlu diselesaikan terlebih dahulu.</p>
             </div>
             <Link href="/contact" className="inline-flex items-center gap-4 border-b border-[#dcb458] pb-2 font-mono text-[9px] font-semibold uppercase tracking-[.12em]">Konsultasikan proyek <ArrowRight className="h-4 w-4 text-[#dcb458]" /></Link>

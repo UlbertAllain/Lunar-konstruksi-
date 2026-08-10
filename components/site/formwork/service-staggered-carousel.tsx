@@ -91,13 +91,13 @@ export function ServiceStaggeredCarousel({ services }: { services: unknown[] }) 
   }
 
   return (
-    <section className="relative border-b border-[#d8d1c6] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28">
+    <section className="relative border-b border-[#d8d1c6] px-5 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-20">
       <div className="mx-auto w-full max-w-[1480px]">
         <header className="mx-auto max-w-[820px] text-center">
           <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#657184]">
             02 / Layanan
           </p>
-          <h2 className="mt-6 text-[clamp(3.2rem,5.8vw,6.3rem)] font-black uppercase leading-[0.88] tracking-[-0.055em] text-[#14243f]">
+          <h2 className="mt-6 text-[clamp(2.55rem,4.5vw,4.65rem)] font-black uppercase leading-[0.88] tracking-[-0.055em] text-[#14243f]">
             Layanan untuk setiap tahap pekerjaan.
           </h2>
           <p className="mx-auto mt-6 max-w-[660px] text-[15px] leading-8 text-[#5f6976]">
@@ -106,7 +106,7 @@ export function ServiceStaggeredCarousel({ services }: { services: unknown[] }) 
           </p>
         </header>
 
-        <div className="mt-10 flex items-center justify-between gap-5 border-t border-[#ddd5c8] pt-5">
+        <div className="mt-7 flex items-center justify-between gap-5 border-t border-[#ddd5c8] pt-5">
           <p className="font-mono text-[9px] uppercase tracking-[0.17em] text-[#758094]">
             Jelajahi layanan
           </p>
@@ -133,7 +133,7 @@ export function ServiceStaggeredCarousel({ services }: { services: unknown[] }) 
         {items.length > 0 ? (
           <div
             ref={railRef}
-            className="mt-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-20 pt-20 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-6 lg:gap-7"
+            className="mt-1 flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-12 pt-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-6 lg:gap-7"
           >
             {items.map((service, index) => {
               const isUpper = index % 2 === 0;
@@ -142,17 +142,17 @@ export function ServiceStaggeredCarousel({ services }: { services: unknown[] }) 
               return (
                 <article
                   key={service.id}
-                  className={`group relative min-h-[465px] w-[80vw] shrink-0 snap-start overflow-hidden border border-[#d7cfc2] bg-[#f8f4ec] shadow-[0_16px_34px_rgba(20,36,63,0.08)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_22px_46px_rgba(20,36,63,0.13)] sm:w-[390px] lg:w-[405px] ${
-                    isUpper ? "-translate-y-8" : "translate-y-8"
+                  className={`group relative min-h-[440px] w-[80vw] shrink-0 snap-start overflow-hidden border border-[#d7cfc2] bg-[#f8f4ec] shadow-[0_16px_34px_rgba(20,36,63,0.08)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_22px_46px_rgba(20,36,63,0.13)] sm:w-[390px] lg:w-[405px] ${
+                    isUpper ? "-translate-y-4" : "translate-y-4"
                   }`}
                   style={{ borderRadius: cardShapes[index % cardShapes.length] }}
                 >
                   <Link
                     href={service.slug ? `/services/${service.slug}` : "/services"}
-                    className="flex h-full min-h-[465px] flex-col"
+                    className="flex h-full min-h-[440px] flex-col"
                   >
                     <div
-                      className="relative h-[255px] overflow-hidden bg-[#e8e2d8] bg-cover bg-center transition duration-700 group-hover:scale-[1.025]"
+                      className="relative h-[235px] overflow-hidden bg-[#e8e2d8] bg-cover bg-center transition duration-700 group-hover:scale-[1.025]"
                       style={
                         service.image
                           ? {
@@ -175,7 +175,7 @@ export function ServiceStaggeredCarousel({ services }: { services: unknown[] }) 
 
                     <div className="flex flex-1 flex-col justify-between gap-6 p-5 sm:p-6">
                       <div>
-                        <h3 className="max-w-[15ch] text-[2rem] font-bold uppercase leading-[0.94] tracking-[-0.045em] text-[#14243f]">
+                        <h3 className="max-w-[15ch] text-[1.75rem] font-bold uppercase leading-[0.94] tracking-[-0.045em] text-[#14243f]">
                           {service.title}
                         </h3>
                         <p className="mt-4 line-clamp-3 text-[13px] leading-7 text-[#5f6976]">

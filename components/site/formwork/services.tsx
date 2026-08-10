@@ -22,7 +22,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
             <div>
               <MicroLabel>S-01 / Capabilities / scope of work</MicroLabel>
               <h1
-                className={`${displayFont} mt-8 text-[clamp(3.7rem,7vw,7.6rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}
+                className={`${displayFont} mt-8 text-[clamp(3rem,5.1vw,5.25rem)] font-black uppercase leading-[.84] tracking-[-.055em]`}
               >
                 Layanan harus saling terhubung.
               </h1>
@@ -116,7 +116,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
               <div>
                 <MicroLabel>Work sequence</MicroLabel>
                 <h2
-                  className={`${displayFont} mt-5 text-5xl font-black uppercase leading-[.9] sm:text-7xl`}
+                  className={`${displayFont} mt-5 text-4xl font-black uppercase leading-[.92] sm:text-5xl lg:text-6xl`}
                 >
                   Dari brief ke handover.
                 </h2>
@@ -151,7 +151,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
               <div>
                 <MicroLabel>FAQ / pre-project</MicroLabel>
                 <h2
-                  className={`${displayFont} mt-5 text-5xl font-black uppercase leading-[.9]`}
+                  className={`${displayFont} mt-5 text-4xl font-black uppercase leading-[.92] sm:text-5xl`}
                 >
                   Hal yang sering dibahas di awal.
                 </h2>
@@ -185,7 +185,7 @@ export function FormworkServices({ data }: { data: SiteData }) {
         <section className="border-t border-[#d9d4ca] py-20">
           <div className="mx-auto flex w-full max-w-[1480px] flex-col gap-7 px-5 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:px-10">
             <h2
-              className={`${displayFont} max-w-3xl text-6xl font-black uppercase leading-[.86] sm:text-8xl`}
+              className={`${displayFont} max-w-3xl text-4xl font-black uppercase leading-[.91] sm:text-5xl lg:text-6xl`}
             >
               Susun ruang lingkup yang benar sejak awal.
             </h2>
