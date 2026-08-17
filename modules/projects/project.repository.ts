@@ -26,23 +26,11 @@ export async function getProjects() {
   return sortProjects(await listDocuments<Project>(COLLECTION));
 }
 
-export async function getPublishedProjects() {
-  return sortProjects(
-    (await listDocuments<Project>(COLLECTION)).filter(
-      (item) => item.isPublished,
-    ),
-  );
-}
 
 export function getProjectById(id: string) {
   return getDocumentById<Project>(COLLECTION, id);
 }
 
-export async function getProjectBySlug(slug: string) {
-  return (await listDocuments<Project>(COLLECTION)).find(
-    (item) => item.slug === slug && item.isPublished,
-  ) ?? null;
-}
 
 export function updateProject(id: string, data: Partial<Project>) {
   return updateDocument<Project>(COLLECTION, id, data);

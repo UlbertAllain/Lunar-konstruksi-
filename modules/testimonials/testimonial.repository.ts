@@ -23,13 +23,6 @@ export async function getTestimonials() {
   return sortTestimonials(await listDocuments<Testimonial>(COLLECTION));
 }
 
-export async function getPublishedTestimonials() {
-  return sortTestimonials(
-    (await listDocuments<Testimonial>(COLLECTION)).filter(
-      (item) => item.isPublished,
-    ),
-  );
-}
 
 export function getTestimonialById(id: string) {
   return getDocumentById<Testimonial>(COLLECTION, id);

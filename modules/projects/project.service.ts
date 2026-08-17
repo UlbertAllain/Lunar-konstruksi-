@@ -8,15 +8,19 @@ import {
 import { deleteImagesSafely } from "@/modules/media/upload.service";
 import { createUniqueSlug } from "@/shared/unique-slug";
 import { projectSchema } from "@/modules/projects/project.schema";
+import { invalidatePublicResource } from "@/modules/public-site/public-cache";
 
 export async function createProjectData(payload: unknown) {
   const data = projectSchema.parse(payload);
   const projects = await getProjects();
 
-  return createProject({
+  const created = await createProject({
     ...data,
     slug: createUniqueSlug(data.title, projects.map((item) => item.slug)),
   });
+
+  invalidatePublicResource("projects");
+  return created;
 }
 
 export function listProjects() {
@@ -55,6 +59,7 @@ export async function updateProjectData(id: string, payload: unknown) {
   ];
 
   await deleteImagesSafely(previousIds.filter((idValue) => !retainedIds.has(idValue)));
+  invalidatePublicResource("projects");
   return updated;
 }
 
@@ -68,6 +73,7 @@ export async function removeProject(id: string) {
       previous.coverImage.publicId,
       ...previous.gallery.map((image) => image.publicId),
     ]);
+    invalidatePublicResource("projects");
   }
   return deleted;
 }

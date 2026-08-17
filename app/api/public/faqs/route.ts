@@ -1,11 +1,11 @@
 import { routeError, success } from "@/lib/route-response";
-import { getPublishedFAQs } from "@/modules/faqs/faq.repository";
+import { getPublicFaqs } from "@/modules/public-site/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    return success(await getPublishedFAQs());
+    return success(await getPublicFaqs());
   } catch (error) {
     return routeError(error, "Gagal memuat FAQ.");
   }

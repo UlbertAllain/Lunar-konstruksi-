@@ -21,11 +21,6 @@ export async function getTeamMembers() {
   return sortTeam(await listDocuments<TeamMember>(COLLECTION));
 }
 
-export async function getActiveTeamMembers() {
-  return sortTeam(
-    (await listDocuments<TeamMember>(COLLECTION)).filter((item) => item.isActive),
-  );
-}
 
 export function getTeamMemberById(id: string) {
   return getDocumentById<TeamMember>(COLLECTION, id);

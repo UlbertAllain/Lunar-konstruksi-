@@ -5,6 +5,7 @@ import {
 } from "./site-content.repository";
 import { siteContentSchema } from "./site-content.schema";
 import type { SiteContentSettings } from "./site-content.types";
+import { invalidatePublicSiteContent } from "@/modules/public-site/public-cache";
 
 function imageIds(
   content: SiteContentSettings,
@@ -145,5 +146,6 @@ export async function updateSiteContentSettings(
     ),
   );
 
+  invalidatePublicSiteContent();
   return saved;
 }

@@ -1,6 +1,6 @@
 # Lunar Konstruksi
 
-Company profile konstruksi berbasis Next.js dengan admin CRUD klasik untuk mengelola konten bisnis. Full CMS/page builder sudah dipensiunkan agar struktur aplikasi lebih sederhana dan mudah dirawat.
+Company profile konstruksi berbasis Next.js dengan admin CRUD untuk mengelola konten publik. Struktur aplikasi memisahkan routing, presentational UI, business logic, repository, dan public read-model agar perubahan data admin dapat dipublikasikan tanpa menggandakan source of truth.
 
 ## Stack
 
@@ -11,42 +11,32 @@ Company profile konstruksi berbasis Next.js dengan admin CRUD klasik untuk menge
 - Cloudinary untuk media
 - Zod untuk validasi payload
 
-## Admin
-
-Admin menggunakan pola CRUD yang jelas:
-
-- Dashboard
-- Services
-- Projects
-- Team
-- Testimonials
-- FAQ
-
-Tidak ada Pages/Sections builder, CMS Workspace, atau editor layout dinamis.
-
 ## Struktur
 
 ```text
 app/                    # routing, pages, API routes
-components/             # UI admin dan website publik
+components/
+  admin/                # komponen UI admin
+  site/                 # komponen UI website publik
 lib/                    # infrastructure: Firebase, Cloudinary, HTTP helpers
-modules/                # business/domain backend
-  _shared/              # primitives lintas domain
+modules/                # domain/business logic + repository
+  _shared/
   admin/
   faqs/
   leads/
   media/
   projects/
-  public-site/          # read-model website publik; bukan CMS
+  public-site/          # public read-model + cache invalidation
   services/
+  site-content/
   team/
   testimonials/
-shared/                 # helper aplikasi lintas domain
-scripts/                # maintenance/bootstrap scripts
+shared/                 # helper lintas domain yang masih digunakan
+scripts/                # bootstrap/maintenance scripts
 public/                 # static assets
 ```
 
-Setiap domain menyimpan type, schema, repository, dan service di folder yang sama. Contoh:
+Setiap domain CRUD menyimpan type, schema, repository, dan service berdekatan. Contoh:
 
 ```text
 modules/projects/
@@ -54,26 +44,50 @@ modules/projects/
   project.schema.ts
   project.repository.ts
   project.service.ts
-  index.ts
-  server.ts
 ```
 
-## Data publik
+## Alur data
 
-Website publik membaca koleksi Services, Projects, Team, Testimonials, dan FAQ langsung melalui read-model server `modules/public-site`.
-
-Data `siteSettings/general` dan `navigation/main` yang sudah pernah tersimpan tetap dibaca sebagai konfigurasi tampilan global, tetapi tidak ada lagi UI Full CMS untuk mengubah layout/section halaman.
-
-## Alur backend
+### Mutation dari admin
 
 ```text
-Admin API Route
-  -> requireAdmin
+Admin UI
+  -> API Route
+  -> authentication/authorization
   -> domain service
-  -> Zod schema
-  -> domain repository
-  -> Firestore / Cloudinary
+  -> Zod validation
+  -> repository
+  -> Firestore
+  -> invalidate public cache
 ```
+
+### Read pada website publik
+
+```text
+Public Page
+  -> modules/public-site/public-site.service.ts
+  -> cached public read-model
+  -> modules/public-site/public-content.repository.ts
+  -> Firestore
+```
+
+Cache publik menggunakan tag per resource. Setelah create, update, publish/unpublish, atau delete dari admin, service domain memanggil invalidasi resource terkait sehingga halaman publik tidak harus menunggu TTL cache untuk melihat perubahan.
+
+## Aturan publikasi
+
+- `isPublished` menentukan apakah record boleh muncul di website publik.
+- `isFeatured` untuk Services dan Projects menentukan prioritas item di homepage.
+- Tampilan, class, layout, dan styling website tetap berada di `components/site`; business logic tidak ditempatkan di komponen presentasional.
+
+## Admin bootstrap
+
+Buat `.env.local` berdasarkan `.env.example`, lalu jalankan:
+
+```bash
+npm run create-admin
+```
+
+Script akan membuat user Firebase Auth jika belum ada lalu melakukan upsert dokumen admin berdasarkan environment variables `ADMIN_*`.
 
 ## Validasi
 

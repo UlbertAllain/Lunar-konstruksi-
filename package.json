@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ignore-pattern .lunar-backups/** --ignore-pattern components/site/redesign/**",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "create-admin": "node --env-file=.env.local scripts/create-admin.mjs"
   },

@@ -7,9 +7,12 @@ import {
 } from "@/modules/testimonials/testimonial.repository";
 import { deleteImagesSafely } from "@/modules/media/upload.service";
 import { testimonialSchema } from "@/modules/testimonials/testimonial.schema";
+import { invalidatePublicResource } from "@/modules/public-site/public-cache";
 
 export async function createTestimonialData(payload: unknown) {
-  return createTestimonial(testimonialSchema.parse(payload));
+  const created = await createTestimonial(testimonialSchema.parse(payload));
+  invalidatePublicResource("testimonials");
+  return created;
 }
 
 export function listTestimonials() {
@@ -33,6 +36,7 @@ export async function updateTestimonialData(id: string, payload: unknown) {
     await deleteImagesSafely([previous.photo.publicId]);
   }
 
+  invalidatePublicResource("testimonials");
   return updated;
 }
 
@@ -41,6 +45,9 @@ export async function removeTestimonial(id: string) {
   if (!previous) return false;
 
   const deleted = await deleteTestimonial(id);
-  if (deleted) await deleteImagesSafely([previous.photo?.publicId]);
+  if (deleted) {
+    await deleteImagesSafely([previous.photo?.publicId]);
+    invalidatePublicResource("testimonials");
+  }
   return deleted;
 }

@@ -34,15 +34,20 @@ export function FormworkHome({ data }: { data: SiteData }) {
   const partners = [...data.siteContent.partners]
     .filter((partner) => partner.isPublished)
     .sort((a, b) => a.order - b.order);
-  const services = data.services.map(serviceModel);
+  const services = data.services
+    .map(serviceModel)
+    .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
   const faqs = data.faqs.map(faqModel);
   const testimonials = data.testimonials.map(testimonialModel).filter((item) => item.quote);
 
   const quote = testimonials[0];
   const processPrimary = LOCAL_MEDIA.processPlanning;
 
-  const featuredProject = projects[0];
-  const secondaryProjects = projects.slice(1, 3);
+  const homepageProjects = [...projects].sort(
+    (a, b) => Number(b.isFeatured) - Number(a.isFeatured),
+  );
+  const featuredProject = homepageProjects[0];
+  const secondaryProjects = homepageProjects.slice(1, 3);
 
   return (
     <div className="lunar-public-page overflow-hidden bg-[#f5f1e8] text-[#182d4d] [font-family:'Aptos','Segoe_UI_Variable_Text','Segoe_UI',Arial,sans-serif]">
@@ -376,17 +381,19 @@ export function FormworkHome({ data }: { data: SiteData }) {
         ) : null}
 
         {/* TESTIMONIAL — field memo compact */}
-        <section className="relative border-b border-[#d9d4ca] py-14 sm:py-16">
-          <div className="mx-auto grid w-full max-w-[1120px] gap-6 px-5 sm:px-8 lg:grid-cols-[100px_1fr_auto] lg:items-start lg:px-10">
-            <Quote className="h-16 w-16 text-[#c9c2b8] lg:h-20 lg:w-20" />
-            <div>
-              <MicroLabel>07 / Cerita klien</MicroLabel>
-              <blockquote className="mt-4 max-w-3xl text-xl leading-[1.5] text-[#263b58] sm:text-2xl">“{quote?.quote || "Koordinasi yang baik membuat pekerjaan lapangan jauh lebih tenang karena keputusan penting sudah dibahas sebelum menjadi masalah."}”</blockquote>
-              <p className="mt-5 font-mono text-[8px] uppercase tracking-[.15em] text-[#dcb458]">— {quote?.name || "Project Client"}{quote?.role ? ` / ${quote.role}` : ""}</p>
+        {quote ? (
+          <section className="relative border-b border-[#d9d4ca] py-14 sm:py-16">
+            <div className="mx-auto grid w-full max-w-[1120px] gap-6 px-5 sm:px-8 lg:grid-cols-[100px_1fr_auto] lg:items-start lg:px-10">
+              <Quote className="h-16 w-16 text-[#c9c2b8] lg:h-20 lg:w-20" />
+              <div>
+                <MicroLabel>07 / Cerita klien</MicroLabel>
+                <blockquote className="mt-4 max-w-3xl text-xl leading-[1.5] text-[#263b58] sm:text-2xl">“{quote.quote}”</blockquote>
+                <p className="mt-5 font-mono text-[8px] uppercase tracking-[.15em] text-[#dcb458]">— {quote.name}{quote.role ? ` / ${quote.role}` : ""}</p>
+              </div>
+              <div className="hidden border-l border-[#cfcac1] pl-5 font-mono text-[8px] uppercase leading-6 tracking-[.14em] text-[#848d99] lg:block"><span className="block">Record / TM-01</span><span className="block">Status / Filed</span><span className="block">Source / Client</span></div>
             </div>
-            <div className="hidden border-l border-[#cfcac1] pl-5 font-mono text-[8px] uppercase leading-6 tracking-[.14em] text-[#848d99] lg:block"><span className="block">Record / TM-01</span><span className="block">Status / Filed</span><span className="block">Source / Client</span></div>
-          </div>
-        </section>
+          </section>
+        ) : null}
 
         {/* CTA — lebih pendek, hierarchy jelas */}
         <section className="relative py-14 sm:py-16">

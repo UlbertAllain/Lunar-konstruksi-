@@ -1,29 +1,29 @@
-import type { SiteContentSettings } from "@/modules/site-content/site-content.types";
+import type { PublicOverviewData } from "@/modules/public-site/public-site.types";
 
-export type SiteData = {
-  services: unknown[];
-  projects: unknown[];
-  team: unknown[];
-  testimonials: unknown[];
-  faqs: unknown[];
-  siteContent: SiteContentSettings;
-};
+export type SiteData = PublicOverviewData;
 
 export type UnknownRecord = Record<string, unknown>;
 
 export function asRecord(value: unknown): UnknownRecord {
-  return typeof value === "object" && value !== null ? (value as UnknownRecord) : {};
+  return typeof value === "object" && value !== null
+    ? (value as UnknownRecord)
+    : {};
 }
 
 export function readString(value: unknown, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+export function readBoolean(value: unknown, fallback = false) {
+  return typeof value === "boolean" ? value : fallback;
+}
+
 export function textFrom(record: UnknownRecord, keys: string[], fallback = "") {
   for (const key of keys) {
     const value = record[key];
     if (typeof value === "string" && value.trim()) return value.trim();
-    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (typeof value === "number" && Number.isFinite(value))
+      return String(value);
   }
   return fallback;
 }
@@ -98,7 +98,12 @@ function mediaUrl(value: unknown, depth = 0): string {
     if (result) return result;
   }
   for (const [key, nested] of Object.entries(record)) {
-    if (!/(image|photo|media|cover|asset|gallery|thumb|avatar|banner|logo)/i.test(key)) continue;
+    if (
+      !/(image|photo|media|cover|asset|gallery|thumb|avatar|banner|logo)/i.test(
+        key,
+      )
+    )
+      continue;
     const result = mediaUrl(nested, depth + 1);
     if (result) return result;
   }
@@ -114,12 +119,25 @@ export function projectModel(value: unknown, index = 0) {
   return {
     id: textFrom(record, ["id", "slug"], `project-${index}`),
     slug: textFrom(record, ["slug"], ""),
-    title: textFrom(record, ["title", "name"], `Project ${String(index + 1).padStart(2, "0")}`),
+    title: textFrom(
+      record,
+      ["title", "name"],
+      `Project ${String(index + 1).padStart(2, "0")}`,
+    ),
     location: textFrom(record, ["location", "city"], "Indonesia"),
     year: textFrom(record, ["year"], ""),
-    category: textFrom(record, ["category", "type", "projectType"], "Construction"),
-    description: textFrom(record, ["shortDescription", "description", "summary"], ""),
+    category: textFrom(
+      record,
+      ["category", "type", "projectType"],
+      "Construction",
+    ),
+    description: textFrom(
+      record,
+      ["shortDescription", "description", "summary"],
+      "",
+    ),
     image: imageFrom(record),
+    isFeatured: readBoolean(record.isFeatured),
   };
 }
 
@@ -128,32 +146,38 @@ export function serviceModel(value: unknown, index = 0) {
   return {
     id: textFrom(record, ["id", "slug"], `service-${index}`),
     slug: textFrom(record, ["slug"], ""),
-    name: textFrom(record, ["name", "title"], `Service ${String(index + 1).padStart(2, "0")}`),
-    shortDescription: textFrom(record, ["shortDescription", "description", "summary"], ""),
+    name: textFrom(
+      record,
+      ["name", "title"],
+      `Service ${String(index + 1).padStart(2, "0")}`,
+    ),
+    shortDescription: textFrom(
+      record,
+      ["shortDescription", "description", "summary"],
+      "",
+    ),
     image: imageFrom(record),
     features: stringArray(record, ["features", "items", "scope"]),
-  };
-}
-
-export function teamModel(value: unknown, index = 0) {
-  const record = asRecord(value);
-  return {
-    id: textFrom(record, ["id", "name"], `team-${index}`),
-    name: textFrom(record, ["name", "title"], `Team ${String(index + 1).padStart(2, "0")}`),
-    position: textFrom(record, ["position", "role"], "Project Team"),
-    description: textFrom(record, ["description", "bio"], ""),
-    skills: stringArray(record, ["skills", "expertise"]),
-    image: imageFrom(record),
+    isFeatured: readBoolean(record.isFeatured),
   };
 }
 
 export function testimonialModel(value: unknown, index = 0) {
   const record = asRecord(value);
+
   return {
     id: textFrom(record, ["id", "name"], `testimonial-${index}`),
     name: textFrom(record, ["name", "clientName", "authorName"], "Client"),
-    role: textFrom(record, ["position", "role", "company", "clientCompany"], "Client"),
-    quote: textFrom(record, ["quote", "content", "message", "testimonial", "description"], ""),
+    role: textFrom(
+      record,
+      ["position", "role", "company", "clientCompany"],
+      "Client",
+    ),
+    quote: textFrom(
+      record,
+      ["quote", "content", "message", "testimonial", "description"],
+      "",
+    ),
     image: imageFrom(record),
   };
 }
@@ -162,7 +186,11 @@ export function faqModel(value: unknown, index = 0) {
   const record = asRecord(value);
   return {
     id: textFrom(record, ["id"], `faq-${index}`),
-    question: textFrom(record, ["question", "title"], `Pertanyaan ${index + 1}`),
+    question: textFrom(
+      record,
+      ["question", "title"],
+      `Pertanyaan ${index + 1}`,
+    ),
     answer: textFrom(record, ["answer", "description", "content"], ""),
   };
 }

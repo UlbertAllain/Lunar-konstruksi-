@@ -6,9 +6,12 @@ import {
   updateFAQ,
 } from "@/modules/faqs/faq.repository";
 import { faqSchema } from "@/modules/faqs/faq.schema";
+import { invalidatePublicResource } from "@/modules/public-site/public-cache";
 
 export async function createFAQData(payload: unknown) {
-  return createFAQ(faqSchema.parse(payload));
+  const created = await createFAQ(faqSchema.parse(payload));
+  invalidatePublicResource("faqs");
+  return created;
 }
 
 export function listFAQs() {
@@ -21,9 +24,13 @@ export function detailFAQ(id: string) {
 
 export async function updateFAQData(id: string, payload: unknown) {
   if (!(await getFAQById(id))) return null;
-  return updateFAQ(id, faqSchema.partial().parse(payload));
+  const updated = await updateFAQ(id, faqSchema.partial().parse(payload));
+  invalidatePublicResource("faqs");
+  return updated;
 }
 
 export async function removeFAQ(id: string) {
-  return deleteFAQ(id);
+  const deleted = await deleteFAQ(id);
+  if (deleted) invalidatePublicResource("faqs");
+  return deleted;
 }

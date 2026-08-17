@@ -8,15 +8,19 @@ import {
 import { deleteImagesSafely } from "@/modules/media/upload.service";
 import { createUniqueSlug } from "@/shared/unique-slug";
 import { serviceSchema } from "@/modules/services/service.schema";
+import { invalidatePublicResource } from "@/modules/public-site/public-cache";
 
 export async function createServiceData(payload: unknown) {
   const data = serviceSchema.parse(payload);
   const services = await getServices();
 
-  return createService({
+  const created = await createService({
     ...data,
     slug: createUniqueSlug(data.name, services.map((item) => item.slug)),
   });
+
+  invalidatePublicResource("services");
+  return created;
 }
 
 export function listServices() {
@@ -53,6 +57,7 @@ export async function updateServiceData(id: string, payload: unknown) {
     await deleteImagesSafely([previous.coverImage.publicId]);
   }
 
+  invalidatePublicResource("services");
   return updated;
 }
 
@@ -61,6 +66,9 @@ export async function removeService(id: string) {
   if (!previous) return false;
 
   const deleted = await deleteService(id);
-  if (deleted) await deleteImagesSafely([previous.coverImage.publicId]);
+  if (deleted) {
+    await deleteImagesSafely([previous.coverImage.publicId]);
+    invalidatePublicResource("services");
+  }
   return deleted;
 }

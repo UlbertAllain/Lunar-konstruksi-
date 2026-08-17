@@ -21,11 +21,6 @@ export async function getFAQs() {
   return sortFAQs(await listDocuments<FAQ>(COLLECTION));
 }
 
-export async function getPublishedFAQs() {
-  return sortFAQs(
-    (await listDocuments<FAQ>(COLLECTION)).filter((item) => item.isPublished),
-  );
-}
 
 export function getFAQById(id: string) {
   return getDocumentById<FAQ>(COLLECTION, id);
