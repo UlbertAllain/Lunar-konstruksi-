@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
 
   serverExternalPackages: ["firebase-admin"],
 
+  async redirects() {
+    return [
+      {
+        source: "/services/kontruksi",
+        destination: "/services/konstruksi",
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     qualities: [75, 85, 90, 95],
     remotePatterns: [

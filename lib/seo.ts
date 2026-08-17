@@ -4,37 +4,23 @@ import type { ConstructionService } from "@/modules/services/service.types";
 import type { Project } from "@/modules/projects/project.types";
 import type { SiteContentSettings } from "@/modules/site-content/site-content.types";
 
-const FALLBACK_SITE_URL =
-  "https://lunar-konstruksi.vercel.app";
+const FALLBACK_SITE_URL = "https://lunar-konstruksi.vercel.app";
 
-function normalizeSiteUrl(
-  value: string | undefined,
-) {
-  const raw =
-    value?.trim() ||
-    FALLBACK_SITE_URL;
+function normalizeSiteUrl(value: string | undefined) {
+  const raw = value?.trim() || FALLBACK_SITE_URL;
 
-  const withProtocol =
-    /^https?:\/\//i.test(raw)
-      ? raw
-      : `https://${raw}`;
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
 
   try {
-    return new URL(
-      withProtocol,
-    ).origin;
+    return new URL(withProtocol).origin;
   } catch {
     return FALLBACK_SITE_URL;
   }
 }
 
-export const SITE_URL =
-  normalizeSiteUrl(
-    process.env.NEXT_PUBLIC_SITE_URL,
-  );
+export const SITE_URL = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
-export const SITE_NAME =
-  "Lunar Konstruksi";
+export const SITE_NAME = "Lunar Konstruksi";
 
 export const DEFAULT_SEO_TITLE =
   "Lunar Konstruksi | Jasa Konstruksi & Kontraktor Solo";
@@ -52,51 +38,34 @@ export const SOLO_AREA_SERVED = [
   "Wonogiri",
 ];
 
-export function absoluteUrl(
-  path = "/",
-) {
-  if (
-    /^https?:\/\//i.test(path)
-  ) {
+export function absoluteUrl(path = "/") {
+  if (/^https?:\/\//i.test(path)) {
     return path;
   }
 
-  const normalizedPath =
-    path.startsWith("/")
-      ? path
-      : `/${path}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
   return `${SITE_URL}${normalizedPath}`;
 }
 
-function cleanText(
-  value: string,
-) {
-  return value
-    .replace(/\s+/g, " ")
-    .trim();
+function cleanText(value: string) {
+  return value.replace(/\s+/g, " ").trim();
 }
 
 export function seoDescription(
   value: string,
-  fallback =
-    DEFAULT_SEO_DESCRIPTION,
+  fallback = DEFAULT_SEO_DESCRIPTION,
 ) {
-  const clean =
-    cleanText(value || fallback);
+  const clean = cleanText(value || fallback);
 
   if (clean.length <= 158) {
     return clean;
   }
 
-  return `${clean
-    .slice(0, 155)
-    .trimEnd()}...`;
+  return `${clean.slice(0, 155).trimEnd()}...`;
 }
 
-function imageList(
-  image?: string,
-) {
+function imageList(image?: string) {
   if (!image) {
     return undefined;
   }
@@ -119,16 +88,13 @@ export function buildPageMetadata({
   path: string;
   image?: string;
 }): Metadata {
-  const canonical =
-    absoluteUrl(path);
+  const canonical = absoluteUrl(path);
 
-  const cleanDescription =
-    seoDescription(description);
+  const cleanDescription = seoDescription(description);
 
   return {
     title,
-    description:
-      cleanDescription,
+    description: cleanDescription,
     alternates: {
       canonical,
     },
@@ -138,11 +104,9 @@ export function buildPageMetadata({
       googleBot: {
         index: true,
         follow: true,
-        "max-image-preview":
-          "large",
+        "max-image-preview": "large",
         "max-snippet": -1,
-        "max-video-preview":
-          -1,
+        "max-video-preview": -1,
       },
     },
     openGraph: {
@@ -151,249 +115,157 @@ export function buildPageMetadata({
       url: canonical,
       siteName: SITE_NAME,
       title,
-      description:
-        cleanDescription,
+      description: cleanDescription,
       images: imageList(image),
     },
     twitter: {
-      card:
-        "summary_large_image",
+      card: "summary_large_image",
       title,
-      description:
-        cleanDescription,
-      images: image
-        ? [absoluteUrl(image)]
-        : undefined,
+      description: cleanDescription,
+      images: image ? [absoluteUrl(image)] : undefined,
     },
   };
 }
 
-export function buildServiceMetadata(
-  service: ConstructionService,
-): Metadata {
-  const path =
-    `/services/${service.slug}`;
+export function buildServiceMetadata(service: ConstructionService): Metadata {
+  const path = `/services/${service.slug}`;
 
-  const title =
-    `${service.name} di Solo Raya`;
+  const title = `${service.name} Solo dan Solo Raya`;
 
-  const description =
-    seoDescription(
-      `${service.shortDescription} Layanan ${service.name.toLowerCase()} dari Lunar Konstruksi untuk kebutuhan proyek di Solo Raya dan sekitarnya.`,
-    );
+  const description = seoDescription(
+    `${service.shortDescription} Layanan ${service.name.toLowerCase()} dari Lunar Konstruksi untuk kebutuhan proyek di Solo Raya dan sekitarnya.`,
+  );
 
   return buildPageMetadata({
     title,
     description,
     path,
-    image:
-      service.coverImage?.url,
+    image: service.coverImage?.url,
   });
 }
 
-export function buildProjectMetadata(
-  project: Project,
-): Metadata {
-  const path =
-    `/projects/${project.slug}`;
+export function buildProjectMetadata(project: Project): Metadata {
+  const path = `/projects/${project.slug}`;
 
-  const location =
-    project.location?.trim();
+  const location = project.location?.trim();
 
   const title = location
     ? `${project.title} | Proyek ${location}`
     : `${project.title} | Portofolio Proyek`;
 
-  const description =
-    seoDescription(
-      project.shortDescription ||
-        `Dokumentasi proyek ${project.title} oleh Lunar Konstruksi.`,
-    );
+  const description = seoDescription(
+    project.shortDescription ||
+      `Dokumentasi proyek ${project.title} oleh Lunar Konstruksi.`,
+  );
 
   return buildPageMetadata({
     title,
     description,
     path,
-    image:
-      project.coverImage?.url,
+    image: project.coverImage?.url,
   });
 }
 
-function compactObject(
-  value: Record<
-    string,
-    unknown
-  >,
-) {
+function compactObject(value: Record<string, unknown>) {
   return Object.fromEntries(
     Object.entries(value).filter(
-      ([, entry]) =>
-        entry !== undefined &&
-        entry !== null &&
-        entry !== "",
+      ([, entry]) => entry !== undefined && entry !== null && entry !== "",
     ),
   );
 }
 
-export function buildBusinessJsonLd(
-  content: SiteContentSettings,
-) {
-  const profile =
-    content.companyProfile;
+export function buildBusinessJsonLd(content: SiteContentSettings) {
+  const profile = content.companyProfile;
 
-  const office =
-    content.officeLocation;
+  const office = content.officeLocation;
 
-  const name =
-    profile.companyName?.trim() ||
-    SITE_NAME;
+  const name = profile.companyName?.trim() || SITE_NAME;
 
   const description =
-    profile.shortDescription?.trim() ||
-    DEFAULT_SEO_DESCRIPTION;
+    profile.shortDescription?.trim() || DEFAULT_SEO_DESCRIPTION;
 
-  const sameAs = [
-    profile.instagramUrl,
-    profile.linkedinUrl,
-  ].filter(Boolean);
+  const sameAs = [profile.instagramUrl, profile.linkedinUrl].filter(Boolean);
 
-  const organization =
-    compactObject({
-      "@type": "Organization",
-      "@id":
-        `${SITE_URL}/#organization`,
-      name,
-      url: SITE_URL,
-      logo:
-        absoluteUrl(
-          "/lunar-logo-mark.png",
-        ),
-      description,
-      email: profile.email,
-      telephone:
-        profile.phone,
-      sameAs:
-        sameAs.length
-          ? sameAs
-          : undefined,
-    });
+  const organization = compactObject({
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name,
+    url: SITE_URL,
+    logo: absoluteUrl("/lunar-logo-mark.png"),
+    description,
+    email: profile.email,
+    telephone: profile.phone,
+    sameAs: sameAs.length ? sameAs : undefined,
+  });
 
-  const webSite =
-    compactObject({
-      "@type": "WebSite",
-      "@id":
-        `${SITE_URL}/#website`,
-      url: SITE_URL,
-      name,
-      inLanguage: "id-ID",
-      publisher: {
-        "@id":
-          `${SITE_URL}/#organization`,
-      },
-    });
+  const webSite = compactObject({
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name,
+    inLanguage: "id-ID",
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
+    },
+  });
 
-  const graph: Record<
-    string,
-    unknown
-  >[] = [
-    organization,
-    webSite,
-  ];
+  const graph: Record<string, unknown>[] = [organization, webSite];
 
-  if (
-    office.address?.trim()
-  ) {
+  if (office.address?.trim()) {
     graph.push(
       compactObject({
-        "@type":
-          "HomeAndConstructionBusiness",
-        "@id":
-          `${SITE_URL}/#localbusiness`,
+        "@type": "HomeAndConstructionBusiness",
+        "@id": `${SITE_URL}/#localbusiness`,
         name,
         url: SITE_URL,
-        image:
-          content.homeHero?.url ||
-          absoluteUrl(
-            "/lunar-logo-mark.png",
-          ),
+        image: content.homeHero?.url || absoluteUrl("/lunar-logo-mark.png"),
         description,
         email: profile.email,
-        telephone:
-          profile.phone,
+        telephone: profile.phone,
         address: {
-          "@type":
-            "PostalAddress",
-          streetAddress:
-            office.address,
-          addressCountry:
-            "ID",
+          "@type": "PostalAddress",
+          streetAddress: office.address,
+          addressCountry: "ID",
         },
-        areaServed:
-          SOLO_AREA_SERVED.map(
-            (area) => ({
-              "@type":
-                "AdministrativeArea",
-              name: area,
-            }),
-          ),
-        hasMap:
-          office.googleMapsUrl ||
-          undefined,
-        sameAs:
-          sameAs.length
-            ? sameAs
-            : undefined,
+        areaServed: SOLO_AREA_SERVED.map((area) => ({
+          "@type": "AdministrativeArea",
+          name: area,
+        })),
+        hasMap: office.googleMapsUrl || undefined,
+        sameAs: sameAs.length ? sameAs : undefined,
         parentOrganization: {
-          "@id":
-            `${SITE_URL}/#organization`,
+          "@id": `${SITE_URL}/#organization`,
         },
       }),
     );
   }
 
   return {
-    "@context":
-      "https://schema.org",
+    "@context": "https://schema.org",
     "@graph": graph,
   };
 }
 
-export function buildServiceJsonLd(
-  service: ConstructionService,
-) {
-  const pageUrl =
-    absoluteUrl(
-      `/services/${service.slug}`,
-    );
+export function buildServiceJsonLd(service: ConstructionService) {
+  const pageUrl = absoluteUrl(`/services/${service.slug}`);
 
   return {
-    "@context":
-      "https://schema.org",
+    "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Service",
-        "@id":
-          `${pageUrl}#service`,
+        "@id": `${pageUrl}#service`,
         name: service.name,
-        serviceType:
-          service.name,
-        description:
-          service.shortDescription,
+        serviceType: service.name,
+        description: service.shortDescription,
         url: pageUrl,
-        image:
-          service.coverImage?.url ||
-          undefined,
-        areaServed:
-          SOLO_AREA_SERVED.map(
-            (area) => ({
-              "@type":
-                "AdministrativeArea",
-              name: area,
-            }),
-          ),
+        image: service.coverImage?.url || undefined,
+        areaServed: SOLO_AREA_SERVED.map((area) => ({
+          "@type": "AdministrativeArea",
+          name: area,
+        })),
         provider: {
-          "@id":
-            `${SITE_URL}/#organization`,
+          "@id": `${SITE_URL}/#organization`,
           name: SITE_NAME,
           url: SITE_URL,
         },
@@ -410,8 +282,7 @@ export function buildServiceJsonLd(
           },
           {
             name: service.name,
-            path:
-              `/services/${service.slug}`,
+            path: `/services/${service.slug}`,
           },
         ],
         false,
@@ -420,26 +291,21 @@ export function buildServiceJsonLd(
   };
 }
 
-export function buildProjectJsonLd(
-  project: Project,
-) {
-  return buildBreadcrumbJsonLd(
-    [
-      {
-        name: "Home",
-        path: "/",
-      },
-      {
-        name: "Proyek",
-        path: "/projects",
-      },
-      {
-        name: project.title,
-        path:
-          `/projects/${project.slug}`,
-      },
-    ],
-  );
+export function buildProjectJsonLd(project: Project) {
+  return buildBreadcrumbJsonLd([
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Proyek",
+      path: "/projects",
+    },
+    {
+      name: project.title,
+      path: `/projects/${project.slug}`,
+    },
+  ]);
 }
 
 export function buildBreadcrumbJsonLd(
@@ -450,22 +316,13 @@ export function buildBreadcrumbJsonLd(
   includeContext = true,
 ) {
   const data = {
-    "@type":
-      "BreadcrumbList",
-    itemListElement:
-      items.map(
-        (item, index) => ({
-          "@type":
-            "ListItem",
-          position:
-            index + 1,
-          name: item.name,
-          item:
-            absoluteUrl(
-              item.path,
-            ),
-        }),
-      ),
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
   };
 
   if (!includeContext) {
@@ -473,8 +330,7 @@ export function buildBreadcrumbJsonLd(
   }
 
   return {
-    "@context":
-      "https://schema.org",
+    "@context": "https://schema.org",
     ...data,
   };
 }
