@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import {
   ArrowRight,
   Building2,
@@ -40,7 +41,7 @@ const processSteps = [
 
 const serviceIcons = [House, Building2, Hammer, Layers3, DraftingCompass] as const;
 
-function EditorialLabel({ children }: { children: React.ReactNode }) {
+function EditorialLabel({ children }: { children: ReactNode }) {
   return <span className="e-kicker">{children}</span>;
 }
 
