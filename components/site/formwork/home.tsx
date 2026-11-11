@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
@@ -11,7 +12,8 @@ import {
 
 import { FormworkFooter } from "./footer";
 import { FormworkHeader } from "./header";
-import { LOCAL_MEDIA } from "./local-assets";
+import { EDITORIAL_STATIC_MEDIA } from "./editorial-assets";
+import { EditorialMotion } from "./editorial-motion";
 import { DatabaseImage } from "./media";
 import {
   projectModel,
@@ -71,12 +73,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
     .filter((partner) => partner.isPublished)
     .sort((a, b) => a.order - b.order);
 
-  const heroImage = data.siteContent.homeHero?.url
-    || LOCAL_MEDIA.capabilityBuilding;
 
   return (
     <div className="lunar-public-page lunar-editorial-page">
       <FormworkHeader services={data.services} projects={data.projects} />
+      <EditorialMotion />
 
       <main>
         <section className="e-hero" aria-labelledby="home-heading">
@@ -100,14 +101,27 @@ export function FormworkHome({ data }: { data: SiteData }) {
                   <span>Service region</span>
                 </div>
               </div>
-              <div className="e-hero-photo">
-                <DatabaseImage
-                  src={heroImage}
-                  alt="Lunar Konstruksi architectural and construction work"
-                  className="h-full w-full object-cover"
-                  sizes="(max-width: 600px) 100vw, 95vw"
-                  quality={90}
-                  hero
+              <div className="e-hero-photo" aria-label="Architectural glass residence with a cantilevered volume">
+                <div className="e-hero-base-mask">
+                  <Image
+                    src={EDITORIAL_STATIC_MEDIA.heroBase}
+                    alt="Modern residence with a projecting glass upper floor"
+                    className="e-hero-base"
+                    width={1292}
+                    height={384}
+                    priority
+                    sizes="(max-width: 700px) 95vw, 93vw"
+                  />
+                </div>
+                <Image
+                  src={EDITORIAL_STATIC_MEDIA.heroProtrusion}
+                  alt=""
+                  aria-hidden="true"
+                  className="e-hero-protrusion"
+                  width={1292}
+                  height={100}
+                  priority
+                  sizes="(max-width: 700px) 95vw, 93vw"
                 />
               </div>
             </div>
@@ -127,12 +141,12 @@ export function FormworkHome({ data }: { data: SiteData }) {
                 <span>
                   The thinking
                   <span className="e-about-thumb" aria-hidden="true">
-                    <DatabaseImage src={LOCAL_MEDIA.capabilityStructure} alt="" className="h-full w-full object-cover" sizes="150px" />
+                    <Image src={EDITORIAL_STATIC_MEDIA.aboutDetailOne} alt="" fill sizes="150px" className="object-cover" />
                   </span>
                 </span>
                 <span>
                   <span className="e-about-thumb e-about-thumb--second" aria-hidden="true">
-                    <DatabaseImage src={LOCAL_MEDIA.capabilityDetail} alt="" className="h-full w-full object-cover" sizes="150px" />
+                    <Image src={EDITORIAL_STATIC_MEDIA.aboutDetailTwo} alt="" fill sizes="150px" className="object-cover" />
                   </span>
                   behind
                 </span>
@@ -154,10 +168,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
               </div>
             </div>
             <div className="e-about-photo">
-              <DatabaseImage
-                src={LOCAL_MEDIA.capabilityStructure}
-                alt="Architectural details in concrete and timber"
+              <Image
+                src={EDITORIAL_STATIC_MEDIA.aboutBanner}
+                alt="Concrete, timber and foliage details from the approved architectural composition"
                 className="h-full w-full object-cover"
+                fill
                 sizes="95vw"
               />
             </div>
@@ -254,10 +269,11 @@ export function FormworkHome({ data }: { data: SiteData }) {
                   <span>we work.</span>
                 </h2>
                 <div className="e-process-photo">
-                  <DatabaseImage
-                    src={LOCAL_MEDIA.processPlanning}
-                    alt="Architectural construction detail"
+                  <Image
+                    src={EDITORIAL_STATIC_MEDIA.process}
+                    alt="Daylit architectural concrete detail"
                     className="h-full w-full object-cover"
+                    fill
                     sizes="(max-width: 800px) 90vw, 50vw"
                   />
                 </div>
