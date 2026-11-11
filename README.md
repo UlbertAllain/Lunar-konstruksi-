@@ -22,12 +22,12 @@ Homepage Lunar Konstruksi menggunakan pendekatan **art-directed motion**: setiap
 | Teknologi / teknik | Penggunaan |
 | --- | --- |
 | **GSAP 3.15.1** | Tween, timeline, easing, transform, dan koordinasi animasi. |
-| **GSAP ScrollTrigger** | Menjalankan animasi berdasarkan posisi section dan menghubungkan progres ke scroll melalui \`scrub\`. |
-| **@gsap/react 2.1.2** | Hook \`useGSAP\` untuk menginisialisasi dan membersihkan animasi pada komponen React client. |
-| **\`gsap.timeline()\`** | Menentukan urutan, \`stagger\`, durasi, serta overlap menggunakan position parameter seperti \`"-=0.68"\`. |
-| **\`clip-path\` + \`scale\`** | Image reveal yang berkembang dari bidang sempit menjadi foto penuh (efek morph/reveal). |
-| **2D/3D transforms** | \`x\`, \`y\`, \`rotation\`, \`rotationX\`, \`rotationY\`, \`skew\`, \`scale\`, dan perspektif untuk memberi kedalaman. |
-| **GSAP easing** | \`power3.out\`, \`expo.inOut\`, \`back.out\`, dan \`elastic.out\` untuk karakter gerakan berbeda. |
+| **GSAP ScrollTrigger** | Menjalankan animasi berdasarkan posisi section dan menghubungkan progres ke scroll melalui `scrub`. |
+| **@gsap/react 2.1.2** | Hook `useGSAP` untuk menginisialisasi dan membersihkan animasi pada komponen React client. |
+| **`gsap.timeline()`** | Menentukan urutan, `stagger`, durasi, serta overlap menggunakan position parameter seperti `"-=0.68"`. |
+| **`clip-path` + `scale`** | Image reveal yang berkembang dari bidang sempit menjadi foto penuh (efek morph/reveal). |
+| **2D/3D transforms** | `x`, `y`, `rotation`, `rotationX`, `rotationY`, `skew`, `scale`, dan perspektif untuk memberi kedalaman. |
+| **GSAP easing** | `power3.out`, `expo.inOut`, `back.out`, dan `elastic.out` untuk karakter gerakan berbeda. |
 
 Tidak menggunakan Framer Motion untuk animasi homepage ini. Interaksi dan scroll choreography utamanya ditangani oleh GSAP.
 
@@ -35,21 +35,21 @@ Tidak menggunakan Framer Motion untuk animasi homepage ini. Interaksi dan scroll
 
 | Section | Implementasi |
 | --- | --- |
-| **Hero** | Headline muncul per baris dengan \`stagger\`, statistik masuk berurutan, kemudian foto utama mengalami **expanding mask reveal** melalui \`clip-path\` dan \`scale\`. Layer bangunan kaca yang menonjol dianimasikan terpisah, lalu teks editorial masuk dari arah bergantian dengan \`skewX\` dan \`autoAlpha\`. |
-| **About** | Baris headline bergerak bertahap dengan \`skewY\`; foto kecil tumbuh dari mask melingkar, teks pendamping bergeser masuk, dan banner lebar terbuka dari sisi kiri. |
-| **Services** | Judul utama terbentuk dari perubahan skala/rotasi, lalu sticky notes mendekat ke posisi akhirnya dengan \`stagger\` dan easing \`back\`. Di desktop, setiap note merespons \`pointermove\` melalui \`rotationX\`/\`rotationY\`; saat pointer keluar, kemiringannya kembali memakai \`elastic.out\`. |
+| **Hero** | Headline muncul per baris dengan `stagger`, statistik masuk berurutan, kemudian foto utama mengalami **expanding mask reveal** melalui `clip-path` dan `scale`. Layer bangunan kaca yang menonjol dianimasikan terpisah, lalu teks editorial masuk dari arah bergantian dengan `skewX` dan `autoAlpha`. |
+| **About** | Baris headline bergerak bertahap dengan `skewY`; foto kecil tumbuh dari mask melingkar, teks pendamping bergeser masuk, dan banner lebar terbuka dari sisi kiri. |
+| **Services** | Judul utama terbentuk dari perubahan skala/rotasi, lalu sticky notes mendekat ke posisi akhirnya dengan `stagger` dan easing `back`. Di desktop, setiap note merespons `pointermove` melalui `rotationX`/`rotationY`; saat pointer keluar, kemiringannya kembali memakai `elastic.out`. |
 | **Projects** | Judul dan galeri muncul bergiliran melalui perpaduan perpindahan vertikal, skala, dan rotasi perspektif 3D. |
-| **Our Process** | Tipografi masuk dari arah bergantian; foto dibuka dengan perubahan \`clip-path\`; empat tahapan muncul secara berurutan dengan \`rotationX\` dan perspektif. |
+| **Our Process** | Tipografi masuk dari arah bergantian; foto dibuka dengan perubahan `clip-path`; empat tahapan muncul secara berurutan dengan `rotationX` dan perspektif. |
 | **Testimonials** | Kutipan utama terbuka secara horizontal, disusul testimoni pendukung dari arah berbeda. Section hanya tampil bila ada testimoni dari CMS. |
-| **CTA** | Dua baris headline bergerak dari arah berlawanan; tombol mengalami perubahan \`clip-path\`, \`scale\`, dan \`border-radius\` hingga menjadi bentuk akhirnya. |
+| **CTA** | Dua baris headline bergerak dari arah berlawanan; tombol mengalami perubahan `clip-path`, `scale`, dan `border-radius` hingga menjadi bentuk akhirnya. |
 
 **Urutan Hero di kode:** headline → statistik → mask reveal foto → layer bangunan menonjol → kalimat editorial. Timeline menggunakan overlap antar-tween, jadi beberapa tahapan berlangsung bersamaan; bukan menunggu setiap animasi selesai sepenuhnya.
 
-**Scroll choreography:** Section setelah Hero menggunakan \`ScrollTrigger\` dengan rentang \`start\`/\`end\` dan \`scrub\`. Karena itu, progres animasi dapat mengikuti gerakan scroll, bukan sekadar trigger sekali ketika elemen masuk viewport.
+**Scroll choreography:** Section setelah Hero menggunakan `ScrollTrigger` dengan rentang `start`/`end` dan `scrub`. Karena itu, progres animasi dapat mengikuti gerakan scroll, bukan sekadar trigger sekali ketika elemen masuk viewport.
 
 ### Arsitektur implementasi
 
-\`\`\`text
+```text
 components/site/formwork/
   home.tsx                 # Struktur section dan data CMS
   editorial-motion.tsx     # Seluruh koreografi GSAP + ScrollTrigger
@@ -57,17 +57,17 @@ components/site/formwork/
   editorial-assets.ts      # Referensi aset gambar statis
 public/lunar-static/
   editorial-*.webp         # Gambar statis yang mengikuti desain
-\`\`\`
+```
 
-\`EditorialMotion\` adalah **client component** yang di-mount pada homepage. GSAP menarget elemen dalam \`.lunar-editorial-page\`, bukan dashboard admin. Data proyek, layanan, dan testimoni tetap menggunakan CMS; sebaliknya gambar visual Hero, About, dan Our Process dikunci sebagai aset lokal untuk mempertahankan komposisi yang sudah disetujui.
+`EditorialMotion` adalah **client component** yang di-mount pada homepage. GSAP menarget elemen dalam `.lunar-editorial-page`, bukan dashboard admin. Data proyek, layanan, dan testimoni tetap menggunakan CMS; sebaliknya gambar visual Hero, About, dan Our Process dikunci sebagai aset lokal untuk mempertahankan komposisi yang sudah disetujui.
 
 ### Responsive, aksesibilitas, dan QA
 
-- \`gsap.matchMedia()\` membedakan layout desktop (mulai **801px**) dan layout sentuh (hingga **800px**); jarak gerak pada layout kecil dikurangi.
-- Jika \`prefers-reduced-motion: reduce\` aktif, koreografi GSAP tidak dijalankan. Styling juga menonaktifkan transisi untuk pengguna tersebut.
-- Listener \`pointermove\`/\`pointerleave\` dibersihkan saat effect dihapus; \`media.revert()\` mengembalikan perubahan GSAP saat lifecycle atau kondisi media berubah.
+- `gsap.matchMedia()` membedakan layout desktop (mulai **801px**) dan layout sentuh (hingga **800px**); jarak gerak pada layout kecil dikurangi.
+- Jika `prefers-reduced-motion: reduce` aktif, koreografi GSAP tidak dijalankan. Styling juga menonaktifkan transisi untuk pengguna tersebut.
+- Listener `pointermove`/`pointerleave` dibersihkan saat effect dihapus; `media.revert()` mengembalikan perubahan GSAP saat lifecycle atau kondisi media berubah.
 - Saat memodifikasi animasi, uji di desktop dan mobile: pastikan layer Hero tidak membesar/menutupi headline, sticky notes tidak terpencar, seluruh teks tetap terbaca saat scroll cepat, dan konten tetap tersedia dengan reduced motion.
-- Perubahan timing atau visual dapat diuji melalui \`npm run lint\`, \`npm run typecheck\`, serta pemeriksaan langsung di browser; pemeriksaan statis saja tidak dapat memvalidasi komposisi visual dan performa animasi.
+- Perubahan timing atau visual dapat diuji melalui `npm run lint`, `npm run typecheck`, serta pemeriksaan langsung di browser; pemeriksaan statis saja tidak dapat memvalidasi komposisi visual dan performa animasi.
 
 ## Struktur
 
