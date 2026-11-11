@@ -160,9 +160,9 @@ export function EditorialMotion() {
           const timeline = gsap.timeline({
             scrollTrigger: {
               trigger: services,
-              start: "top 77%",
-              end: "bottom 66%",
-              scrub: desktop ? 1.3 : 0.6,
+              start: "top 83%",
+              end: "top 28%",
+              scrub: desktop ? 0.8 : 0.45,
             },
           });
 
@@ -180,10 +180,10 @@ export function EditorialMotion() {
             .from(
               notes,
               {
-                x: (index) => ((index % 2 ? 1 : -1) * 175) * distance,
-                y: (index) => (index % 3 === 0 ? -125 : 115) * distance,
-                scale: 0.66,
-                rotation: (index) => (index % 2 ? 16 : -16),
+                x: (index) => ((index % 2 ? 1 : -1) * 70) * distance,
+                y: (index) => (index % 3 === 0 ? -55 : 55) * distance,
+                scale: 0.88,
+                rotation: (index) => (index % 2 ? 7 : -7),
                 autoAlpha: 0,
                 stagger: 0.12,
                 duration: 1.2,

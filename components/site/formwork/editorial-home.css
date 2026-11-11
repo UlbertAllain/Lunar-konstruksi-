@@ -47,8 +47,8 @@
 .e-hero-photo { position: relative; z-index: 3; width: 100%; aspect-ratio: 1292 / 384; margin-top: clamp(40px, 5vw, 76px); overflow: visible; background: transparent; }
 .e-hero-base-mask { position: relative; z-index: 1; width: 100%; height: 100%; overflow: hidden; border-radius: 12px; background: #d6d7d4; }
 .e-hero-base { width: 100%; height: 100%; object-fit: cover; display: block; }
-.e-hero-protrusion { position: absolute; left: 0; bottom: calc(100% - 1px); z-index: 2; width: 100%; height: auto; pointer-events: none; }
-.e-hero-photo > img, .e-image > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.e-hero-protrusion { position: absolute; left: 0; bottom: calc(100% - 1px); z-index: 2; width: 100%; height: auto; object-fit: contain; pointer-events: none; }
+.e-image > img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .e-hero-base { object-position: 50% 54%; }
 .e-hero-statement { margin-top: clamp(28px, 3.5vw, 52px); padding-inline: clamp(0px, 2vw, 28px); font-size: clamp(16px, 2.2vw, 33px); line-height: 1.28; letter-spacing: -.045em; font-weight: 500; text-transform: uppercase; }
 .e-hero-statement span { display: block; width: fit-content; max-width: 100%; }
@@ -72,17 +72,17 @@
 .e-about-photo > img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 56%; }
 
 .e-services { padding-bottom: clamp(82px, 9vw, 132px); }
-.e-services-board { position: relative; min-height: clamp(570px, 49vw, 700px); margin-top: 26px; }
-.e-service-backdrop { position: absolute; left: 27%; top: 22%; width: 46%; height: 48%; border-radius: 12px; background: #efede8; }
-.e-service-display { position: absolute; left: 31%; top: 32%; width: 38%; height: 35%; display: grid; place-items: center; background: #faf8f5; border: 1px solid #e2dfda; }
+.e-services-board { position: relative; min-height: clamp(490px, 42vw, 575px); margin-top: 24px; }
+.e-service-backdrop { position: absolute; left: 27%; top: 18%; width: 46%; height: 61%; border-radius: 12px; background: #efede8; }
+.e-service-display { position: absolute; left: 31%; top: 29%; width: 38%; height: 41%; display: grid; place-items: center; background: #faf8f5; border: 1px solid #e2dfda; }
 .e-service-display strong { display: block; text-align: center; font-size: clamp(2.85rem, 4.8vw, 5.7rem); letter-spacing: -.085em; line-height: .95; font-weight: 500; }
 .e-service-note { position: absolute; z-index: 2; width: min(27%, 310px); min-height: 124px; padding: clamp(17px, 1.8vw, 24px); background: #fffdfa; box-shadow: 0 8px 18px rgba(30,27,23,.055); transition: transform .25s ease, box-shadow .25s ease; }
 .e-service-note:hover { transform: rotate(0deg) translateY(-2px) !important; box-shadow: 0 11px 22px rgba(30,27,23,.08); }
-.e-service-note--1 { left: 36%; top: 3%; transform: rotate(-1.5deg); background: #fff7e9; }
-.e-service-note--2 { left: 1%; top: 26%; transform: rotate(1.5deg); }
-.e-service-note--3 { right: 1%; top: 26%; transform: rotate(1.5deg); }
-.e-service-note--4 { left: 5%; bottom: 9%; transform: rotate(-1.5deg); background: #fff8ed; }
-.e-service-note--5 { right: 5%; bottom: 9%; transform: rotate(-1.5deg); }
+.e-service-note--1 { left: 36%; top: 4%; transform: rotate(-1.5deg); background: #fff7e9; }
+.e-service-note--2 { left: 7%; top: 27%; transform: rotate(1.5deg); }
+.e-service-note--3 { right: 7%; top: 27%; transform: rotate(1.5deg); }
+.e-service-note--4 { left: 13%; bottom: 7%; transform: rotate(-1.5deg); background: #fff8ed; }
+.e-service-note--5 { right: 13%; bottom: 7%; transform: rotate(-1.5deg); }
 .e-service-note-head { display: flex; align-items: flex-start; gap: 10px; }
 .e-service-note-head svg { flex-shrink: 0; width: 22px; height: 22px; stroke-width: 1.4; }
 .e-service-note h3 { margin: 0; font-size: clamp(13px, 1.15vw, 17px); font-weight: 650; letter-spacing: -.04em; line-height: 1.23; }
