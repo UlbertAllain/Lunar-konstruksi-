@@ -36,6 +36,7 @@ export function EditorialMotion() {
         const find = gsap.utils.selector(root);
         const section = (id: string) => root.querySelector<HTMLElement>(id);
         const distance = desktop ? 1 : 0.55;
+        let disposePointerListeners = () => {};
 
         // The hero is a directed opening sequence, not a generic fade-in.
         const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -238,9 +239,7 @@ export function EditorialMotion() {
                 node.removeEventListener("pointerleave", onLeave);
               });
             });
-            // matchMedia will call cleanup on unmount or breakpoint change.
-            context.add("cleanupPointer", () => cleanups.forEach((fn) => fn()));
-            return () => cleanups.forEach((fn) => fn());
+            disposePointerListeners = () => cleanups.forEach((fn) => fn());
           }
         }
 
@@ -373,6 +372,8 @@ export function EditorialMotion() {
               0.45,
             );
         }
+
+        return () => disposePointerListeners();
       },
     );
 
