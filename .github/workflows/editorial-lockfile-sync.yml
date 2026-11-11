@@ -1,0 +1,39 @@
+name: Sync Editorial Animation Lockfile
+
+on:
+  push:
+    branches:
+      - feat/editorial-homepage-redesign
+    paths:
+      - package.json
+      - .github/workflows/editorial-lockfile-sync.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve locked dependencies
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Commit lockfile if needed
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "Lockfile already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "chore: lock GSAP versions for editorial motion"
+          git push origin HEAD:feat/editorial-homepage-redesign
