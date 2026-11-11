@@ -75,11 +75,11 @@
 .e-service-display strong { display: block; text-align: center; font-size: clamp(3rem, 5.2vw, 6.1rem); letter-spacing: -.09em; line-height: .88; font-weight: 500; }
 .e-service-note { position: absolute; z-index: 2; width: min(29%, 330px); min-height: 140px; padding: clamp(18px, 2.3vw, 28px); background: #fffdfa; box-shadow: 0 12px 24px rgba(30,27,23,.09); transition: transform .25s ease, box-shadow .25s ease; }
 .e-service-note:hover { transform: rotate(0deg) translateY(-5px) !important; box-shadow: 0 18px 34px rgba(30,27,23,.13); }
-.e-service-note:nth-of-type(3) { left: 34%; top: 4%; transform: rotate(-3deg); background: #fff4dc; }
-.e-service-note:nth-of-type(4) { left: 1%; top: 24%; transform: rotate(4deg); }
-.e-service-note:nth-of-type(5) { right: 1%; top: 24%; transform: rotate(5deg); }
-.e-service-note:nth-of-type(6) { left: 4%; bottom: 4%; transform: rotate(-5deg); background: #fff4df; }
-.e-service-note:nth-of-type(7) { right: 4%; bottom: 4%; transform: rotate(-3deg); }
+.e-service-note--1 { left: 34%; top: 4%; transform: rotate(-3deg); background: #fff4dc; }
+.e-service-note--2 { left: 1%; top: 24%; transform: rotate(4deg); }
+.e-service-note--3 { right: 1%; top: 24%; transform: rotate(5deg); }
+.e-service-note--4 { left: 4%; bottom: 4%; transform: rotate(-5deg); background: #fff4df; }
+.e-service-note--5 { right: 4%; bottom: 4%; transform: rotate(-3deg); }
 .e-service-note-head { display: flex; align-items: flex-start; gap: 12px; }
 .e-service-note-head svg { flex-shrink: 0; width: 25px; height: 25px; stroke-width: 1.5; }
 .e-service-note h3 { margin: 0; font-size: clamp(13px, 1.2vw, 18px); font-weight: 700; letter-spacing: -.05em; line-height: 1.18; }
