@@ -1,253 +1,91 @@
+import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-} from "lucide-react";
 
 import type { SiteContentSettings } from "@/modules/site-content/site-content.types";
-import { displayFont } from "./decor";
+import { serviceModel } from "./data";
 
-function whatsappHref(
-  value: string,
-) {
-  const digits =
-    value.replace(/\D/g, "");
+type Props = {
+  content: SiteContentSettings;
+  services?: unknown[];
+};
 
-  if (!digits) {
-    return "";
-  }
-
-  let normalized = digits;
-
-  if (normalized.startsWith("0")) {
-    normalized =
-      `62${normalized.slice(1)}`;
-  }
-
-  return `https://wa.me/${normalized}`;
+function validPhone(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed || /812[\s-]*0{4}/.test(trimmed)) return "";
+  return trimmed;
 }
 
-export function FormworkFooter({
-  content,
-}: {
-  content: SiteContentSettings;
-}) {
-  const profile =
-    content.companyProfile;
+function whatsappLink(value: string) {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  return `https://wa.me/${digits.startsWith("0") ? `62${digits.slice(1)}` : digits}`;
+}
 
-  const office =
-    content.officeLocation;
-
-  const companyName =
-    profile.companyName ||
-    "Lunar Konstruksi";
-
-  const shortDescription =
-    profile.shortDescription ||
-    "Perencanaan, koordinasi, dan pekerjaan konstruksi dengan proses yang jelas dari awal sampai serah terima.";
-
-  const email =
-    profile.email ||
-    process.env
-      .NEXT_PUBLIC_COMPANY_EMAIL ||
-    "";
-
-  const phone =
-    profile.phone ||
-    process.env
-      .NEXT_PUBLIC_COMPANY_PHONE ||
-    "";
-
-  const whatsapp =
-    whatsappHref(
-      profile.whatsapp,
-    );
+export function FormworkFooter({ content, services = [] }: Props) {
+  const profile = content.companyProfile;
+  const companyName = profile.companyName?.trim() || "Lunar Konstruksi";
+  const email = profile.email?.trim() && profile.email !== "hello@lunarkonstruksi.id"
+    ? profile.email.trim()
+    : "";
+  const phone = validPhone(profile.phone ?? "");
+  const location = content.officeLocation.address?.trim();
+  const serviceItems = services.map(serviceModel).filter((service) => service.slug).slice(0, 5);
+  const whatsapp = whatsappLink(profile.whatsapp || "");
 
   const socials = [
-    {
-      label: "Instagram",
-      shortLabel: "IG",
-      href: profile.instagramUrl,
-    },
-    {
-      label: "LinkedIn",
-      shortLabel: "IN",
-      href: profile.linkedinUrl,
-    },
-  ].filter(
-    (item) =>
-      Boolean(item.href),
-  );
+    { label: "Instagram", href: profile.instagramUrl },
+    { label: "LinkedIn", href: profile.linkedinUrl },
+  ].filter((social) => social.href?.trim());
 
   return (
-    <footer className="bg-[#101f37] text-[#f8f4ec]">
-      <div className="mx-auto w-full max-w-[1480px] px-5 py-10 sm:px-8 sm:py-12 lg:px-10">
-        <div className="grid gap-10 border-b border-white/15 pb-10 xl:grid-cols-[1.08fr_.92fr] xl:gap-16">
+    <footer className="lunar-e-footer">
+      <div className="e-footer-inner">
+        <div className="e-footer-grid">
           <div>
-            <p
-              className={`${displayFont} text-[clamp(2rem,3.1vw,3.2rem)] font-black uppercase leading-[0.92] tracking-[-0.035em]`}
-            >
-              {companyName}
+            <Link className="e-footer-brand" href="/" aria-label="Lunar Konstruksi home">
+              <Image src="/lunar-logo-mark.png" alt="" width={41} height={43} />
+              <span>Lunar<br />Konstruksi</span>
+            </Link>
+            <p className="e-footer-summary">
+              Construction, technical planning, and interior works in Surakarta and the surrounding area.
             </p>
-
-            <p className="mt-4 max-w-xl text-[13px] leading-7 text-white/55">
-              {shortDescription}
-            </p>
-
-            {socials.length > 0 ? (
-              <div className="mt-7 flex flex-wrap gap-2">
-                {socials.map(
-                  (social) => (
-                    <a
-                      key={
-                        social.label
-                      }
-                      href={
-                        social.href
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={
-                        social.label
-                      }
-                      title={
-                        social.label
-                      }
-                      className="group grid h-10 w-10 place-items-center rounded-full border border-white/15 font-mono text-[9px] font-bold uppercase tracking-[0.08em] text-white/55 transition duration-300 hover:-translate-y-0.5 hover:border-[#dcb458]/70 hover:bg-[#dcb458] hover:text-[#14243f]"
-                    >
-                      {
-                        social.shortLabel
-                      }
-                    </a>
-                  ),
-                )}
-              </div>
-            ) : null}
           </div>
-
-          <div className="grid gap-8 sm:grid-cols-2">
-            <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#dcb458]">
-                Contact
-              </p>
-
-              <div className="mt-4 space-y-3 text-[13px] leading-6 text-white/70">
-                {email ? (
-                  <a
-                    href={`mailto:${email}`}
-                    className="group flex items-start gap-3 transition hover:text-white"
-                  >
-                    <Mail className="mt-1 h-3.5 w-3.5 shrink-0 text-[#dcb458]" />
-
-                    <span className="break-all">
-                      {email}
-                    </span>
-                  </a>
-                ) : null}
-
-                {phone ? (
-                  <a
-                    href={`tel:${phone.replace(
-                      /\s/g,
-                      "",
-                    )}`}
-                    className="group flex items-start gap-3 transition hover:text-white"
-                  >
-                    <Phone className="mt-1 h-3.5 w-3.5 shrink-0 text-[#dcb458]" />
-
-                    <span>
-                      {phone}
-                    </span>
-                  </a>
-                ) : null}
-
-                {whatsapp ? (
-                  <a
-                    href={whatsapp}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex items-start gap-3 transition hover:text-white"
-                  >
-                    <MessageCircle className="mt-1 h-3.5 w-3.5 shrink-0 text-[#dcb458]" />
-
-                    <span>
-                      WhatsApp
-                    </span>
-
-                    <ArrowUpRight className="mt-1 h-3 w-3 text-white/35 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#dcb458]" />
-                  </a>
-                ) : null}
-
-                {office.address ? (
-                  <div className="flex items-start gap-3">
-                    <MapPin className="mt-1 h-3.5 w-3.5 shrink-0 text-[#dcb458]" />
-
-                    <span className="max-w-[280px] whitespace-pre-line">
-                      {
-                        office.address
-                      }
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
-            <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#dcb458]">
-                Navigate
-              </p>
-
-              <div className="mt-4 flex flex-col gap-2.5 text-[13px] text-white/70">
-                {[
-                  ["/", "Home"],
-                  [
-                    "/projects",
-                    "Proyek",
-                  ],
-                  [
-                    "/services",
-                    "Layanan",
-                  ],
-                  [
-                    "/contact",
-                    "Kontak",
-                  ],
-                ].map(
-                  ([
-                    href,
-                    label,
-                  ]) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      className="group flex w-fit items-center gap-2 transition hover:text-white"
-                    >
-                      {label}
-
-                      <span className="h-px w-0 bg-[#dcb458] transition-all duration-300 group-hover:w-5" />
-                    </Link>
-                  ),
-                )}
-              </div>
-            </div>
+          <div className="e-footer-col">
+            <h3>Explore</h3>
+            <Link href="/">Home</Link>
+            <Link href="/services">Services</Link>
+            <Link href="/projects">Projects</Link>
+            <Link href="/#about">About</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
+          <div className="e-footer-col">
+            <h3>Services</h3>
+            {serviceItems.length ? serviceItems.map((service) => (
+              <Link key={service.id} href={`/services/${service.slug}`}>
+                {service.name}
+              </Link>
+            )) : (
+              <Link href="/services">Explore our services</Link>
+            )}
+          </div>
+          <div className="e-footer-col">
+            <h3>Get in Touch</h3>
+            {location ? <p>{location}</p> : <p>Surakarta, Central Java</p>}
+            {email ? <a href={`mailto:${email}`}>{email}</a> : null}
+            {phone ? <a href={`tel:${phone.replace(/\s/g, "")}`}>{phone}</a> : null}
+            {whatsapp ? <a href={whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}
+            {!email && !phone && !whatsapp ? <Link href="/contact">Contact the team</Link> : null}
           </div>
         </div>
-
-        <div className="flex flex-col gap-3 pt-5 font-mono text-[8px] uppercase tracking-[0.14em] text-white/40 sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            &copy;{" "}
-            {new Date().getFullYear()}{" "}
-            {profile.copyrightText ||
-              companyName}
-          </span>
-
-          <span>
-            Planning / Coordination /
-            Construction
-          </span>
+        <div className="e-footer-bottom">
+          <span>© {new Date().getFullYear()} {profile.copyrightText || companyName}. All rights reserved.</span>
+          <div className="e-footer-socials">
+            {socials.map((social) => (
+              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer">
+                {social.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
